@@ -95,7 +95,6 @@ public class StageSubsystem extends SubsystemBase {
      * @param speed speed to set Stage motor at
      */
     public void runStage(double speed) {
-        System.out.println("Just yapping");
         m_stageMotor.set(ControlMode.PercentOutput, speed);
     }
 
@@ -104,11 +103,6 @@ public class StageSubsystem extends SubsystemBase {
     }
 
     public void stopStage() {
-        //System.out.println(m_timer.get());
-        System.out.println(m_timer.giveTime());
-        m_timer.timerState(false);
-        m_timer.resetTimer();
-        //this.startShootTime = 0;
         this.hasRun = false;
         m_stageMotor.set(ControlMode.PercentOutput, 0.0);
     }
@@ -179,7 +173,6 @@ public class StageSubsystem extends SubsystemBase {
     }
 
     public Command runStageCommand() {
-        System.out.println("Just chatting");
         return new RunCommand(() -> this.runStage(0.9));
     }
 

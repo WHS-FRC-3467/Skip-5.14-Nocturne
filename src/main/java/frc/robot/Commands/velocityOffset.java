@@ -58,19 +58,17 @@ public class velocityOffset extends Command {
     @Override
     public void initialize() {
         
-        System.out.println("Starting vel command");
+        //System.out.println("Starting vel command");
         m_isDone = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        System.out.println("HEARTBEAT");
-
         if (m_trigger.getAsDouble() > .01) {
-            System.out.println("TRIGGER PRESSED");
+            //System.out.println("TRIGGER PRESSED");
             if (!ranOnce) {
-                System.out.println("STARTING INTERNAL TIMER");
+                //System.out.println("STARTING INTERNAL TIMER");
                 shootTimer.start();
                 ranOnce = true;
             }
@@ -85,10 +83,10 @@ public class velocityOffset extends Command {
         if (timeUntilShot < 0) {
             timeUntilShot = 0.00;
         }
-        if (timeUntilShot < .4) {
+/*         if (timeUntilShot < .4) {
             System.out.println("DYNAMIC TIMING");
             System.out.printf("%.3f",shootTimer.get());
-        }
+        } */
 
         xDelta = timeUntilShot*(speeds.vxMetersPerSecond);
         yDelta = timeUntilShot*(speeds.vyMetersPerSecond);
@@ -107,12 +105,12 @@ public class velocityOffset extends Command {
             SmartDashboard.putNumber("Robot Dist To Speaker",m_drivetrain.calcDistToSpeaker());
             //SmartDashboard.putNumber("xDelta", xDelta);
             //SmartDashboard.putNumber("yDelta", yDelta);
-            SmartDashboard.putNumber("futureang", futureAngleToSpeaker);
+            //SmartDashboard.putNumber("futureang", futureAngleToSpeaker);
             SmartDashboard.putNumber("Correction Angle", correctionAngle);
             SmartDashboard.putNumber("timeUntilShot", timeUntilShot);
-            SmartDashboard.putNumber("time Const", Constants.ShooterConstants.timeToShoot);
-            SmartDashboard.putNumber("currentTime", shootTimer.get());
-            SmartDashboard.putNumber("trig", m_trigger.getAsDouble());
+            //SmartDashboard.putNumber("time Const", Constants.ShooterConstants.timeToShoot);
+            //SmartDashboard.putNumber("currentTime", shootTimer.get());
+            //SmartDashboard.putNumber("trig", m_trigger.getAsDouble());
         }
 
               

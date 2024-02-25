@@ -161,13 +161,13 @@ public final class Constants {
 	
     public static class Vision {
         //public static final String kCameraName = "front_cam";
-        public static final String kCameraName = "USB_Camera";
+        public static final String kCameraName = "front_left";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
         //public static final Transform3d kRobotToCam =
                 //new Transform3d(new Translation3d(.174,-0.186, 0.588), new Rotation3d(0, Math.toRadians(10),0));
 
         public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(.25679,.2491, .22), new Rotation3d(0, Math.toRadians(-20.4),Math.toRadians(20)));
+                new Transform3d(new Translation3d(.25679,.2491, .22), new Rotation3d(0, Math.toRadians(-20.4),Math.toRadians(-13)));
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout kTagLayout =

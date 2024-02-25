@@ -14,19 +14,19 @@ public class VisionLookUpTable {
     public VisionLookUpTable() {
         shooterConfig = new ShooterConfig();
         shooterConfig.getShooterConfigs().add(new ShooterPreset(1, 50, 40, 1)); // Distance -> Bumper
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 50, 40, 1.5)); // Distance -> Bumper
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(21, 50, 40, 2)); // Distance -> Bumper
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(25, 50, 40, 2.5)); // Distance -> Bumper
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(29, 70, 60, 3)); // Distance -> Bumper
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(32, 70, 60, 3.5)); 
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(34.35, 70, 60, 4)); // Distance -> Bumper
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(35.85, 70, 60, 4.5)); // Distance -> Bumper
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(36.7, 70, 60, 5)); // Distance -> Bumper
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(38.58, 70, 60, 5.5)); // Distance -> Bumper
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(39.6, 70, 60, 6)); // Distance -> Bumper
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(41, 80, 60, 6.5)); // Distance -> Bumper
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(42, 80, 60, 7)); // Distance -> Bumper
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(42.8, 80, 60, 7.5)); // Distance -> Bumper
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(10-3.5, 50, 40, 1.5)); // Distance -> Bumper
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(21-3.5, 50, 40, 2)); // Distance -> Bumper
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(25-3.5, 50, 40, 2.5)); // Distance -> Bumper
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(29-3.5, 70, 60, 3)); // Distance -> Bumper
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(32-3.5, 70, 60, 3.5)); 
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(34.35-3.5, 70, 60, 4)); // Distance -> Bumper
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(35.85-3.5, 70, 60, 4.5)); // Distance -> Bumper
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(36.7-3.5, 70, 60, 5)); // Distance -> Bumper
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(38.58-3.5, 70, 60, 5.5)); // Distance -> Bumper
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(39.6-3.5, 70, 60, 6)); // Distance -> Bumper
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(41-3.5, 80, 60, 6.5)); // Distance -> Bumper
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(42-3.5, 80, 60, 7)); // Distance -> Bumper
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(42.8-3.5, 80, 60, 7.5)); // Distance -> Bumper
 
         Collections.sort(shooterConfig.getShooterConfigs());
     }

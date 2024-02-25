@@ -321,7 +321,7 @@ public class RobotContainer {
 
         // Driver: While Right Stick button is pressed, drive while pointing to alliance speaker
         // AND adjusting Arm angle AND running Shooter
-/*          m_driverCtrl.rightStick().whileTrue(Commands.parallel(
+          m_driverCtrl.rightStick().whileTrue(Commands.parallel(
             new velocityOffset(m_drivetrain, () -> m_driverCtrl.getRightTriggerAxis()),
             m_drivetrain.applyRequest(
                 () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed)
@@ -331,7 +331,7 @@ public class RobotContainer {
                         .withRotationalDeadband(m_AngularRate * 0.1)
             ),
             new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker())
-        ));  */
+        ));  
 
          // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X') (while pressed)
         m_driverCtrl.povLeft().whileTrue(m_drivetrain.applyRequest(() -> m_brake));
