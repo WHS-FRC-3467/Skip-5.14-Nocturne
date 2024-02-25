@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6859860992449257,
+      "y": 4.365853095342555
+    },
+    "rotation": 120.80144597613685
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FA Collect1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FA Back2Wing"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FA Collect2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FA Back2Podium"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Week1",
+  "choreoAuto": false
+}

@@ -1,0 +1,291 @@
+********** Robot program starting **********
+NT: Listening on NT3 port 1735, NT4 port 5810
+NT: Got a NT4 connection from 10.34.67.228 port 54588
+NT: CONNECTED NT4 client 'shuffleboard@1' (from 10.34.67.228:54588)
+[phoenix] CANbus Connected: Drivetrain (can0, B7B8C1613353385320202034150F03FF)
+[phoenix] CANbus Network Up: Drivetrain (can0, B7B8C1613353385320202034150F03FF)
+[phoenix] CANbus Successfully Started: Drivetrain
+NT: Got a NT4 connection from 10.34.67.22 port 43208
+NT: CONNECTED NT4 client 'photonvision@2' (from 10.34.67.22:43208)
+Using a Pro only feature on an unlicensed device. The device may not behave as expected if it continues to operate while unlicensed.
+TalonFX ID 2 failed config with error UsingProFeatureOnUnlicensedDevice
+Using a Pro only feature on an unlicensed device. The device may not behave as expected if it continues to operate while unlicensed.
+TalonFX ID 6 failed config with error UsingProFeatureOnUnlicensedDevice
+Using a Pro only feature on an unlicensed device. The device may not behave as expected if it continues to operate while unlicensed.
+TalonFX ID 4 failed config with error UsingProFeatureOnUnlicensedDevice
+Using a Pro only feature on an unlicensed device. The device may not behave as expected if it continues to operate while unlicensed.
+TalonFX ID 8 failed config with error UsingProFeatureOnUnlicensedDevice
+[phoenix] Library initialization is complete.
+[phoenix-diagnostics] Server 2024.1.0 (Feb 7 2024, 18:50:28) running on port: 1250
+[phoenix] Signal Logger Started (Network: B7B8C1613353385320202034150F03FF)
+[phoenix] Signal Logger: Available disk space (41 MB) below 50 MB, deleted /home/lvuser/logs/rio_2024-02-14_21-01-40.hoot
+[phoenix] Signal Logger Started (Network: rio)
+[phoenix] Signal Logger: Available disk space (52 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+[phoenix] Signal Logger: Available disk space (51 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+********** Robot program startup complete **********
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+Loop time of 0.02s overrun
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:412): Loop time of 0.02s overrun
+CommandScheduler loop overrun
+IntakeSubsystem.periodic(): 0.003821s
+ArmSubsystem.periodic(): 0.029272s
+CommandSwerveDrivetrain.periodic(): 0.077279s
+StageSubsystem.periodic(): 0.003729s
+RunCommand.initialize(): 0.012039s
+buttons.run(): 0.013560s
+ShooterSubsystem.periodic(): 0.039604s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): IntakeSubsystem.periodic(): 0.003821s
+ArmSubsystem.periodic(): 0.029272s
+CommandSwerveDrivetrain.periodic(): 0.077279s
+StageSubsystem.periodic(): 0.003729s
+RunCommand.initialize(): 0.012039s
+buttons.run(): 0.013560s
+ShooterSubsystem.periodic(): 0.039604s
+SmartDashboard.updateValues(): 0.019162s
+disabledInit(): 0.003729s
+robotPeriodic(): 0.408119s
+LiveWindow.updateValues(): 0.000130s
+Shuffleboard.update(): 0.000092s
+disabledPeriodic(): 0.000890s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): SmartDashboard.updateValues(): 0.019162s
+disabledInit(): 0.003729s
+robotPeriodic(): 0.408119s
+LiveWindow.updateValues(): 0.000130s
+Shuffleboard.update(): 0.000092s
+disabledPeriodic(): 0.000890s
+CommandScheduler loop overrun
+CommandScheduler loop overrun
+CommandScheduler loop overrun
+CommandScheduler loop overrun
+Loop time of 0.02s overrun
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:412): Loop time of 0.02s overrun
+SmartDashboard.updateValues(): 0.008645s
+robotPeriodic(): 0.020868s
+LiveWindow.updateValues(): 0.000037s
+Shuffleboard.update(): 0.000018s
+disabledPeriodic(): 0.000149s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): SmartDashboard.updateValues(): 0.008645s
+robotPeriodic(): 0.020868s
+LiveWindow.updateValues(): 0.000037s
+Shuffleboard.update(): 0.000018s
+disabledPeriodic(): 0.000149s
+CommandScheduler loop overrun
+IntakeSubsystem.periodic(): 0.003506s
+ArmSubsystem.periodic(): 0.000167s
+CommandSwerveDrivetrain.periodic(): 0.012985s
+StageSubsystem.periodic(): 0.000316s
+RunCommand.execute(): 0.010888s
+buttons.run(): 0.000779s
+ShooterSubsystem.periodic(): 0.000593s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): IntakeSubsystem.periodic(): 0.003506s
+ArmSubsystem.periodic(): 0.000167s
+CommandSwerveDrivetrain.periodic(): 0.012985s
+StageSubsystem.periodic(): 0.000316s
+RunCommand.execute(): 0.010888s
+buttons.run(): 0.000779s
+ShooterSubsystem.periodic(): 0.000593s
+[phoenix] Signal Logger: Available disk space (51 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+Loop time of 0.02s overrun
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:412): Loop time of 0.02s overrun
+CommandScheduler loop overrun
+SmartDashboard.updateValues(): 0.006437s
+robotPeriodic(): 0.012873s
+LiveWindow.updateValues(): 0.000019s
+Shuffleboard.update(): 0.000018s
+disabledPeriodic(): 0.000149s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): SmartDashboard.updateValues(): 0.006437s
+robotPeriodic(): 0.012873s
+LiveWindow.updateValues(): 0.000019s
+Shuffleboard.update(): 0.000018s
+disabledPeriodic(): 0.000149s
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+Loop time of 0.02s overrun
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:412): Loop time of 0.02s overrun
+CommandScheduler loop overrun
+IntakeSubsystem.periodic(): 0.021611s
+ArmSubsystem.periodic(): 0.000111s
+CommandSwerveDrivetrain.periodic(): 0.004823s
+StageSubsystem.periodic(): 0.000111s
+RunCommand.execute(): 0.000093s
+buttons.run(): 0.003673s
+ShooterSubsystem.periodic(): 0.000612s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): IntakeSubsystem.periodic(): 0.021611s
+ArmSubsystem.periodic(): 0.000111s
+CommandSwerveDrivetrain.periodic(): 0.004823s
+StageSubsystem.periodic(): 0.000111s
+RunCommand.execute(): 0.000093s
+buttons.run(): 0.003673s
+ShooterSubsystem.periodic(): 0.000612s
+SmartDashboard.updateValues(): 0.025377s
+robotPeriodic(): 0.077891s
+LiveWindow.updateValues(): 0.001372s
+Shuffleboard.update(): 0.000019s
+disabledPeriodic(): 0.000612s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): SmartDashboard.updateValues(): 0.025377s
+robotPeriodic(): 0.077891s
+LiveWindow.updateValues(): 0.001372s
+Shuffleboard.update(): 0.000019s
+disabledPeriodic(): 0.000612s
+[phoenix] Signal Logger: Available disk space (51 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+Loop time of 0.02s overrun
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:412): Loop time of 0.02s overrun
+SmartDashboard.updateValues(): 0.004730s
+robotPeriodic(): 0.008181s
+LiveWindow.updateValues(): 0.000018s
+Shuffleboard.update(): 0.000037s
+disabledPeriodic(): 0.008607s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): SmartDashboard.updateValues(): 0.004730s
+robotPeriodic(): 0.008181s
+LiveWindow.updateValues(): 0.000018s
+Shuffleboard.update(): 0.000037s
+disabledPeriodic(): 0.008607s
+CommandScheduler loop overrun
+IntakeSubsystem.periodic(): 0.000427s
+ArmSubsystem.periodic(): 0.000278s
+CommandSwerveDrivetrain.periodic(): 0.000686s
+StageSubsystem.periodic(): 0.000111s
+RunCommand.execute(): 0.000501s
+buttons.run(): 0.000186s
+ShooterSubsystem.periodic(): 0.019051s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): IntakeSubsystem.periodic(): 0.000427s
+ArmSubsystem.periodic(): 0.000278s
+CommandSwerveDrivetrain.periodic(): 0.000686s
+StageSubsystem.periodic(): 0.000111s
+RunCommand.execute(): 0.000501s
+buttons.run(): 0.000186s
+ShooterSubsystem.periodic(): 0.019051s
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+Loop time of 0.02s overrun
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:412): Loop time of 0.02s overrun
+SmartDashboard.updateValues(): 0.021704s
+robotPeriodic(): 0.017845s
+LiveWindow.updateValues(): 0.000018s
+Shuffleboard.update(): 0.000019s
+disabledPeriodic(): 0.001707s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): SmartDashboard.updateValues(): 0.021704s
+robotPeriodic(): 0.017845s
+LiveWindow.updateValues(): 0.000018s
+Shuffleboard.update(): 0.000019s
+disabledPeriodic(): 0.001707s
+[phoenix] Signal Logger: Available disk space (51 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+Loop time of 0.02s overrun
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:412): Loop time of 0.02s overrun
+SmartDashboard.updateValues(): 0.016695s
+robotPeriodic(): 0.022298s
+LiveWindow.updateValues(): 0.000000s
+Shuffleboard.update(): 0.000037s
+disabledPeriodic(): 0.000129s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): SmartDashboard.updateValues(): 0.016695s
+robotPeriodic(): 0.022298s
+LiveWindow.updateValues(): 0.000000s
+Shuffleboard.update(): 0.000037s
+disabledPeriodic(): 0.000129s
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+Loop time of 0.02s overrun
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:412): Loop time of 0.02s overrun
+SmartDashboard.updateValues(): 0.026489s
+robotPeriodic(): 0.005120s
+LiveWindow.updateValues(): 0.000019s
+Shuffleboard.update(): 0.000148s
+disabledPeriodic(): 0.005843s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): SmartDashboard.updateValues(): 0.026489s
+robotPeriodic(): 0.005120s
+LiveWindow.updateValues(): 0.000019s
+Shuffleboard.update(): 0.000148s
+disabledPeriodic(): 0.005843s
+[phoenix] Signal Logger: Available disk space (51 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+[phoenix] Signal Logger: Available disk space (50 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+Loop time of 0.02s overrun
+Warning at edu.wpi.first.wpilibj.IterativeRobotBase.printLoopOverrunMessage(IterativeRobotBase.java:412): Loop time of 0.02s overrun
+SmartDashboard.updateValues(): 0.020275s
+robotPeriodic(): 0.017344s
+LiveWindow.updateValues(): 0.000149s
+Shuffleboard.update(): 0.000018s
+disabledPeriodic(): 0.000835s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): SmartDashboard.updateValues(): 0.020275s
+robotPeriodic(): 0.017344s
+LiveWindow.updateValues(): 0.000149s
+Shuffleboard.update(): 0.000018s
+disabledPeriodic(): 0.000835s
+CommandScheduler loop overrun
+IntakeSubsystem.periodic(): 0.001188s
+ArmSubsystem.periodic(): 0.002226s
+CommandSwerveDrivetrain.periodic(): 0.015285s
+StageSubsystem.periodic(): 0.001187s
+RunCommand.execute(): 0.005436s
+buttons.run(): 0.000111s
+ShooterSubsystem.periodic(): 0.009924s
+Warning at edu.wpi.first.wpilibj.Tracer.lambda$printEpochs$0(Tracer.java:62): IntakeSubsystem.periodic(): 0.001188s
+ArmSubsystem.periodic(): 0.002226s
+CommandSwerveDrivetrain.periodic(): 0.015285s
+StageSubsystem.periodic(): 0.001187s
+RunCommand.execute(): 0.005436s
+buttons.run(): 0.000111s
+ShooterSubsystem.periodic(): 0.009924s
+[phoenix] Signal Logger: Available disk space (50 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+NT: DISCONNECTED NT4 client 'photonvision@2' (from 10.34.67.22:43208): connection timed out
+[phoenix] Signal Logger: Available disk space (50 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+[phoenix] Signal Logger: Available disk space (50 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+PhotonVision coprocessor at path /photonvision/front_cam is not sending new data.
+Warning at org.photonvision.PhotonCamera.verifyVersion(PhotonCamera.java:368): PhotonVision coprocessor at path /photonvision/front_cam is not sending new data.
+at org.photonvision.PhotonCamera.verifyVersion(PhotonCamera.java:368)
+at org.photonvision.PhotonCamera.getLatestResult(PhotonCamera.java:178)
+at org.photonvision.PhotonPoseEstimator.update(PhotonPoseEstimator.java:309)
+at frc.robot.Vision.PhotonVision.getEstimatedGlobalPose(PhotonVision.java:100)
+at frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain.periodic(CommandSwerveDrivetrain.java:125)
+at edu.wpi.first.wpilibj2.command.CommandScheduler.run(CommandScheduler.java:260)
+at frc.robot.Robot.robotPeriodic(Robot.java:32)
+at edu.wpi.first.wpilibj.IterativeRobotBase.loopFunc(IterativeRobotBase.java:381)
+at edu.wpi.first.wpilibj.TimedRobot.startCompetition(TimedRobot.java:131)
+at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:365)
+at edu.wpi.first.wpilibj.RobotBase.startRobot(RobotBase.java:453)
+at frc.robot.Main.main(Main.java:14)
+NT: Got a NT4 connection from 10.34.67.22 port 49488
+NT: CONNECTED NT4 client 'photonvision@2' (from 10.34.67.22:49488)
+[phoenix] Signal Logger: Available disk space (50 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+[phoenix] Signal Logger: Available disk space (49 MB) below 50 MB, deleted /home/lvuser/logs/B7B8C1613353385320202034150F03FF_2024-02-14_21-01-40.hoot
+NT: DISCONNECTED NT4 client 'photonvision@2' (from 10.34.67.22:49488): connection timed out
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+[phoenix] Signal Logger: Available disk space (99 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+[phoenix] Signal Logger: Available disk space (99 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+PhotonVision coprocessor at path /photonvision/front_cam is not sending new data.
+Warning at org.photonvision.PhotonCamera.verifyVersion(PhotonCamera.java:368): PhotonVision coprocessor at path /photonvision/front_cam is not sending new data.
+at org.photonvision.PhotonCamera.verifyVersion(PhotonCamera.java:368)
+at org.photonvision.PhotonCamera.getLatestResult(PhotonCamera.java:178)
+at org.photonvision.PhotonPoseEstimator.update(PhotonPoseEstimator.java:309)
+at frc.robot.Vision.PhotonVision.getEstimatedGlobalPose(PhotonVision.java:100)
+at frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain.periodic(CommandSwerveDrivetrain.java:125)
+at edu.wpi.first.wpilibj2.command.CommandScheduler.run(CommandScheduler.java:260)
+at frc.robot.Robot.robotPeriodic(Robot.java:32)
+at edu.wpi.first.wpilibj.IterativeRobotBase.loopFunc(IterativeRobotBase.java:381)
+at edu.wpi.first.wpilibj.TimedRobot.startCompetition(TimedRobot.java:131)
+at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:365)
+at edu.wpi.first.wpilibj.RobotBase.startRobot(RobotBase.java:453)
+at frc.robot.Main.main(Main.java:14)
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+[phoenix] Signal Logger: Available disk space (99 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+CAN frame not received/too-stale. Check the CAN bus wiring, CAN bus utilization, and power to the device.
+[phoenix] Signal Logger: Available disk space (99 MB) is low; at 50 MB, old hoot logs will be deleted. Use Tuner X to download and delete hoot logs.
+PhotonVision coprocessor at path /photonvision/front_cam is not sending new data.
+Warning at org.photonvision.PhotonCamera.verifyVersion(PhotonCamera.java:368): PhotonVision coprocessor at path /photonvision/front_cam is not sending new data.
+at org.photonvision.PhotonCamera.verifyVersion(PhotonCamera.java:368)
+at org.photonvision.PhotonCamera.getLatestResult(PhotonCamera.java:178)
+at org.photonvision.PhotonPoseEstimator.update(PhotonPoseEstimator.java:309)
+at frc.robot.Vision.PhotonVision.getEstimatedGlobalPose(PhotonVision.java:100)
+at frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain.periodic(CommandSwerveDrivetrain.java:125)
+at edu.wpi.first.wpilibj2.command.CommandScheduler.run(CommandScheduler.java:260)
+at frc.robot.Robot.robotPeriodic(Robot.java:32)
+at edu.wpi.first.wpilibj.IterativeRobotBase.loopFunc(IterativeRobotBase.java:381)
+at edu.wpi.first.wpilibj.TimedRobot.startCompetition(TimedRobot.java:131)
+at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:365)
+at edu.wpi.first.wpilibj.RobotBase.startRobot(RobotBase.java:453)
+at frc.robot.Main.main(Main.java:14)

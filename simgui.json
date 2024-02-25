@@ -1,0 +1,137 @@
+{
+  "HALProvider": {
+    "DIO": {
+      "window": {
+        "visible": true
+      }
+    },
+    "Other Devices": {
+      "DutyCycleEncoder[0]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[15]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[17]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[19]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[20]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[23]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Pose": "Field2d",
+      "/SmartDashboard/Arm Contoller": "ProfiledPIDController",
+      "/SmartDashboard/Arm Controller": "Motor Controller",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/Auto Turning PID": "PIDController",
+      "/SmartDashboard/Control Chooser": "String Chooser",
+      "/SmartDashboard/Control Style Chooser": "String Chooser",
+      "/SmartDashboard/Module 0": "Mechanism2d",
+      "/SmartDashboard/Module 1": "Mechanism2d",
+      "/SmartDashboard/Module 2": "Mechanism2d",
+      "/SmartDashboard/Module 3": "Mechanism2d",
+      "/SmartDashboard/Run Shooter": "Command",
+      "/SmartDashboard/Speed Limit": "String Chooser",
+      "/SmartDashboard/Stop Shooter": "Command",
+      "/SmartDashboard/Update Shooter Gains": "Command"
+    },
+    "windows": {
+      "/Pose": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Auto Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Control Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Run Shooter": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Speed Limit": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Stop Shooter": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
+    "Retained Values": {
+      "open": false
+    },
+    "retained": {
+      "SmartDashboard": {
+        "open": true
+      },
+      "limelight": {
+        "open": true
+      }
+    },
+    "transitory": {
+      "LiveWindow": {
+        ".status": {
+          "open": true
+        },
+        "open": true
+      },
+      "Pose": {
+        "double[]##v_/Pose/robotPose": {
+          "open": true
+        }
+      },
+      "SmartDashboard": {
+        "TunableNumbers": {
+          "open": true
+        },
+        "open": true
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}

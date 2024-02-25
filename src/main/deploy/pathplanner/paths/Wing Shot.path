@@ -1,0 +1,76 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.937447226245804,
+        "y": 0.8135338793200119
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.81883257359012,
+        "y": 0.8966613073790942
+      },
+      "isLocked": false,
+      "linkedName": "CenterPiece5"
+    },
+    {
+      "anchor": {
+        "x": 3.78657550107893,
+        "y": 2.1632605427373024
+      },
+      "prevControl": {
+        "x": 4.979142210536673,
+        "y": 1.4236842888100192
+      },
+      "nextControl": {
+        "x": 2.584715044930937,
+        "y": 2.9086003605035016
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.6787831773861743,
+        "y": 3.9937117712073262
+      },
+      "prevControl": {
+        "x": 1.826698428171631,
+        "y": 3.7163706759845954
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "WingShot1"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 148.6269948598915,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 120.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}
