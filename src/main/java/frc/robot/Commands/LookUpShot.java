@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Subsystems.Arm.ArmSubsystem;
+import frc.robot.Subsystems.LED.LEDSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Util.Setpoints;
 import frc.robot.Util.ShooterPreset;
@@ -21,20 +22,22 @@ public class LookUpShot extends Command {
     ArmSubsystem m_armSubsystem;
     ShooterSubsystem m_shooterSubsystem;
     ShooterPreset m_shotInfo;
+    LEDSubsystem m_blinker;
     VisionLookUpTable m_VisionLookUpTable;
     DoubleSupplier m_distance;
     
 
     /** Constructor - Creates a new prepareToShoot. */
-    public LookUpShot(ArmSubsystem armSub, ShooterSubsystem shootSub, DoubleSupplier distance) {
+    public LookUpShot(ArmSubsystem armSub, ShooterSubsystem shootSub, DoubleSupplier distance, LEDSubsystem blinker) {
         
         m_armSubsystem = armSub;
         m_shooterSubsystem = shootSub;
         m_VisionLookUpTable = new VisionLookUpTable();
         m_distance = distance;
         m_setpoints = RobotConstants.LOOKUP;
+        m_blinker = blinker;
 
-        addRequirements(armSub, shootSub);
+        addRequirements(armSub, shootSub, blinker);
     }
 
     // Called when the command is initially scheduled.
@@ -58,6 +61,12 @@ public class LookUpShot extends Command {
             SmartDashboard.putNumber("LookUp Distance", distance);
             SmartDashboard.putNumber("Shot Info Angle", m_setpoints.arm);
         }
+        if(m_shooterSubsystem.areWheelsAtSpeed()) {
+            m_blinker.ready2Shoot();
+        } else {
+            m_blinker.notReady2Shoot();
+        }
+
 
         m_armSubsystem.updateArmSetpoint(m_setpoints);
 

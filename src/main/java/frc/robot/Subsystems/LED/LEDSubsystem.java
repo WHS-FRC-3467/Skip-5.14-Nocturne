@@ -40,6 +40,8 @@ public class LEDSubsystem extends SubsystemBase {
   //public static final Animation ColorFlow = new ColorFlowAnimation(color.red, color.green, color.blue, 0, speed, segmentSize, Direction.Forward, startIndex)
   public static final Animation m_ready2Shoot = new StrobeAnimation(green.red, green.green, green.blue, 0, 0.09, 300, 0);  // Flash Green
   public static final Animation m_notReady2Shoot = new StrobeAnimation(red.red, red.green, red.blue, 0, .09, 300, 0);  // Flash Red
+  public static final Animation m_armNotReady = new StrobeAnimation(red.red, red.green, red.blue, 0, 0.09, 300, 0); // Flash Red
+  public static final Animation m_noNote = new StrobeAnimation(yellow.red, yellow.green, yellow.blue, 0, 0.09, 300, 0); // Flash Yellow
 
 
 
@@ -63,8 +65,10 @@ public class LEDSubsystem extends SubsystemBase {
 
   public Command defaultCommand() {
     return runOnce(() -> {
-        LEDSegment.MainStrip.setColor(yellow);
-        LEDSegment.SecondStrip.setColor(yellow);
+        LEDSegment.ShooterStrip.setColor(yellow);
+        LEDSegment.IntakeStrip.setColor(yellow);
+        LEDSegment.ArmStrip.setColor(yellow);
+        LEDSegment.TimerStrip.setColor(yellow);
     });
   }
 
@@ -73,10 +77,37 @@ public class LEDSubsystem extends SubsystemBase {
     m_candle.configBrightnessScalar(percent, 100);
   }
 
+  public void ready2Shoot() {
+    LEDSegment.ShooterStrip.setColor(green);
+  }
+
+  public void notReady2Shoot() {
+    LEDSegment.ShooterStrip.notReady2Shoot(1);
+  }
+  
+  public void noNote() {
+    LEDSegment.IntakeStrip.noNote(2);
+  }
+
+  public void yesNote() {
+    LEDSegment.IntakeStrip.setColor(white);
+  }
+
+  public void armNotAtPos() {
+    LEDSegment.ArmStrip.armNotReady(3);
+  }
+
+  public void armAtPos() {
+    LEDSegment.ArmStrip.setColor(green);
+  }
+
+
   /* This section will define our LED strip and apply the proper Functions to change it */
-  public static enum LEDSegment {
-        MainStrip(8, 300, 2),
-        SecondStrip(0,100,3);
+  private static enum LEDSegment {
+        TimerStrip(0,100,0),
+        ShooterStrip(8, 300, 1),
+        IntakeStrip(0,100,2),
+        ArmStrip(0,100,3);
 
         public final int startIndex;
         public final int segmentSize;
@@ -101,10 +132,16 @@ public class LEDSubsystem extends SubsystemBase {
             m_candle.animate(m_ready2Shoot, slotNum);
         }
 
-        public void notReady2Sheet(int slotNum) {
+        public void notReady2Shoot(int slotNum) {
             m_candle.animate(m_notReady2Shoot, slotNum);
         }
+        public void noNote(int slotNum) {
+            m_candle.animate(m_noNote, slotNum);
+        }
 
+        public void armNotReady(int slotNum) {
+            m_candle.animate(m_armNotReady, slotNum);
+        }
         public void fullClear() {
             clearAnimation();
             disableLEDs();
