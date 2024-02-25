@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.Stage.StageSubsystem;
+import frc.robot.Subsystems.LED.LEDSubsystem;
 /**
  *  Intake a Note
  * - Run Intake & Stage
@@ -17,14 +18,16 @@ public class intakeNote extends Command {
 
     IntakeSubsystem m_intakeSubsystem;
     StageSubsystem m_stageSubsystem;
+    LEDSubsystem m_blinker;
     boolean m_isDone;
 
     /** Constructor - Creates a new intakeNote */
-    public intakeNote(IntakeSubsystem intakeSub, StageSubsystem stageSub) {
+    public intakeNote(IntakeSubsystem intakeSub, StageSubsystem stageSub, LEDSubsystem blinker) {
 
         m_intakeSubsystem = intakeSub;
         m_stageSubsystem = stageSub;
-        addRequirements(intakeSub, stageSub);
+        m_blinker = blinker;
+        addRequirements(intakeSub, stageSub, blinker);
     }
 
     // Called when the command is initially scheduled.
@@ -43,9 +46,11 @@ public class intakeNote extends Command {
         // Run the Stage until a Note is inside
         if (!m_stageSubsystem.isNoteInStage()) {
             m_stageSubsystem.runStage();
+            m_blinker.noNote();
         } else {
             m_stageSubsystem.stopStage();
             m_isDone = true;
+            m_blinker.yesNote();
         }
     }
 

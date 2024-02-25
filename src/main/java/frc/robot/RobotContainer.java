@@ -37,6 +37,7 @@ import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import frc.robot.Subsystems.Drivetrain.Telemetry;
 import frc.robot.Subsystems.Intake.IntakeDefault;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
+import frc.robot.Subsystems.LED.LEDSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Stage.StageSubsystem;
 import frc.robot.Util.CommandXboxPS5Controller;
@@ -52,7 +53,6 @@ public class RobotContainer {
      * Shuffleboard Chooser widgets
      */
     private SendableChooser<Command> autoChooser;
-    private SendableChooser<String> controlChooser = new SendableChooser<>();
     private SendableChooser<Double> speedChooser = new SendableChooser<>();
 
     /*
@@ -123,6 +123,7 @@ public class RobotContainer {
     shootTimer m_shootTimer = new shootTimer();
     StageSubsystem m_stageSubsystem = new StageSubsystem(m_shootTimer);
     ArmSubsystem m_armSubsystem = new ArmSubsystem();
+    LEDSubsystem m_ledSubsystem = new LEDSubsystem();
     //PhotonVision m_PhotonVision = new PhotonVision();
 
     // Setup Limelight periodic query (defaults to disabled)
@@ -178,7 +179,7 @@ public class RobotContainer {
     private void registerNamedCommands() {
 
         // Register Named Commands for use in PathPlanner autos
-        NamedCommands.registerCommand("RunIntake", (new intakeNote(m_intakeSubsystem, m_stageSubsystem)));
+        NamedCommands.registerCommand("RunIntake", (new intakeNote(m_intakeSubsystem, m_stageSubsystem, m_ledSubsystem)));
         NamedCommands.registerCommand("DownIntake", m_armSubsystem.prepareForIntakeCommand());
         NamedCommands.registerCommand("StopIntake", m_intakeSubsystem.stopIntakeCommand());
         NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(30, 35));
@@ -204,17 +205,6 @@ public class RobotContainer {
         // Build an auto chooser. This will use Commands.none() as the default option.
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
-
-        // Build a drive control style chooser
-        controlChooser.setDefaultOption("2 Joysticks", "2 Joysticks");
-        controlChooser.addOption("1 Joystick Rotation Triggers", "1 Joystick Rotation Triggers");
-        controlChooser.addOption("Split Joysticks Rotation Triggers", "Split Joysticks Rotation Triggers");
-        controlChooser.addOption("2 Joysticks with Gas Pedal", "2 Joysticks with Gas Pedal");
-        SmartDashboard.putData("Control Style Chooser", controlChooser);
-
-        // Configure a Trigger to change the Control Style when a selection is made on the Control Style Chooser
-        Trigger controlPick = new Trigger(() -> m_lastControl != controlChooser.getSelected());
-        controlPick.onTrue(runOnce(() -> newControlStyle()));
         
         // Set the initial Drive Control Style
         newControlStyle();
@@ -330,7 +320,7 @@ public class RobotContainer {
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)
             ),
-            new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker())
+            new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker(), m_ledSubsystem)
         ));  
 
          // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X') (while pressed)
@@ -353,7 +343,7 @@ public class RobotContainer {
         
         // Driver: When LeftTrigger is pressed, lower the Arm and then run the Intake and Stage until a Note is found
         m_driverCtrl.leftTrigger(0.4).onTrue(m_armSubsystem.prepareForIntakeCommand()
-            .andThen(new intakeNote(m_intakeSubsystem, m_stageSubsystem)));
+            .andThen(new intakeNote(m_intakeSubsystem, m_stageSubsystem, m_ledSubsystem)));
 
         // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
         m_driverCtrl.rightTrigger(0.4).onTrue(m_stageSubsystem.feedNote2ShooterCommand());
@@ -459,53 +449,11 @@ public class RobotContainer {
 
     private void newControlStyle() {
 
-        m_lastControl = controlChooser.getSelected();
-        switch (controlChooser.getSelected()) {
-            case "2 Joysticks":
-                m_controlStyle = () -> m_drive.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed) // Drive forward -Y
-                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate(-m_driverCtrl.getRightX() * m_AngularRate); // Drive counterclockwise with
-                                                                                        // negative X (left)
-                break;
-            case "1 Joystick Rotation Triggers":
-                m_controlStyle = () -> m_drive.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed) // Drive forward -Y
-                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate((m_driverCtrl.getLeftTriggerAxis() - m_driverCtrl.getRightTriggerAxis())
-                                * m_AngularRate);
-                // Left trigger turns left, right trigger turns right
-                break;
-            case "Split Joysticks Rotation Triggers":
-                m_controlStyle = () -> m_drive.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed) // Left stick
-                                                                                                    // forward/back
-                        .withVelocityY(-m_driverCtrl.getRightX() * m_MaxSpeed) // Right stick strafe
-                        .withRotationalRate((m_driverCtrl.getLeftTriggerAxis() - m_driverCtrl.getRightTriggerAxis())
-                                * m_AngularRate);
-                // Left trigger turns left, right trigger turns right
-                break;
-            case "2 Joysticks with Gas Pedal":
-                m_controlStyle = () -> {
-                    var stickX = -m_driverCtrl.getLeftX();
-                    var stickY = -m_driverCtrl.getLeftY();
-                    var angle = Math.atan2(stickX, stickY);
-                    // RightTriggerAxis = "Gas pedal"
-                    return m_drive.withVelocityX(Math.cos(angle) * m_driverCtrl.getRightTriggerAxis() * m_MaxSpeed) // left
-                                                                                                                    // x
-                                                                                                                    // *
-                                                                                                                    // gas
-                            .withVelocityY(Math.sin(angle) * m_driverCtrl.getRightTriggerAxis() * m_MaxSpeed) // Angle
-                                                                                                              // of left
-                                                                                                              // stick Y
-                                                                                                              // * gas
-                            .withRotationalRate(-m_driverCtrl.getRightX() * m_AngularRate); // Drive counterclockwise
-                                                                                            // with negative X (left)
-                };
-                break;
-        }
-        try {
-            m_drivetrain.getDefaultCommand().cancel();
-        } catch (Exception e) {
-        }
 
+        m_controlStyle = () -> m_drive.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed) // Drive forward -Y
+                .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed) // Drive left with negative X (left)
+                .withRotationalRate(-m_driverCtrl.getRightX() * m_AngularRate); // Drive counterclockwise with
+                                                                                // negative X (left)
         // Specify the desired Control Style as the Drivetrain's default command
         // Drivetrain will execute this command periodically
         m_drivetrain.setDefaultCommand(m_drivetrain.applyRequest(m_controlStyle).ignoringDisable(true));
