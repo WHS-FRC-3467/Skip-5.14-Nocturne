@@ -102,7 +102,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         followerConfiguration.MotorOutput.DutyCycleNeutralDeadband = ArmConstants.kNeutral_Deadband;
 
         /* Set the turning direction */
-        leadConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        leadConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         /*
          * Apply the configurations to the motors, and set one to follow the other in
@@ -110,7 +110,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
          */
         m_armLeader.getConfigurator().apply(leadConfiguration);
         m_armFollower.getConfigurator().apply(followerConfiguration);
-        m_armFollower.setControl(new Follower(m_armLeader.getDeviceID(), false));
+        m_armFollower.setControl(new Follower(m_armLeader.getDeviceID(), true));
 
         // optimize StatusSignal rates for the Talons
         //m_armLeader.getSupplyVoltage().setUpdateFrequency(4);

@@ -78,7 +78,7 @@ public class RobotContainer {
     // Track current AngularRate
     private double m_AngularRate = m_MaxAngularRate;
     // Save last Speed Limit so we know if it needs updating
-    private Double m_lastSpeed = 0.65;
+    private Double m_lastSpeed = 1.0;
 
     /*
      * Driver/Operator controllers
@@ -321,7 +321,7 @@ public class RobotContainer {
 
         // Driver: While Right Stick button is pressed, drive while pointing to alliance speaker
         // AND adjusting Arm angle AND running Shooter
-         m_driverCtrl.rightStick().whileTrue(Commands.parallel(
+/*          m_driverCtrl.rightStick().whileTrue(Commands.parallel(
             new velocityOffset(m_drivetrain, () -> m_driverCtrl.getRightTriggerAxis()),
             m_drivetrain.applyRequest(
                 () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed)
@@ -331,7 +331,7 @@ public class RobotContainer {
                         .withRotationalDeadband(m_AngularRate * 0.1)
             ),
             new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker())
-        )); 
+        ));  */
 
          // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X') (while pressed)
         m_driverCtrl.povLeft().whileTrue(m_drivetrain.applyRequest(() -> m_brake));
@@ -358,6 +358,8 @@ public class RobotContainer {
         // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
         m_driverCtrl.rightTrigger(0.4).onTrue(m_stageSubsystem.feedNote2ShooterCommand());
             //.andThen(m_armSubsystem.prepareForIntakeCommand()));
+        
+        m_driverCtrl.start().whileTrue(m_stageSubsystem.runStageCommand());
 
 
         // Driver: While start button held, adjust Arm elevation based on goal

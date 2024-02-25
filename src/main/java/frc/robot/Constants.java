@@ -39,7 +39,7 @@ public final class Constants {
 
         // Shooter and Arm Setpoints
         public static final Setpoints STOWED = new Setpoints(1.0, 0.4, 0.0, 0.0, GameState.STOWED);
-        public static final Setpoints INTAKE = new Setpoints(3.0, 2.0, 0.0, 0.0, GameState.INTAKE);
+        public static final Setpoints INTAKE = new Setpoints(1.0, 2.0, 0.0, 0.0, GameState.INTAKE);
         public static final Setpoints SUBWOOFER = new Setpoints(3.0, 1.0, 25.0,25.0,  GameState.SUBWOOFER);
         public static final Setpoints AMP = new Setpoints(88.0, 0.4, 30.0,30.0,  GameState.AMP);
         public static final Setpoints PODIUM = new Setpoints(23.0, 0.4, 50.0,50.0,  GameState.PODIUM);
@@ -80,7 +80,7 @@ public final class Constants {
 
     public static final class StageConstants {
 
-        public static final double kIntakeSpeed = 0.6;
+        public static final double kIntakeSpeed = 0.8;
         public static final double kFeedToShooterSpeed = 1.0;
         public static final double kFeedToAmpSpeed = 0.7;
         public static final double kFeedToTrapSpeed = 0.5;
@@ -92,8 +92,8 @@ public final class Constants {
 
     public static final class IntakeConstants {
 
-        public static final double kIntakeSpeed = 1.0;
-        public static final double kEjectSpeed = -0.75;
+        public static final double kIntakeSpeed = .6;
+        public static final double kEjectSpeed = -0.3;
     }
 
     public static final class ShooterConstants {
@@ -131,9 +131,9 @@ public final class Constants {
  */
         // Observed Arm Offsets
         // Measured against the hardstop when the Arm is in the STOWED position
-        public static final double kARM_STARTING_OFFSET = 98.0;
+        public static final double kARM_STARTING_OFFSET = 162.6;
         // Measured when the Arm is exactly horizontal
-        public static final double kARM_HORIZONTAL_OFFSET = 115.0;
+        public static final double kARM_HORIZONTAL_OFFSET = 181.6;
 
         // Feedforward Gains
         public static final double kS = .5;  // The Static Gain, in volts
@@ -160,14 +160,14 @@ public final class Constants {
 	}
 	
     public static class Vision {
-        public static final String kCameraName = "front_cam";
-        //public static final String kCameraName = "USB_Camera";
+        //public static final String kCameraName = "front_cam";
+        public static final String kCameraName = "USB_Camera";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-        public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(.174,-0.186, 0.588), new Rotation3d(0, Math.toRadians(10),0));
-
         //public static final Transform3d kRobotToCam =
-                //new Transform3d(new Translation3d(0.264922,0.2465578, 0.2182876), new Rotation3d(0, Math.toRadians(22.09),Math.toRadians(5)));
+                //new Transform3d(new Translation3d(.174,-0.186, 0.588), new Rotation3d(0, Math.toRadians(10),0));
+
+        public static final Transform3d kRobotToCam =
+                new Transform3d(new Translation3d(.25679,.2491, .22), new Rotation3d(0, Math.toRadians(-20.4),Math.toRadians(20)));
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout kTagLayout =

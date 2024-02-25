@@ -45,7 +45,7 @@ public class StageSubsystem extends SubsystemBase {
         m_stageMotor.configFactoryDefault();
 
         // Invert motor?
-        m_stageMotor.setInverted(false);
+        m_stageMotor.setInverted(true);
 
         // Set motor to Brake
         m_stageMotor.setNeutralMode(NeutralMode.Brake);
@@ -95,6 +95,7 @@ public class StageSubsystem extends SubsystemBase {
      * @param speed speed to set Stage motor at
      */
     public void runStage(double speed) {
+        System.out.println("Just yapping");
         m_stageMotor.set(ControlMode.PercentOutput, speed);
     }
 
@@ -114,16 +115,6 @@ public class StageSubsystem extends SubsystemBase {
 
     // Do not use if the shooter's target velocity is zero.
     public void ejectFront(double speed) {
-        //System.out.println("CHECKING FOR TIME");
-        if (this.hasStarted && !this.hasRun) {
-            //this.startShootTime = System.currentTimeMillis();
-            //m_timer.start();
-            m_timer.timerState(true);
-
-            System.out.println("STARTING TIMER");
-            System.out.println(m_timer.giveTime());
-            this.hasRun = true;
-        } 
         if (m_noteInStage) {
             this.runStage(speed);
         }
@@ -160,12 +151,6 @@ public class StageSubsystem extends SubsystemBase {
         return new RunCommand(()->this.stopStage());
     }
 
-    public double getTimeOfShot() {
-        System.out.println("BBBBBBBBBBBBB");
-        System.out.printf("%.3f",m_timer.giveTime());
-        return Constants.ShooterConstants.timeToShoot - m_timer.giveTime();
-    }
-
     // Feed the Note to the Amp
     public Command feedNote2AmpCommand() {
         return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToAmpSpeed), this)
@@ -191,6 +176,11 @@ public class StageSubsystem extends SubsystemBase {
     public Command stopStageCommand() {
         
         return new InstantCommand(() -> this.stopStage());
+    }
+
+    public Command runStageCommand() {
+        System.out.println("Just chatting");
+        return new RunCommand(() -> this.runStage(0.9));
     }
 
 }
