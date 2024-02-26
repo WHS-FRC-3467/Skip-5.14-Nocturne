@@ -320,7 +320,7 @@ public class RobotContainer {
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)
             ),
-            new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker(), m_ledSubsystem)
+            new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance(), m_ledSubsystem)
         ));  
 
          // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X') (while pressed)

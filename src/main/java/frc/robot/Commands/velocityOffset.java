@@ -4,8 +4,6 @@
 
 package frc.robot.Commands;
 
-
-
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -43,6 +41,7 @@ public class velocityOffset extends Command {
     DoubleSupplier m_trigger;
     Timer shotTimer;
     Boolean ranOnce;
+    Double correctedDistance;
 
     /** Creates a new velocityOffset. */
     public velocityOffset(CommandSwerveDrivetrain drivetrain, DoubleSupplier triggerAxis) {
@@ -102,8 +101,11 @@ public class velocityOffset extends Command {
         //The amount to add to the current angle to speaker to aim for the future
         correctionAngle = currentAngleToSpeaker - futureAngleToSpeaker;
         correctedPose = Rotation2d.fromDegrees(-correctionAngle).plus(m_drivetrain.RotToSpeaker());
+
+        correctedDistance = m_drivetrain.calcAngleToSpeaker(futureRobotPose);
+
         //Pass the offset to the drivetrain
-        m_drivetrain.setVelOffset(correctedPose);
+        m_drivetrain.setVelOffset(correctedPose,correctedDistance);
 
         
 
