@@ -18,17 +18,19 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 //import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 /* Local */
 import frc.robot.Commands.LookUpShot;
 import frc.robot.Commands.intakeNote;
 import frc.robot.Commands.prepareToShoot;
+import frc.robot.Commands.setShooterSpeedLookUP;
 import frc.robot.Commands.velocityOffset;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Subsystems.Arm.ArmDefault;
@@ -233,6 +235,14 @@ public class RobotContainer {
 
     }
 
+    private double invertForAlliance() {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+            return -1;
+        }
+        return 1;
+    }
+
     private void configureButtonBindings() {
 
         /*
@@ -308,7 +318,7 @@ public class RobotContainer {
                         .withTargetDirection(Rotation2d.fromDegrees(90.0))
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
-
+        
         // Driver: While Right Stick button is pressed, drive while pointing to alliance speaker
         // AND adjusting Arm angle AND running Shooter
           m_driverCtrl.rightStick().whileTrue(Commands.parallel(
@@ -335,6 +345,7 @@ public class RobotContainer {
         m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_lastSpeed)
                 .andThen(() -> m_AngularRate = m_MaxAngularRate));
         
+
         // Driver: While Right Bumper is held, reduce speed by 25%
          m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_QuarterSpeed)
                 .andThen(() -> m_AngularRate = m_QuarterAngularRate));
@@ -352,26 +363,12 @@ public class RobotContainer {
         m_driverCtrl.start().whileTrue(m_stageSubsystem.runStageCommand());
 
 
-        // Driver: While start button held, adjust Arm elevation based on goal
-        //m_driverCtrl.start().onTrue(Commands.parallel(m_shooterSubsystem.runShooterCommand(),m_armSubsystem.moveToDegreeCommand()));
-
-/*         m_driverCtrl.start().whileTrue(
-            m_drivetrain.applyRequest(
-                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed)
-                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed)
-                        .withTargetDirection(m_drivetrain.getAngularOffset(m_stageSubsystem.getTimeAtStartOfShot()))
-                        .withDeadband(m_MaxSpeed * 0.1)
-                        .withRotationalDeadband(m_AngularRate * 0.1)
-        )); */
-
         /*
          * OPERATOR Controls
          */
         // Operator: When A button is pressed, stop Shooter
         //m_operatorCtrl.a().onTrue(m_shooterSubsystem.runShooterCommand());
-        m_operatorCtrl.a().onFalse(m_shooterSubsystem.stopShooterCommand());
-
-        
+       // m_operatorCtrl.a().onTrue(new setShooterSpeedLookUP(m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker()));
 
          // Operator: X Button: Arm to Stowed Position (when pressed)
          m_operatorCtrl.x().onTrue(new prepareToShoot(RobotConstants.STOWED, ()->m_stageSubsystem.isNoteInStage(),
@@ -422,7 +419,7 @@ public class RobotContainer {
          * These bindings will only be used when characterizing the Drivetrain. They can
          * eventually be commented out.
          */
-/*
+        /*
         m_driverCtrl.x().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveQuasiTest(Direction.kForward));
         m_driverCtrl.x().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runDriveQuasiTest(Direction.kReverse));
 
@@ -438,7 +435,7 @@ public class RobotContainer {
         // Drivetrain needs to be placed against a sturdy wall and test stopped
         // immediately upon wheel slip
         m_driverCtrl.back().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveSlipTest());
-    */
+        */
     }
 
     public Command getAutonomousCommand() {
@@ -450,14 +447,14 @@ public class RobotContainer {
     private void newControlStyle() {
 
 
-        m_controlStyle = () -> m_drive.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed) // Drive forward -Y
-                .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed) // Drive left with negative X (left)
+        m_controlStyle = () -> m_drive.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance()) // Drive forward -Y
+                .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance()) // Drive left with negative X (left)
                 .withRotationalRate(-m_driverCtrl.getRightX() * m_AngularRate); // Drive counterclockwise with
                                                                                 // negative X (left)
         // Specify the desired Control Style as the Drivetrain's default command
         // Drivetrain will execute this command periodically
         m_drivetrain.setDefaultCommand(m_drivetrain.applyRequest(m_controlStyle).ignoringDisable(true));
-    }
+    } 
 
     private void newSpeed() {
 

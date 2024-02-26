@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-//import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.SignalLogger;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
         // This is the CTRE SignalLogger. It requires a USB drive in the RoboRIO
         // https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/api-usage/signal-logging.html
         // Don't use it for now
-        // SignalLogger.start();
+         SignalLogger.start();
     }
 
     @Override

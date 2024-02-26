@@ -31,14 +31,14 @@ public class ShooterSubsystem extends SubsystemBase {
      * Gains for shooter tuning
      */
     // An error of 1 rotation per second results in 2V output
-    private static TunableNumber m_kP = new TunableNumber("Shooter kP", 0.05);
+    private static TunableNumber m_kP = new TunableNumber("Shooter kP", 0.3);
     // An error of 1 rotation per second increases output by 0.5V every second
     private static TunableNumber m_kI = new TunableNumber("Shooter kI", 0.0);
     // A change of 1 rotation per second squared results in 0.01 volts output
     private static TunableNumber m_kD = new TunableNumber("Shooter kD", 0.0);
     // Voltage-based velocity requires a velocity feed forward to account for the back-emf of the motor
     // Falcon 500 is a 500kV motor, 500rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts/RPS
-    private static TunableNumber m_kV = new TunableNumber("Shooter kV", 0.113);
+    private static TunableNumber m_kV = new TunableNumber("Shooter kV", 0.125);
 
     // Shooter Velocity setpoints (in RPS)
     private static TunableNumber m_ShooterSetpointL = new TunableNumber("Shooter Setpoint L", 0.0);

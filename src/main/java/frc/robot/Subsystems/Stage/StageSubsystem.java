@@ -109,9 +109,7 @@ public class StageSubsystem extends SubsystemBase {
 
     // Do not use if the shooter's target velocity is zero.
     public void ejectFront(double speed) {
-        if (m_noteInStage) {
-            this.runStage(speed);
-        }
+        this.runStage(speed);
     }
 
     public void ejectBack(double speed) {

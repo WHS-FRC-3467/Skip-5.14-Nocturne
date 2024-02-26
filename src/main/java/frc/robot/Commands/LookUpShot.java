@@ -80,6 +80,7 @@ public class LookUpShot extends Command {
     public void end(boolean interrupted) {
         // Stop the Shooter but keep the Arm control going
         m_shooterSubsystem.stopShooter();
+        m_armSubsystem.prepareForIntakeCommand();
 
     }
 

@@ -92,7 +92,7 @@ public final class Constants {
 
     public static final class IntakeConstants {
 
-        public static final double kIntakeSpeed = .6;
+        public static final double kIntakeSpeed = .7;
         public static final double kEjectSpeed = -0.3;
     }
 

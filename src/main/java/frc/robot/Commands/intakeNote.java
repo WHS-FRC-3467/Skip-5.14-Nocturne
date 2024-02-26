@@ -39,19 +39,17 @@ public class intakeNote extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-
-        // Turn on the Intake
-        m_intakeSubsystem.runIntake(IntakeConstants.kIntakeSpeed);
-
         // Run the Stage until a Note is inside
         if (!m_stageSubsystem.isNoteInStage()) {
             m_stageSubsystem.runStage();
             m_blinker.noNote();
         } else {
             m_stageSubsystem.stopStage();
-            m_isDone = true;
             m_blinker.yesNote();
+            m_isDone = true;
         }
+        // Turn on the Intake
+        m_intakeSubsystem.runIntake(IntakeConstants.kIntakeSpeed);
     }
 
     // Called once the command ends or is interrupted.
