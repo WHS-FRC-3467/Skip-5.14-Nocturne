@@ -4,10 +4,9 @@
 
 package frc.robot.Commands;
 
-import static edu.wpi.first.units.Units.Micro;
-
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,10 +14,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import frc.robot.Subsystems.Stage.StageSubsystem;
-import edu.wpi.first.wpilibj.Timer;
+
 
 public class velocityOffset extends Command {
 
@@ -41,15 +41,17 @@ public class velocityOffset extends Command {
     Translation2d moveDelta;
     Rotation2d correctedPose;
     DoubleSupplier m_trigger;
-    Timer shootTimer;
+    Timer shotTimer;
     Boolean ranOnce;
+    Double correctedDistance;
+    Pose2d futureRobotPose2d;
 
     /** Creates a new velocityOffset. */
     public velocityOffset(CommandSwerveDrivetrain drivetrain, DoubleSupplier triggerAxis) {
         m_drivetrain = drivetrain;
         //m_stageSubsystem = stage;
         m_trigger = triggerAxis;
-        shootTimer = new Timer();
+        shotTimer = new Timer();
         ranOnce = false;
         //addRequirements(stage);
     }
@@ -57,50 +59,61 @@ public class velocityOffset extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        
-        //System.out.println("Starting vel command");
+        //System.out.println("Starting Velocity Offset correction command");
         m_isDone = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (m_trigger.getAsDouble() > .01) {
-            //System.out.println("TRIGGER PRESSED");
+
+        //Starts shot timer after trigger press
+        //TODO: Sync trigger threashold with driver controller bindings
+        if (m_trigger.getAsDouble() > Constants.ControllerConstants.triggerThreashold) {
             if (!ranOnce) {
-                //System.out.println("STARTING INTERNAL TIMER");
-                shootTimer.start();
+                //System.out.println("Starting Internal Timer");
+                shotTimer.start();
                 ranOnce = true;
             }
         }
 
-
+        //Get current translation of the drivetrain
         currentPos = m_drivetrain.getState().Pose.getTranslation();
-        currentAngleToSpeaker = m_drivetrain.calcAngleToSpeaker();
+        //Calculate angle relative to the speaker from current pose
+        currentAngleToSpeaker = m_drivetrain.calcAngleToSpeaker(currentPos);
+        //Get current drivetrain velocities in field relative terms
         speeds = m_drivetrain.getFieldRelativeChassisSpeeds();
 
-        timeUntilShot = Constants.ShooterConstants.timeToShoot - shootTimer.get();
+        //timeToShoot represents the time it take a note to leave the shooter after button is pressed
+        //timeUntil shot calculates the time until the note leaves based on the constant and time since button press
+        timeUntilShot = Constants.ShooterConstants.timeToShoot - shotTimer.get();
         if (timeUntilShot < 0) {
             timeUntilShot = 0.00;
         }
-/*         if (timeUntilShot < .4) {
-            System.out.println("DYNAMIC TIMING");
-            System.out.printf("%.3f",shootTimer.get());
-        } */
 
+        //Calculate change in x/y distance due to time and velocity
         xDelta = timeUntilShot*(speeds.vxMetersPerSecond);
         yDelta = timeUntilShot*(speeds.vyMetersPerSecond);
         moveDelta = new Translation2d(xDelta,yDelta);
+
+        //futureRobotPose is the position the robot will be at timeUntilShot in the future
         futureRobotPose = currentPos.plus(moveDelta);
+        //Angle to the speaker at future position
         futureAngleToSpeaker = m_drivetrain.calcAngleToSpeaker(futureRobotPose);
 
+        //The amount to add to the current angle to speaker to aim for the future
         correctionAngle = currentAngleToSpeaker - futureAngleToSpeaker;
         correctedPose = Rotation2d.fromDegrees(-correctionAngle).plus(m_drivetrain.RotToSpeaker());
-        m_drivetrain.setVelOffset(correctedPose);
+        //Wrap the input using Modulus to prevent un-needed 180deg spins
+        correctedPose = Rotation2d.fromDegrees(MathUtil.inputModulus(correctedPose.getDegrees(),-180,180));
+        //Get the future distance to speaker
+        correctedDistance = m_drivetrain.calcDistToSpeaker(futureRobotPose);
+        //Pass the offsets to the drivetrain
+        m_drivetrain.setVelOffset(correctedPose,correctedDistance);
 
         
-
-        if (true) {
+ 
+        if (Constants.RobotConstants.kIsAutoAimTuningMode) {
             SmartDashboard.putNumber("Robot Angle To Speaker",m_drivetrain.calcAngleToSpeaker());
             SmartDashboard.putNumber("Robot Dist To Speaker",m_drivetrain.calcDistToSpeaker());
             //SmartDashboard.putNumber("xDelta", xDelta);
@@ -108,8 +121,10 @@ public class velocityOffset extends Command {
             //SmartDashboard.putNumber("futureang", futureAngleToSpeaker);
             SmartDashboard.putNumber("Correction Angle", correctionAngle);
             SmartDashboard.putNumber("timeUntilShot", timeUntilShot);
+            SmartDashboard.putNumber("futureDist", correctedDistance);
+            
             //SmartDashboard.putNumber("time Const", Constants.ShooterConstants.timeToShoot);
-            //SmartDashboard.putNumber("currentTime", shootTimer.get());
+            //SmartDashboard.putNumber("currentTime", shotTimer.get());
             //SmartDashboard.putNumber("trig", m_trigger.getAsDouble());
         }
 
@@ -120,8 +135,8 @@ public class velocityOffset extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        shootTimer.stop();
-        shootTimer.reset();
+        shotTimer.stop();
+        shotTimer.reset();
         ranOnce = false;
         //m_isDone = true;
     }

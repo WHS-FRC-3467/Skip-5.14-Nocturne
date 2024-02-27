@@ -53,6 +53,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public Field2d _field = new Field2d();
     public PhotonVision _vision = new PhotonVision();
     private Rotation2d velocityOffset = new Rotation2d(0);
+    private Double correctedDist;
 
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
@@ -256,6 +257,17 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         
     }
 
+    public double calcDistToSpeaker(Translation2d pose) {
+        if(getSpeakerPos()!=null) {
+            return getRadiusToSpeakerInMeters(new Pose2d(pose, m_odometry.getEstimatedPosition().getRotation()),getSpeakerPos());
+        } else {
+            return 999;
+        }
+        
+    }
+
+    
+
     private double calcAngleToSpeakerForRed(Translation2d pose) {
         Pose2d speakerPos = Constants.RED_SPEAKER;
         double xDiff = speakerPos.getX() - pose.getX();
@@ -286,12 +298,17 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
     }
 
-    public void setVelOffset(Rotation2d angle) {
+    public void setVelOffset(Rotation2d angle, double dist) {
         velocityOffset = angle;
+        correctedDist = dist;
     }
 
     public Rotation2d getVelocityOffset() {
         return velocityOffset;
+    }
+
+    public double getCorrectedDistance() {
+        return correctedDist;
     }
 
 
