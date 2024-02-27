@@ -148,7 +148,6 @@ public class RobotContainer {
         
 
         // Sets Cardinal Rotation PID
-        m_cardinal.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         m_cardinal.HeadingController.setPID(6.0, 0, 0.6);
 
         if (RobotConstants.kIsTuningMode) {
@@ -212,7 +211,7 @@ public class RobotContainer {
         newControlStyle();
 
         // Build a speed limit chooser
-        speedChooser.addOption("100%", 1.0);
+        /* speedChooser.addOption("100%", 1.0);
         speedChooser.addOption("95%", 0.95);
         speedChooser.addOption("90%", 0.9);
         speedChooser.addOption("85%", 0.85);
@@ -228,10 +227,10 @@ public class RobotContainer {
 
         // Configure a Trigger to change the speed limit when a selection is made on the Speed Limit Chooser
         Trigger speedPick = new Trigger(() -> m_lastSpeed != speedChooser.getSelected());
-        speedPick.onTrue(runOnce(() -> newSpeed()));
+        speedPick.onTrue(runOnce(() -> newSpeed())); */
 
         // Set the initial Speed Limit
-        newSpeed();
+        //newSpeed();
 
     }
 
@@ -289,32 +288,32 @@ public class RobotContainer {
          */
         // Driver: While Y button is pressed, rotate to North
         m_driverCtrl.y().onTrue(m_drivetrain.applyRequest(
-                () -> m_cardinal.withVelocityX(0.0)
-                        .withVelocityY(0.0)
+                () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(0.0))
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While B button is pressed, rotate to East
         m_driverCtrl.b().onTrue(m_drivetrain.applyRequest(
-                () -> m_cardinal.withVelocityX(0.0)
-                        .withVelocityY(0.0)
+                () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(-90.0))
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While A button is pressed, rotate to South
         m_driverCtrl.a().onTrue(m_drivetrain.applyRequest(
-                () -> m_cardinal.withVelocityX(0.0)
-                        .withVelocityY(0.0)
+                () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(180.0))
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While X button is pressed, rotate to West
         m_driverCtrl.x().onTrue(m_drivetrain.applyRequest(
-                () -> m_cardinal.withVelocityX(0.0)
-                        .withVelocityY(0.0)
+                () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(90.0))
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
@@ -324,8 +323,8 @@ public class RobotContainer {
           m_driverCtrl.rightStick().whileTrue(Commands.parallel(
             new velocityOffset(m_drivetrain, () -> m_driverCtrl.getRightTriggerAxis()),
             m_drivetrain.applyRequest(
-                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed)
-                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed)
+                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(m_drivetrain.getVelocityOffset())
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)
@@ -339,16 +338,15 @@ public class RobotContainer {
          // Driver: DPad Up: Reset the field-centric heading (when pressed)
         m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
 
-        // Driver: While Left Bumper is held, reduce speed by 50%
-         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_HalfSpeed)
-                .andThen(() -> m_AngularRate = m_HalfAngularRate));
+        // Driver: While Left Bumper is held, reduce speed by 25%
+         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_QuarterSpeed)
+                .andThen(() -> m_AngularRate = m_QuarterAngularRate));
         m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_lastSpeed)
                 .andThen(() -> m_AngularRate = m_MaxAngularRate));
         
-
-        // Driver: While Right Bumper is held, reduce speed by 25%
-         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_QuarterSpeed)
-                .andThen(() -> m_AngularRate = m_QuarterAngularRate));
+        // Driver: While Right Bumper is held, reduce speed by 50%
+         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_HalfSpeed)
+                .andThen(() -> m_AngularRate = m_HalfAngularRate));
         m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_lastSpeed)
                 .andThen(() -> m_AngularRate = m_MaxAngularRate));
         
@@ -357,12 +355,10 @@ public class RobotContainer {
             .andThen(new intakeNote(m_intakeSubsystem, m_stageSubsystem, m_ledSubsystem)));
 
         // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
-        m_driverCtrl.rightTrigger(0.4).onTrue(m_stageSubsystem.feedNote2ShooterCommand());
-            //.andThen(m_armSubsystem.prepareForIntakeCommand()));
-        
-        m_driverCtrl.start().whileTrue(m_stageSubsystem.runStageCommand());
-
-
+        m_driverCtrl.rightTrigger(0.4).onTrue(m_stageSubsystem.feedNote2ShooterCommand()
+            .withTimeout(2)
+            .andThen(m_armSubsystem.prepareForIntakeCommand()));
+            
         /*
          * OPERATOR Controls
          */
