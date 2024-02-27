@@ -5,6 +5,8 @@
 package frc.robot.Commands;
 
 import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -42,6 +44,7 @@ public class velocityOffset extends Command {
     Timer shotTimer;
     Boolean ranOnce;
     Double correctedDistance;
+    Pose2d futureRobotPose2d;
 
     /** Creates a new velocityOffset. */
     public velocityOffset(CommandSwerveDrivetrain drivetrain, DoubleSupplier triggerAxis) {
@@ -101,14 +104,15 @@ public class velocityOffset extends Command {
         //The amount to add to the current angle to speaker to aim for the future
         correctionAngle = currentAngleToSpeaker - futureAngleToSpeaker;
         correctedPose = Rotation2d.fromDegrees(-correctionAngle).plus(m_drivetrain.RotToSpeaker());
-
-        correctedDistance = m_drivetrain.calcAngleToSpeaker(futureRobotPose);
-
-        //Pass the offset to the drivetrain
+        //Wrap the input using Modulus to prevent un-needed 180deg spins
+        correctedPose = Rotation2d.fromDegrees(MathUtil.inputModulus(correctedPose.getDegrees(),-180,180));
+        //Get the future distance to speaker
+        correctedDistance = m_drivetrain.calcDistToSpeaker(futureRobotPose);
+        //Pass the offsets to the drivetrain
         m_drivetrain.setVelOffset(correctedPose,correctedDistance);
 
         
-
+ 
         if (Constants.RobotConstants.kIsAutoAimTuningMode) {
             SmartDashboard.putNumber("Robot Angle To Speaker",m_drivetrain.calcAngleToSpeaker());
             SmartDashboard.putNumber("Robot Dist To Speaker",m_drivetrain.calcDistToSpeaker());
@@ -117,6 +121,8 @@ public class velocityOffset extends Command {
             //SmartDashboard.putNumber("futureang", futureAngleToSpeaker);
             SmartDashboard.putNumber("Correction Angle", correctionAngle);
             SmartDashboard.putNumber("timeUntilShot", timeUntilShot);
+            SmartDashboard.putNumber("futureDist", correctedDistance);
+            
             //SmartDashboard.putNumber("time Const", Constants.ShooterConstants.timeToShoot);
             //SmartDashboard.putNumber("currentTime", shotTimer.get());
             //SmartDashboard.putNumber("trig", m_trigger.getAsDouble());

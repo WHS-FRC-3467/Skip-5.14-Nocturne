@@ -52,7 +52,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private Pose2d _speakerPosition;
     public Field2d _field = new Field2d();
     public PhotonVision _vision = new PhotonVision();
-    private Rotation2d velocityOffset;
+    private Rotation2d velocityOffset = new Rotation2d(0);
     private Double correctedDist;
 
 
@@ -256,14 +256,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         
     }
 
-    public double calcDistToSpeaker(Pose2d pose) {
+    public double calcDistToSpeaker(Translation2d pose) {
         if(getSpeakerPos()!=null) {
-            return getRadiusToSpeakerInMeters(pose,getSpeakerPos());
+            return getRadiusToSpeakerInMeters(new Pose2d(pose, m_odometry.getEstimatedPosition().getRotation()),getSpeakerPos());
         } else {
             return 999;
         }
         
     }
+
+    
 
     private double calcAngleToSpeakerForRed(Translation2d pose) {
         Pose2d speakerPos = Constants.RED_SPEAKER;
