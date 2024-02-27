@@ -40,6 +40,7 @@ import frc.robot.Subsystems.Drivetrain.Telemetry;
 import frc.robot.Subsystems.Intake.IntakeDefault;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.LED.LEDSubsystem;
+import frc.robot.Subsystems.Shooter.ShooterDefault;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Stage.StageSubsystem;
 import frc.robot.Util.CommandXboxPS5Controller;
@@ -120,12 +121,13 @@ public class RobotContainer {
     Pose2d m_odomStart = new Pose2d(0, 0, new Rotation2d(0, 0));
 
     // Instantiate other Subsystems
-    ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+    LEDSubsystem m_ledSubsystem = new LEDSubsystem();
+    ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(m_ledSubsystem);
     IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
     shootTimer m_shootTimer = new shootTimer();
     StageSubsystem m_stageSubsystem = new StageSubsystem(m_shootTimer);
     ArmSubsystem m_armSubsystem = new ArmSubsystem();
-    LEDSubsystem m_ledSubsystem = new LEDSubsystem();
+    
     //PhotonVision m_PhotonVision = new PhotonVision();
 
     // Setup Limelight periodic query (defaults to disabled)
@@ -282,12 +284,13 @@ public class RobotContainer {
          * Right Stick Button: <no-op>
          * *
          */
+        m_shooterSubsystem.setDefaultCommand(new ShooterDefault(m_shooterSubsystem));
 
         /*
          * DRIVER Controls
          */
         // Driver: While Y button is pressed, rotate to North
-        m_driverCtrl.y().onTrue(m_drivetrain.applyRequest(
+        m_driverCtrl.y().whileTrue(m_drivetrain.applyRequest(
                 () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
                         .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(0.0))
@@ -295,7 +298,7 @@ public class RobotContainer {
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While B button is pressed, rotate to East
-        m_driverCtrl.b().onTrue(m_drivetrain.applyRequest(
+        m_driverCtrl.b().whileTrue(m_drivetrain.applyRequest(
                 () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
                         .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(-90.0))
@@ -303,7 +306,7 @@ public class RobotContainer {
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While A button is pressed, rotate to South
-        m_driverCtrl.a().onTrue(m_drivetrain.applyRequest(
+        m_driverCtrl.a().whileTrue(m_drivetrain.applyRequest(
                 () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
                         .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(180.0))
@@ -311,7 +314,7 @@ public class RobotContainer {
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While X button is pressed, rotate to West
-        m_driverCtrl.x().onTrue(m_drivetrain.applyRequest(
+        m_driverCtrl.x().whileTrue(m_drivetrain.applyRequest(
                 () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
                         .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(90.0))
@@ -351,13 +354,13 @@ public class RobotContainer {
                 .andThen(() -> m_AngularRate = m_MaxAngularRate));
         
         // Driver: When LeftTrigger is pressed, lower the Arm and then run the Intake and Stage until a Note is found
-        m_driverCtrl.leftTrigger(0.4).onTrue(m_armSubsystem.prepareForIntakeCommand()
+        m_driverCtrl.leftTrigger(0.4).whileTrue(m_armSubsystem.prepareForIntakeCommand()
             .andThen(new intakeNote(m_intakeSubsystem, m_stageSubsystem, m_ledSubsystem)));
 
         // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
-        m_driverCtrl.rightTrigger(0.4).onTrue(m_stageSubsystem.feedNote2ShooterCommand()
-            .withTimeout(2)
-            .andThen(m_armSubsystem.prepareForIntakeCommand()));
+        m_driverCtrl.rightTrigger(0.4).onTrue(m_stageSubsystem.feedNote2ShooterCommand());
+            //.withTimeout(2)
+            //.andThen(m_armSubsystem.prepareForIntakeCommand()));
             
         /*
          * OPERATOR Controls

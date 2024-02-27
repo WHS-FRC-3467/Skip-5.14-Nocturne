@@ -4,17 +4,13 @@
 
 package frc.robot.Subsystems.LED;
 
-import com.ctre.phoenix.led.Animation;
-import com.ctre.phoenix.led.CANdle;
 //import com.ctre.phoenix.led.RainbowAnimation;
 //import com.ctre.phoenix.led.SingleFadeAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdle.VBatOutputMode;
-import com.ctre.phoenix.led.CANdleConfiguration;
-//import com.ctre.phoenix.led.ColorFlowAnimation;
 //import com.ctre.phoenix.led.LarsonAnimation;
 //import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
-import com.ctre.phoenix.led.StrobeAnimation;
+import com.ctre.phoenix.led.*;
 //import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,7 +34,7 @@ public class LEDSubsystem extends SubsystemBase {
   /* Animations */
 
   //public static final Animation ColorFlow = new ColorFlowAnimation(color.red, color.green, color.blue, 0, speed, segmentSize, Direction.Forward, startIndex)
-  public static final Animation m_ready2Shoot = new StrobeAnimation(green.red, green.green, green.blue, 0, 0.09, 300, 0);  // Flash Green
+  public static final Animation m_ready2Shoot = new SingleFadeAnimation(green.red, green.green, green.blue, 0, 0.09, 300, 0);  // Flash Green
   public static final Animation m_notReady2Shoot = new StrobeAnimation(red.red, red.green, red.blue, 0, .09, 300, 0);  // Flash Red
   public static final Animation m_armNotReady = new StrobeAnimation(red.red, red.green, red.blue, 0, 0.09, 300, 0); // Flash Red
   public static final Animation m_noNote = new StrobeAnimation(white.red, white.green, white.blue, 0, 0.09, 300, 0); // Flash Yellow
@@ -55,7 +51,7 @@ public class LEDSubsystem extends SubsystemBase {
     candleConfiguration.vBatOutputMode = VBatOutputMode.Modulated;
     m_candle.configAllSettings(candleConfiguration, 100);
 
-    setDefaultCommand(defaultCommand());
+    //setDefaultCommand(defaultCommand());
   }
 
   @Override
@@ -78,17 +74,18 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void ready2Shoot() {
-    LEDSegment.ShooterStrip.clearAnimation();
-    LEDSegment.ShooterStrip.setColor(green);
+    //LEDSegment.ShooterStrip.clearAnimation();
+    //System.out.println("READY TO SHOOT LED");
+    LEDSegment.ShooterStrip.ready2Shoot(0);
   }
 
   public void notReady2Shoot() {
-    LEDSegment.ShooterStrip.clearAnimation();
+    //LEDSegment.ShooterStrip.clearAnimation();
     LEDSegment.ShooterStrip.notReady2Shoot(0);
   }
   
   public void noNote() {
-    LEDSegment.IntakeStrip.clearAnimation();
+    //LEDSegment.IntakeStrip.clearAnimation();
     //System.out.println("noNote");
     LEDSegment.IntakeStrip.noNote(0);
   }
@@ -96,7 +93,7 @@ public class LEDSubsystem extends SubsystemBase {
   public void yesNote() {
     LEDSegment.IntakeStrip.clearAnimation();
     //System.out.println("yesNote");
-    LEDSegment.IntakeStrip.setColor(red);
+    LEDSegment.IntakeStrip.setColor(blue);
   }
 
   public void armNotAtPos() {
@@ -128,7 +125,7 @@ public class LEDSubsystem extends SubsystemBase {
         }
 
         public void setColor(Color color) {
-            clearAnimation();
+            //clearAnimation();
             m_candle.setLEDs(color.red, color.green, color.blue, 0, startIndex, segmentSize);
         }
 
