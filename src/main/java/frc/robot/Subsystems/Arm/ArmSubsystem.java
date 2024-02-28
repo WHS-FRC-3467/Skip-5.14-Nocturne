@@ -4,6 +4,7 @@
 
 package frc.robot.Subsystems.Arm;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
@@ -69,6 +70,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     private double m_tolerance;
 
     TunableNumber tempDegree = new TunableNumber("Arm go to degrees", 0.0);
+    private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
     /*
      * Constructor
@@ -92,6 +94,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         // Config Motors
         var leadConfiguration = new TalonFXConfiguration();
         var followerConfiguration = new TalonFXConfiguration();
+        
 
         // Set the output mode to brake
         leadConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -103,6 +106,17 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
         /* Set the turning direction */
         leadConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
+        /* Current Limiting for the arm */
+        m_currentLimits.SupplyCurrentLimit = 30; // Limit to 5 amps
+        m_currentLimits.SupplyCurrentThreshold = 50; // If we exceed 10 amps
+        m_currentLimits.SupplyTimeThreshold = 0.1; // For at least 1 second
+        m_currentLimits.SupplyCurrentLimitEnable = true; // And enable it
+
+        m_currentLimits.StatorCurrentLimit = 60; // Limit stator to 30 amps
+        m_currentLimits.StatorCurrentLimitEnable = true; // And enable it
+        leadConfiguration.CurrentLimits = m_currentLimits;
+        followerConfiguration.CurrentLimits = m_currentLimits;
 
         /*
          * Apply the configurations to the motors, and set one to follow the other in

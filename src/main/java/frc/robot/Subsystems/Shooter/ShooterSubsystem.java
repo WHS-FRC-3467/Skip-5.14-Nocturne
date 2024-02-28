@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CanConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Subsystems.LED.LEDSubsystem;
 import frc.robot.Util.Setpoints;
 import frc.robot.Util.TunableNumber;
 import frc.robot.sim.PhysicsSim;
@@ -26,6 +28,7 @@ public class ShooterSubsystem extends SubsystemBase {
     /* Hardware */
     TalonFX m_motorLeft = new TalonFX(CanConstants.ID_ShooterLeft);
     TalonFX m_motorRight = new TalonFX(CanConstants.ID_ShooterRight);
+    LEDSubsystem m_blinker;
 
     /*
      * Gains for shooter tuning
@@ -62,7 +65,9 @@ public class ShooterSubsystem extends SubsystemBase {
         kRIGHT
     };
 
-    public ShooterSubsystem() {
+    public ShooterSubsystem(LEDSubsystem blinker) {
+        SmartDashboard.putData("POWER", new PowerDistribution());
+        m_blinker = blinker;
 
         /* Configure the motors */
         var leadConfiguration = new TalonFXConfiguration();
@@ -100,9 +105,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
         // optimize StatusSignal rates for the Talons
         m_motorLeft.getVelocity().setUpdateFrequency(50);
+        m_motorLeft.getStatorCurrent().setUpdateFrequency(100);
+        m_motorLeft.getSupplyCurrent().setUpdateFrequency(100);
         m_motorLeft.optimizeBusUtilization();
         m_motorRight.getVelocity().setUpdateFrequency(50);
+        m_motorRight.getStatorCurrent().setUpdateFrequency(100);
+        m_motorRight.getSupplyCurrent().setUpdateFrequency(100);
         m_motorRight.optimizeBusUtilization();
+    
 
     }
 
@@ -122,6 +132,12 @@ public class ShooterSubsystem extends SubsystemBase {
             // Put actual velocities to smart dashboard
             SmartDashboard.putNumber("Shooter Velocity L", getShooterVelocity(kShooterSide.kLEFT));
             SmartDashboard.putNumber("Shooter Velocity R", getShooterVelocity(kShooterSide.kRIGHT));
+        }
+
+        if (areWheelsAtSpeed() && (getShooterVelocity(kShooterSide.kLEFT)>25.0)) {
+            m_blinker.ready2Shoot();
+        } else if (!areWheelsAtSpeed() && getShooterVelocity(kShooterSide.kLEFT)>25.0) {
+            m_blinker.notReady2Shoot();
         }
     }
 

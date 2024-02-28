@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-//import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.NeutralOut;
@@ -36,7 +36,7 @@ public class IntakeSubsystem extends SubsystemBase {
     TalonSRX m_centeringMotor = new WPI_TalonSRX(CanConstants.ID_IntakeCtrRoller);
 
     /* Current Limits config */
-    //private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
+    private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
     /* Run Intake motor using Duty Cycle (-1.0 -> 1.0) */
     private final DutyCycleOut m_speed = new DutyCycleOut(0);
@@ -55,27 +55,29 @@ public class IntakeSubsystem extends SubsystemBase {
         
         /* Set the motor direction */
         m_configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-/*
+
         // Configure the motor to use a supply limit of 5 amps IF we exceed 10 amps for over 1 second
-        m_currentLimits.SupplyCurrentLimit = 5; // Limit to 5 amps
-        m_currentLimits.SupplyCurrentThreshold = 10; // If we exceed 10 amps
-        m_currentLimits.SupplyTimeThreshold = 1.0; // For at least 1 second
+        m_currentLimits.SupplyCurrentLimit = 60; // Limit to 5 amps
+        m_currentLimits.SupplyCurrentThreshold = 80; // If we exceed 10 amps
+        m_currentLimits.SupplyTimeThreshold = 0.1; // For at least 1 second
         m_currentLimits.SupplyCurrentLimitEnable = true; // And enable it
 
-        m_currentLimits.StatorCurrentLimit = 30; // Limit stator to 30 amps
+        m_currentLimits.StatorCurrentLimit = 70; // Limit stator to 30 amps
         m_currentLimits.StatorCurrentLimitEnable = true; // And enable it
         m_configuration.CurrentLimits = m_currentLimits;
-*/
+
 
         /* Config the peak outputs */
         m_configuration.Voltage.PeakForwardVoltage = 12.0;
         m_configuration.Voltage.PeakReverseVoltage = -12.0;
 
         /* Apply Intake motor configs */
-        m_intakeMotor.getConfigurator().apply(m_configuration);
+        //m_intakeMotor.getConfigurator().apply(m_configuration);
 
         // optimize StatusSignal rates for the Talon
         m_intakeMotor.getDutyCycle().setUpdateFrequency(100);
+        m_intakeMotor.getSupplyCurrent().setUpdateFrequency(100);
+        m_intakeMotor.getStatorCurrent().setUpdateFrequency(100);
         m_intakeMotor.optimizeBusUtilization();
  
         // Set Centering motors to factory defaults

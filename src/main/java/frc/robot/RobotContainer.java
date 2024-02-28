@@ -40,6 +40,7 @@ import frc.robot.Subsystems.Drivetrain.Telemetry;
 import frc.robot.Subsystems.Intake.IntakeDefault;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.LED.LEDSubsystem;
+import frc.robot.Subsystems.Shooter.ShooterDefault;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Stage.StageSubsystem;
 import frc.robot.Util.CommandXboxPS5Controller;
@@ -100,19 +101,20 @@ public class RobotContainer {
     CommandSwerveDrivetrain m_drivetrain = TunerConstants.DriveTrain;
 
     // Field-centric driving in Open Loop, can change to closed loop after characterization
-    SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-            .withDeadband(m_MaxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
+    //SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+    //        .withDeadband(m_MaxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
 
     // Field-centric driving in Closed Loop. Comment above and uncomment below.
-    // SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.Velocity)
-    // .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(AngularRate * 0.1);
+    SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.Velocity)
+            .withDeadband(m_MaxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
 
     // Swerve Drive functional requests
     SwerveRequest.SwerveDriveBrake m_brake = new SwerveRequest.SwerveDriveBrake();
     SwerveRequest.RobotCentric m_forwardStraight = new SwerveRequest.RobotCentric()
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+            .withDriveRequestType(DriveRequestType.Velocity);
     SwerveRequest.PointWheelsAt m_point = new SwerveRequest.PointWheelsAt();
-    SwerveRequest.FieldCentricFacingAngle m_head = new SwerveRequest.FieldCentricFacingAngle();
+    SwerveRequest.FieldCentricFacingAngle m_head = new SwerveRequest.FieldCentricFacingAngle()
+            .withDriveRequestType(DriveRequestType.Velocity);
     SwerveRequest.FieldCentricFacingAngle m_cardinal = new SwerveRequest.FieldCentricFacingAngle();
 
     // Set up Drivetrain Telemetry
@@ -120,12 +122,13 @@ public class RobotContainer {
     Pose2d m_odomStart = new Pose2d(0, 0, new Rotation2d(0, 0));
 
     // Instantiate other Subsystems
-    ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+    LEDSubsystem m_ledSubsystem = new LEDSubsystem();
+    ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(m_ledSubsystem);
     IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
     shootTimer m_shootTimer = new shootTimer();
     StageSubsystem m_stageSubsystem = new StageSubsystem(m_shootTimer);
     ArmSubsystem m_armSubsystem = new ArmSubsystem();
-    LEDSubsystem m_ledSubsystem = new LEDSubsystem();
+    
     //PhotonVision m_PhotonVision = new PhotonVision();
 
     // Setup Limelight periodic query (defaults to disabled)
@@ -148,7 +151,6 @@ public class RobotContainer {
         
 
         // Sets Cardinal Rotation PID
-        m_cardinal.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         m_cardinal.HeadingController.setPID(6.0, 0, 0.6);
 
         if (RobotConstants.kIsTuningMode) {
@@ -175,6 +177,7 @@ public class RobotContainer {
         if (Utils.isSimulation()) {
             m_drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
         }
+
 
     }
 
@@ -212,7 +215,7 @@ public class RobotContainer {
         newControlStyle();
 
         // Build a speed limit chooser
-        speedChooser.addOption("100%", 1.0);
+        /* speedChooser.addOption("100%", 1.0);
         speedChooser.addOption("95%", 0.95);
         speedChooser.addOption("90%", 0.9);
         speedChooser.addOption("85%", 0.85);
@@ -228,10 +231,10 @@ public class RobotContainer {
 
         // Configure a Trigger to change the speed limit when a selection is made on the Speed Limit Chooser
         Trigger speedPick = new Trigger(() -> m_lastSpeed != speedChooser.getSelected());
-        speedPick.onTrue(runOnce(() -> newSpeed()));
+        speedPick.onTrue(runOnce(() -> newSpeed())); */
 
         // Set the initial Speed Limit
-        newSpeed();
+        //newSpeed();
 
     }
 
@@ -283,49 +286,50 @@ public class RobotContainer {
          * Right Stick Button: <no-op>
          * *
          */
+        m_shooterSubsystem.setDefaultCommand(new ShooterDefault(m_shooterSubsystem));
 
         /*
          * DRIVER Controls
          */
         // Driver: While Y button is pressed, rotate to North
-        m_driverCtrl.y().onTrue(m_drivetrain.applyRequest(
-                () -> m_cardinal.withVelocityX(0.0)
-                        .withVelocityY(0.0)
+
+         m_driverCtrl.y().whileTrue(m_drivetrain.applyRequest(
+                () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(0.0))
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While B button is pressed, rotate to East
-        m_driverCtrl.b().onTrue(m_drivetrain.applyRequest(
-                () -> m_cardinal.withVelocityX(0.0)
-                        .withVelocityY(0.0)
+        m_driverCtrl.b().whileTrue(m_drivetrain.applyRequest(
+                () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(-90.0))
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While A button is pressed, rotate to South
-        m_driverCtrl.a().onTrue(m_drivetrain.applyRequest(
-                () -> m_cardinal.withVelocityX(0.0)
-                        .withVelocityY(0.0)
+        m_driverCtrl.a().whileTrue(m_drivetrain.applyRequest(
+                () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(180.0))
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While X button is pressed, rotate to West
-        m_driverCtrl.x().onTrue(m_drivetrain.applyRequest(
-                () -> m_cardinal.withVelocityX(0.0)
-                        .withVelocityY(0.0)
+        m_driverCtrl.x().whileTrue(m_drivetrain.applyRequest(
+                () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(90.0))
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
-        
-        // Driver: While Right Stick button is pressed, drive while pointing to alliance speaker
+         // Driver: While Right Stick button is pressed, drive while pointing to alliance speaker
         // AND adjusting Arm angle AND running Shooter
           m_driverCtrl.rightStick().whileTrue(Commands.parallel(
             new velocityOffset(m_drivetrain, () -> m_driverCtrl.getRightTriggerAxis()),
             m_drivetrain.applyRequest(
-                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed)
-                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed)
+                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(m_drivetrain.getVelocityOffset())
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)
@@ -333,36 +337,33 @@ public class RobotContainer {
             new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance(), m_ledSubsystem)
         ));  
 
-         // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X') (while pressed)
+/*          // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X') (while pressed)
         m_driverCtrl.povLeft().whileTrue(m_drivetrain.applyRequest(() -> m_brake));
 
          // Driver: DPad Up: Reset the field-centric heading (when pressed)
-        m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
+        m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative())); */
 
-        // Driver: While Left Bumper is held, reduce speed by 50%
-         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_HalfSpeed)
-                .andThen(() -> m_AngularRate = m_HalfAngularRate));
-        m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_lastSpeed)
-                .andThen(() -> m_AngularRate = m_MaxAngularRate));
-        
-
-        // Driver: While Right Bumper is held, reduce speed by 25%
+        // Driver: While Left Bumper is held, reduce speed by 25%
          m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_QuarterSpeed)
                 .andThen(() -> m_AngularRate = m_QuarterAngularRate));
         m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_lastSpeed)
                 .andThen(() -> m_AngularRate = m_MaxAngularRate));
         
+        // Driver: While Right Bumper is held, reduce speed by 50%
+         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_HalfSpeed)
+                .andThen(() -> m_AngularRate = m_HalfAngularRate));
+        m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_lastSpeed)
+                .andThen(() -> m_AngularRate = m_MaxAngularRate));
+        
         // Driver: When LeftTrigger is pressed, lower the Arm and then run the Intake and Stage until a Note is found
-        m_driverCtrl.leftTrigger(0.4).onTrue(m_armSubsystem.prepareForIntakeCommand()
+        m_driverCtrl.leftTrigger(0.4).whileTrue(m_armSubsystem.prepareForIntakeCommand()
             .andThen(new intakeNote(m_intakeSubsystem, m_stageSubsystem, m_ledSubsystem)));
 
         // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
         m_driverCtrl.rightTrigger(0.4).onTrue(m_stageSubsystem.feedNote2ShooterCommand());
+            //.withTimeout(2)
             //.andThen(m_armSubsystem.prepareForIntakeCommand()));
-        
-        m_driverCtrl.start().whileTrue(m_stageSubsystem.runStageCommand());
-
-
+            
         /*
          * OPERATOR Controls
          */
@@ -373,6 +374,8 @@ public class RobotContainer {
          // Operator: X Button: Arm to Stowed Position (when pressed)
          m_operatorCtrl.x().onTrue(new prepareToShoot(RobotConstants.STOWED, ()->m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
+
+        m_operatorCtrl.a().whileTrue(m_shooterSubsystem.runShooterCommand(40, 50));
 
         // Operator: Use Left Bumper and Left Stick Y-Axis to manually control Arm
         m_armSubsystem.setDefaultCommand(
@@ -419,23 +422,23 @@ public class RobotContainer {
          * These bindings will only be used when characterizing the Drivetrain. They can
          * eventually be commented out.
          */
-        /*
-        m_driverCtrl.x().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveQuasiTest(Direction.kForward));
-        m_driverCtrl.x().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runDriveQuasiTest(Direction.kReverse));
 
-        m_driverCtrl.y().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveDynamTest(Direction.kForward));
-        m_driverCtrl.y().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runDriveDynamTest(Direction.kReverse));
+/*         m_driverCtrl.x().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.sysIdQuasistatic(Direction.kForward));
+        m_driverCtrl.x().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-        m_driverCtrl.a().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runSteerQuasiTest(Direction.kForward));
+        m_driverCtrl.y().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.sysIdDynamic(Direction.kForward));
+        m_driverCtrl.y().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.sysIdDynamic(Direction.kReverse));
+ */
+/*         m_driverCtrl.a().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runSteerQuasiTest(Direction.kForward));
         m_driverCtrl.a().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runSteerQuasiTest(Direction.kReverse));
 
         m_driverCtrl.b().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runSteerDynamTest(Direction.kForward));
-        m_driverCtrl.b().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runSteerDynamTest(Direction.kReverse));
+        m_driverCtrl.b().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runSteerDynamTest(Direction.kReverse)); */
 
         // Drivetrain needs to be placed against a sturdy wall and test stopped
         // immediately upon wheel slip
-        m_driverCtrl.back().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveSlipTest());
-        */
+        //m_driverCtrl.back().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveSlipTest());
+
     }
 
     public Command getAutonomousCommand() {
