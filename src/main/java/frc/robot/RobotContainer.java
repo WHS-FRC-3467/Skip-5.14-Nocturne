@@ -101,19 +101,20 @@ public class RobotContainer {
     CommandSwerveDrivetrain m_drivetrain = TunerConstants.DriveTrain;
 
     // Field-centric driving in Open Loop, can change to closed loop after characterization
-    SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-            .withDeadband(m_MaxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
+    //SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+    //        .withDeadband(m_MaxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
 
     // Field-centric driving in Closed Loop. Comment above and uncomment below.
-    // SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.Velocity)
-    // .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(AngularRate * 0.1);
+    SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.Velocity)
+            .withDeadband(m_MaxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
 
     // Swerve Drive functional requests
     SwerveRequest.SwerveDriveBrake m_brake = new SwerveRequest.SwerveDriveBrake();
     SwerveRequest.RobotCentric m_forwardStraight = new SwerveRequest.RobotCentric()
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+            .withDriveRequestType(DriveRequestType.Velocity);
     SwerveRequest.PointWheelsAt m_point = new SwerveRequest.PointWheelsAt();
-    SwerveRequest.FieldCentricFacingAngle m_head = new SwerveRequest.FieldCentricFacingAngle();
+    SwerveRequest.FieldCentricFacingAngle m_head = new SwerveRequest.FieldCentricFacingAngle()
+            .withDriveRequestType(DriveRequestType.Velocity);
     SwerveRequest.FieldCentricFacingAngle m_cardinal = new SwerveRequest.FieldCentricFacingAngle();
 
     // Set up Drivetrain Telemetry
@@ -176,6 +177,7 @@ public class RobotContainer {
         if (Utils.isSimulation()) {
             m_drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
         }
+
 
     }
 
@@ -290,7 +292,8 @@ public class RobotContainer {
          * DRIVER Controls
          */
         // Driver: While Y button is pressed, rotate to North
-        m_driverCtrl.y().whileTrue(m_drivetrain.applyRequest(
+
+         m_driverCtrl.y().whileTrue(m_drivetrain.applyRequest(
                 () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
                         .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(0.0))
@@ -320,8 +323,7 @@ public class RobotContainer {
                         .withTargetDirection(Rotation2d.fromDegrees(90.0))
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
-        
-        // Driver: While Right Stick button is pressed, drive while pointing to alliance speaker
+         // Driver: While Right Stick button is pressed, drive while pointing to alliance speaker
         // AND adjusting Arm angle AND running Shooter
           m_driverCtrl.rightStick().whileTrue(Commands.parallel(
             new velocityOffset(m_drivetrain, () -> m_driverCtrl.getRightTriggerAxis()),
@@ -335,11 +337,11 @@ public class RobotContainer {
             new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance(), m_ledSubsystem)
         ));  
 
-         // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X') (while pressed)
+/*          // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X') (while pressed)
         m_driverCtrl.povLeft().whileTrue(m_drivetrain.applyRequest(() -> m_brake));
 
          // Driver: DPad Up: Reset the field-centric heading (when pressed)
-        m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
+        m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative())); */
 
         // Driver: While Left Bumper is held, reduce speed by 25%
          m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_QuarterSpeed)
@@ -372,6 +374,8 @@ public class RobotContainer {
          // Operator: X Button: Arm to Stowed Position (when pressed)
          m_operatorCtrl.x().onTrue(new prepareToShoot(RobotConstants.STOWED, ()->m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
+
+        m_operatorCtrl.a().whileTrue(m_shooterSubsystem.runShooterCommand(40, 50));
 
         // Operator: Use Left Bumper and Left Stick Y-Axis to manually control Arm
         m_armSubsystem.setDefaultCommand(
@@ -418,23 +422,23 @@ public class RobotContainer {
          * These bindings will only be used when characterizing the Drivetrain. They can
          * eventually be commented out.
          */
-        /*
-        m_driverCtrl.x().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveQuasiTest(Direction.kForward));
-        m_driverCtrl.x().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runDriveQuasiTest(Direction.kReverse));
 
-        m_driverCtrl.y().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveDynamTest(Direction.kForward));
-        m_driverCtrl.y().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runDriveDynamTest(Direction.kReverse));
+/*         m_driverCtrl.x().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.sysIdQuasistatic(Direction.kForward));
+        m_driverCtrl.x().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-        m_driverCtrl.a().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runSteerQuasiTest(Direction.kForward));
+        m_driverCtrl.y().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.sysIdDynamic(Direction.kForward));
+        m_driverCtrl.y().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.sysIdDynamic(Direction.kReverse));
+ */
+/*         m_driverCtrl.a().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runSteerQuasiTest(Direction.kForward));
         m_driverCtrl.a().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runSteerQuasiTest(Direction.kReverse));
 
         m_driverCtrl.b().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runSteerDynamTest(Direction.kForward));
-        m_driverCtrl.b().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runSteerDynamTest(Direction.kReverse));
+        m_driverCtrl.b().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runSteerDynamTest(Direction.kReverse)); */
 
         // Drivetrain needs to be placed against a sturdy wall and test stopped
         // immediately upon wheel slip
-        m_driverCtrl.back().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveSlipTest());
-        */
+        //m_driverCtrl.back().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveSlipTest());
+
     }
 
     public Command getAutonomousCommand() {

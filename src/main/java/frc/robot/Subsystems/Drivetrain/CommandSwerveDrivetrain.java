@@ -6,6 +6,8 @@ import java.util.function.Supplier;
 
 import javax.sql.rowset.spi.TransactionalWriter;
 
+import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
@@ -25,6 +27,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -35,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.Util.ModifiedSignalLogger;
 import frc.robot.Util.SwerveVoltageRequest;
 import frc.robot.Vision.PhotonVision;
@@ -54,18 +58,21 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public PhotonVision _vision = new PhotonVision();
     private Rotation2d velocityOffset = new Rotation2d(0);
     private Double correctedDist = 0.0;
+    
 
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
             SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
-        configNeutralMode(NeutralModeValue.Coast);
+        configNeutralMode(NeutralModeValue.Brake);
+        setSwerveDriveCustomCurrentLimits();        // Setup the current Limits
         configurePathPlanner();
     }
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
-        configNeutralMode(NeutralModeValue.Coast);
+        configNeutralMode(NeutralModeValue.Brake);
+        setSwerveDriveCustomCurrentLimits();        // Setup the current Limits
         configurePathPlanner();
     }
 
@@ -118,6 +125,36 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 this); // Subsystem for requirements
     }
 
+    //Start
+    /**
+     * Set custom current limits for the swerve drive motors.
+     * The constructor already sets the stator current limit, but this method sets the supply current limit.
+     * <p>This should be done in the constructor, since the {@link com.ctre.phoenix6.configs.TalonFXConfigurator#refresh()} and {@link com.ctre.phoenix6.configs.TalonFXConfigurator#apply()} are blocking API calls.
+     */
+    public void setSwerveDriveCustomCurrentLimits() {
+        //Create a current configuration to use for the drive motor of each swerve module.
+        var customCurrentLimitConfigs = new CurrentLimitsConfigs();
+
+        //Iterate through each module.
+        for (var module : Modules) {
+            //Get the Configurator for the current drive motor.
+            var currentConfigurator = module.getDriveMotor().getConfigurator();
+
+            //Refresh the current configuration, since the stator current limit has already been set.
+            currentConfigurator.refresh(customCurrentLimitConfigs);
+
+            //Set all of the parameters related to the supply current.  The values should come from Constants.
+            customCurrentLimitConfigs.SupplyCurrentLimit = SwerveConstants.kSwerveDriveSupplyCurrentLimit;
+            customCurrentLimitConfigs.SupplyCurrentLimitEnable = SwerveConstants.kSwerveDriveSupplyCurrentLimitEnable;
+            customCurrentLimitConfigs.SupplyCurrentThreshold = SwerveConstants.kSwerveDriveSupplyCurrentThreshold;
+            customCurrentLimitConfigs.SupplyTimeThreshold = SwerveConstants.kSwerveDriveSupplyTimeThreshold;
+
+            //Apply the new current limit configuration.
+            currentConfigurator.apply(customCurrentLimitConfigs);
+        }
+    }
+    //End
+
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         return run(() -> this.setControl(requestSupplier.get()));
     }
@@ -132,6 +169,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         _field.setRobotPose(m_odometry.getEstimatedPosition());
         SmartDashboard.putData("Field Test",_field);
         SmartDashboard.putNumber("Distance2Speaker", calcDistToSpeaker());
+        
         
         var visionEst = _vision.getEstimatedGlobalPose();
         visionEst.ifPresent(
@@ -316,8 +354,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     /*
      * SysID robot drive characterization routines
      */
-    private SwerveVoltageRequest driveVoltageRequest = new SwerveVoltageRequest(true);
-
+    //private SwerveVoltageRequest driveVoltageRequest = new SwerveVoltageRequest(true);
+    
+/* 
     private SysIdRoutine m_driveSysIdRoutine = new SysIdRoutine(
             new SysIdRoutine.Config(null, null, null, ModifiedSignalLogger.logState()),
             new SysIdRoutine.Mechanism(
@@ -357,4 +396,60 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public Command runDriveSlipTest() {
         return m_slipSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
     }
+}
+ */
+
+ private final SwerveRequest.SysIdSwerveTranslation TranslationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
+    private final SwerveRequest.SysIdSwerveRotation RotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+    private final SwerveRequest.SysIdSwerveSteerGains SteerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
+
+    /* Use one of these sysidroutines for your particular test */
+    private SysIdRoutine SysIdRoutineTranslation = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    null,
+                    Volts.of(4),
+                    null,
+                    (state) -> SignalLogger.writeString("state", state.toString())),
+            new SysIdRoutine.Mechanism(
+                    (volts) -> setControl(TranslationCharacterization.withVolts(volts)),
+                    null,
+                    this));
+
+    private final SysIdRoutine SysIdRoutineRotation = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    null,
+                    Volts.of(4),
+                    null,
+                    (state) -> SignalLogger.writeString("state", state.toString())),
+            new SysIdRoutine.Mechanism(
+                    (volts) -> setControl(RotationCharacterization.withVolts(volts)),
+                    null,
+                    this));
+    private final SysIdRoutine SysIdRoutineSteer = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    null,
+                    Volts.of(7),
+                    null,
+                    (state) -> SignalLogger.writeString("state", state.toString())),
+            new SysIdRoutine.Mechanism(
+                    (volts) -> setControl(SteerCharacterization.withVolts(volts)),
+                    null,
+                    this));
+
+    /* Change this to the sysid routine you want to test */
+    private final SysIdRoutine RoutineToApply = SysIdRoutineTranslation;
+
+
+    /*
+     * Both the sysid commands are specific to one particular sysid routine, change
+     * which one you're trying to characterize
+     */
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return RoutineToApply.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return RoutineToApply.dynamic(direction);
+    }
+
 }

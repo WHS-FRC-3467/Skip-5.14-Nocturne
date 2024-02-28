@@ -30,18 +30,18 @@ public final class Constants {
 
     public static final class RobotConstants {
 
-        public static final boolean kIsTuningMode = true;
-        public static final boolean kIsDriveTuningMode = true;
+        public static final boolean kIsTuningMode = false;
+        public static final boolean kIsDriveTuningMode = false;
         public static final boolean kIsArmTuningMode = false;
         public static final boolean kIsIntakeTuningMode = false;
         public static final boolean kIsStageTuningMode = false;
-        public static final boolean kIsShooterTuningMode = true;
-        public static final boolean kIsAutoAimTuningMode = true;
+        public static final boolean kIsShooterTuningMode = false;
+        public static final boolean kIsAutoAimTuningMode = false;
 
         // Shooter and Arm Setpoints
         public static final Setpoints STOWED = new Setpoints(1.0, 0.4, 0.0, 0.0, GameState.STOWED);
         public static final Setpoints INTAKE = new Setpoints(1.0, 2.0, 0.0, 0.0, GameState.INTAKE);
-        public static final Setpoints SUBWOOFER = new Setpoints(3.0, 1.0, 25.0,25.0,  GameState.SUBWOOFER);
+        public static final Setpoints SUBWOOFER = new Setpoints(3.0, 1.0, 30.0,30.0,  GameState.SUBWOOFER);
         public static final Setpoints AMP = new Setpoints(88.0, 0.4, 30.0,30.0,  GameState.AMP);
         public static final Setpoints PODIUM = new Setpoints(23.0, 0.4, 50.0,50.0,  GameState.PODIUM);
         public static final Setpoints WING = new Setpoints(30.0, 0.4, 70.0,60.0,  GameState.WING);
@@ -52,6 +52,35 @@ public final class Constants {
     }
     
     public static final class CanConstants {
+
+        /* PDH Power Ports
+        0. Front Left Drive
+        1. Front Left Steer
+        2. Left Shooter
+        3. Back Left Steer
+        4. Back Left Drive
+        5. Mini Power Module
+        6. Left Arm Motor
+        7. N/A
+        8. Intake
+        9. N/A
+        10. N/A
+        11. Right Arm
+        12. Candle
+        13. N/A
+        14. Back Right Steer
+        15. Back Right Drive
+        16. Front Right Drive
+        17. Front Right Steer
+        18. Right Shooter Motor
+        19. Stage Motor
+        20. Future Limelight
+        21. VRM
+        22. RIO
+        23. N/A
+         * 
+         * 
+         */
 
         // Drivebase CAN IDs are 1 -> 13
         // See generated/TunerConstants.java
@@ -178,6 +207,13 @@ public final class Constants {
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+    }
+
+    public static class SwerveConstants {
+        public static final double kSwerveDriveSupplyCurrentLimit = 30.00;
+        public static final boolean kSwerveDriveSupplyCurrentLimitEnable = true;
+        public static final double kSwerveDriveSupplyCurrentThreshold = 90.00;
+        public static final double kSwerveDriveSupplyTimeThreshold = 0.01;
     }
 
     public static class ControllerConstants {
