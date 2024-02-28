@@ -23,14 +23,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-//import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 /* Local */
 import frc.robot.Commands.LookUpShot;
 import frc.robot.Commands.intakeNote;
 import frc.robot.Commands.prepareToShoot;
-import frc.robot.Commands.setShooterSpeedLookUP;
 import frc.robot.Commands.velocityOffset;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Subsystems.Arm.ArmDefault;
@@ -44,9 +40,6 @@ import frc.robot.Subsystems.Shooter.ShooterDefault;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Stage.StageSubsystem;
 import frc.robot.Util.CommandXboxPS5Controller;
-//import frc.robot.Util.VisionLookUpTable;
-//import frc.robot.Vision.Limelight;
-//import frc.robot.Vision.PhotonVision;
 import frc.robot.generated.TunerConstants;
 import frc.robot.Util.shootTimer;
 
@@ -91,7 +84,6 @@ public class RobotContainer {
 
     // Drive Control style settings
     private Supplier<SwerveRequest> m_controlStyle;
-    private String m_lastControl = "2 Joysticks";
 
     /*
      * Swerve Drive Configuration

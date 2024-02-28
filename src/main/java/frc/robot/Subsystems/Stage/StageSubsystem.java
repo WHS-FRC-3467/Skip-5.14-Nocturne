@@ -1,22 +1,17 @@
 package frc.robot.Subsystems.Stage;
 
-import java.util.function.BooleanSupplier;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
-//import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.CanConstants;
 import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.RobotConstants;
@@ -135,12 +130,9 @@ public class StageSubsystem extends SubsystemBase {
     
     // Pass the Note to the Shooter
     public Command feedNote2ShooterCommand() {        
-        if (true) {
-            return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
-                .withTimeout(StageConstants.kFeedToShooterTime)
-                .andThen(()->this.stopStage());
-        }
-        return new RunCommand(()->this.stopStage());
+        return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
+            .withTimeout(StageConstants.kFeedToShooterTime)
+            .andThen(()->this.stopStage());
     }
 
     // Feed the Note to the Amp
