@@ -5,12 +5,13 @@
 
 package frc.robot.Subsystems.Intake;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrame;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+//import com.ctre.phoenix.motorcontrol.NeutralMode;
+//import com.ctre.phoenix.motorcontrol.StatusFrame;
+//import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+//import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+//import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+//import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -33,7 +34,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     /* Initialize Talons */
     TalonFX m_intakeMotor = new TalonFX(CanConstants.ID_IntakeMotor);
-    TalonSRX m_centeringMotor = new WPI_TalonSRX(CanConstants.ID_IntakeCtrRoller);
+    // No centering wheels on Nocturne
+    //TalonSRX m_centeringMotor = new WPI_TalonSRX(CanConstants.ID_IntakeCtrRoller);
 
     /* Current Limits config */
     private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
@@ -56,13 +58,13 @@ public class IntakeSubsystem extends SubsystemBase {
         /* Set the motor direction */
         m_configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-        // Configure the motor to use a supply limit of 5 amps IF we exceed 10 amps for over 1 second
-        m_currentLimits.SupplyCurrentLimit = 60; // Limit to 5 amps
-        m_currentLimits.SupplyCurrentThreshold = 80; // If we exceed 10 amps
-        m_currentLimits.SupplyTimeThreshold = 0.1; // For at least 1 second
+        // Configure the motor to use a supply limit of 60 amps IF we exceed 80 amps for over 0.1 second
+        m_currentLimits.SupplyCurrentLimit = 60; // Limit to 60 amps
+        m_currentLimits.SupplyCurrentThreshold = 80; // If we exceed 80 amps
+        m_currentLimits.SupplyTimeThreshold = 0.1; // For at least 0.1 second
         m_currentLimits.SupplyCurrentLimitEnable = true; // And enable it
 
-        m_currentLimits.StatorCurrentLimit = 70; // Limit stator to 30 amps
+        m_currentLimits.StatorCurrentLimit = 70; // Limit stator to 70 amps
         m_currentLimits.StatorCurrentLimitEnable = true; // And enable it
         m_configuration.CurrentLimits = m_currentLimits;
 
@@ -80,6 +82,7 @@ public class IntakeSubsystem extends SubsystemBase {
         m_intakeMotor.getStatorCurrent().setUpdateFrequency(100);
         m_intakeMotor.optimizeBusUtilization();
  
+       /*
         // Set Centering motors to factory defaults
         m_centeringMotor.configFactoryDefault();
 
@@ -99,7 +102,7 @@ public class IntakeSubsystem extends SubsystemBase {
             )
         );
 
-        /* Config the peak and nominal outputs */
+        // Config the peak and nominal outputs
         m_centeringMotor.configNominalOutputForward(0.0, 30);
         m_centeringMotor.configNominalOutputReverse(0.0, 30);
         m_centeringMotor.configPeakOutputForward(1.0, 30);
@@ -109,12 +112,14 @@ public class IntakeSubsystem extends SubsystemBase {
         m_centeringMotor.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 255);
         m_centeringMotor.setStatusFramePeriod(StatusFrame.Status_10_Targets, 255);
         m_centeringMotor.setStatusFramePeriod(StatusFrame.Status_9_MotProfBuffer, 255);
+    */
+
     }
 
     public void simulationInit() {
         /* If running in Simulation, setup simulated Talons */
         PhysicsSim.getInstance().addTalonFX(m_intakeMotor, 0.001);
-        PhysicsSim.getInstance().addTalonSRX(m_centeringMotor, 1.0, 89975.0);
+        //PhysicsSim.getInstance().addTalonSRX(m_centeringMotor, 1.0, 89975.0);
     }
 
 
@@ -125,7 +130,7 @@ public class IntakeSubsystem extends SubsystemBase {
         // This method will be called once per scheduler run
         if (RobotConstants.kIsIntakeTuningMode) {
             SmartDashboard.putNumber("Intake Current Draw", m_intakeMotor.getSupplyCurrent().getValueAsDouble());
-            SmartDashboard.putNumber("Intake Center Current Draw", m_centeringMotor.getSupplyCurrent());
+            //SmartDashboard.putNumber("Intake Center Current Draw", m_centeringMotor.getSupplyCurrent());
         }
     }
 
@@ -140,12 +145,12 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public void runIntake(double speed) {
         m_intakeMotor.setControl(m_speed.withOutput(speed));
-        m_centeringMotor.set(TalonSRXControlMode.PercentOutput, speed);
+        //m_centeringMotor.set(TalonSRXControlMode.PercentOutput, speed);
     }
 
     public void stopIntake() {
         m_intakeMotor.setControl(m_brake);
-        m_centeringMotor.set(TalonSRXControlMode.PercentOutput, 0.0);
+        //m_centeringMotor.set(TalonSRXControlMode.PercentOutput, 0.0);
     }
 
     /*

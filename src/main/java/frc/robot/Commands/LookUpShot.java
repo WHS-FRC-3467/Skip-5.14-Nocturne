@@ -64,7 +64,7 @@ public class LookUpShot extends Command {
         if(m_shooterSubsystem.areWheelsAtSpeed()) {
             m_blinker.ready2Shoot();
         } else {
-            m_blinker.notReady2Shoot();
+            m_blinker.shooterSpoolUp();
         }
 
 

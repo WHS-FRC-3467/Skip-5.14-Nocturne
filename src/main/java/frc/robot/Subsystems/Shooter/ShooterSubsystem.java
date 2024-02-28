@@ -1,5 +1,6 @@
 package frc.robot.Subsystems.Shooter;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 //import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -48,7 +49,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private static TunableNumber m_ShooterSetpointR = new TunableNumber("Shooter Setpoint R", 0.0);
 
     // Current Limits
-    // private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
+    private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
     /*
      * Setup the Velocity PID control object Start at velocity 0, disable FOC, no feed forward, use slot 0
@@ -65,6 +66,17 @@ public class ShooterSubsystem extends SubsystemBase {
         kRIGHT
     };
 
+    // Shooter state
+    public enum kShooterState {
+        kOFF,
+        kIDLE,
+        kSPOOLING,
+        kREADY
+    }
+    kShooterState m_state = kShooterState.kOFF;
+
+    double m_idleSpeed = ShooterConstants.kShooterIdleSpeed;
+
     public ShooterSubsystem(LEDSubsystem blinker) {
         SmartDashboard.putData("POWER", new PowerDistribution());
         m_blinker = blinker;
@@ -75,17 +87,15 @@ public class ShooterSubsystem extends SubsystemBase {
         /* set motors to Coast */
         leadConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
-/*
-        // Configure the lead Talon to use a supply limit of 5 amps IF we exceed 10 amps for over 1 second
-        m_currentLimits.SupplyCurrentLimit = 5; // Limit to 5 amps
-        m_currentLimits.SupplyCurrentThreshold = 10; // If we exceed 10 amps
-        m_currentLimits.SupplyTimeThreshold = 1.0; // For at least 1 second
+        // Configure the lead Talon to use a supply limit of 60 amps IF we exceed 80 amps for over 0.1 second
+        m_currentLimits.SupplyCurrentLimit = 60; // Limit to 60 amps
+        m_currentLimits.SupplyCurrentThreshold = 80; // If we exceed 80 amps
+        m_currentLimits.SupplyTimeThreshold = 0.1; // For at least 0.1 second
         m_currentLimits.SupplyCurrentLimitEnable = true; // And enable it
 
-        m_currentLimits.StatorCurrentLimit = 20; // Limit stator to 20 amps
+        m_currentLimits.StatorCurrentLimit = 70; // Limit stator to 70 amps
         m_currentLimits.StatorCurrentLimitEnable = true; // And enable it
         leadConfiguration.CurrentLimits = m_currentLimits;
-*/
 
         /* Config the peak outputs */
         leadConfiguration.Voltage.PeakForwardVoltage = 12.0;
@@ -126,7 +136,8 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
  
-        SmartDashboard.putBoolean("Shooter at Speed?", areWheelsAtSpeed());
+        boolean wheelsAtSpeed = areWheelsAtSpeed();
+        SmartDashboard.putBoolean("Shooter at Speed?", wheelsAtSpeed);
 
         if (RobotConstants.kIsShooterTuningMode) {
             // Put actual velocities to smart dashboard
@@ -134,10 +145,21 @@ public class ShooterSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Shooter Velocity R", getShooterVelocity(kShooterSide.kRIGHT));
         }
 
-        if (areWheelsAtSpeed() && (getShooterVelocity(kShooterSide.kLEFT)>25.0)) {
-            m_blinker.ready2Shoot();
-        } else if (!areWheelsAtSpeed() && getShooterVelocity(kShooterSide.kLEFT)>25.0) {
-            m_blinker.notReady2Shoot();
+        // If Shooter is off or idling, just return
+        if (m_state == kShooterState.kOFF || m_state == kShooterState.kIDLE)
+            return;
+
+        // Otherwise, check for Ready state and set LEDs
+        if (wheelsAtSpeed) {
+            if (m_state == kShooterState.kSPOOLING) {
+                m_blinker.ready2Shoot();
+                m_state = kShooterState.kREADY;
+            } 
+        } else {
+            if (m_state != kShooterState.kSPOOLING) {
+                m_blinker.shooterSpoolUp();
+                m_state = kShooterState.kSPOOLING;
+            } 
         }
     }
 
@@ -172,18 +194,46 @@ public class ShooterSubsystem extends SubsystemBase {
         m_ShooterSetpointR.set(targetVelocityR);
         m_motorLeft.setControl(m_voltageVelocityLeft.withVelocity(targetVelocityL));
         m_motorRight.setControl(m_voltageVelocityRight.withVelocity(targetVelocityR));
+        if (m_state == kShooterState.kOFF) {
+            m_state = kShooterState.kSPOOLING;
+            m_blinker.shooterSpoolUp();
+        }
     }
 
     public void runShooter() {
         // Get Velocity setpoint from TunableNumber
         m_motorLeft.setControl(m_voltageVelocityLeft.withVelocity(m_ShooterSetpointL.get()));
         m_motorRight.setControl(m_voltageVelocityRight.withVelocity(m_ShooterSetpointR.get()));
+        if (m_state == kShooterState.kOFF) {
+            m_state = kShooterState.kSPOOLING;
+            m_blinker.shooterSpoolUp();
+        }
     }
 
     public void stopShooter() {
         m_motorLeft.setControl(m_brake);
         m_motorRight.setControl(m_brake);
+        if (m_state != kShooterState.kOFF) {
+            m_state = kShooterState.kOFF;
+            m_blinker.shooterOff();
+        }
     }
+
+    public void runIdle() {
+        m_ShooterSetpointL.set(m_idleSpeed);
+        m_ShooterSetpointR.set(m_idleSpeed);
+        m_motorLeft.setControl(m_voltageVelocityLeft.withVelocity(m_idleSpeed));
+        m_motorRight.setControl(m_voltageVelocityRight.withVelocity(m_idleSpeed));
+        if (m_state != kShooterState.kIDLE) {
+            m_state = kShooterState.kIDLE;
+            m_blinker.shooterIdle();
+        }
+    }
+
+    public void setIdleShooterSpeed(double speed) {
+        m_idleSpeed = speed;
+    }
+
 
     /**
      * @param setpoints - Reference to a Setpoints class instance

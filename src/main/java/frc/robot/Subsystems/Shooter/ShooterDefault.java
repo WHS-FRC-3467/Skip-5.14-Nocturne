@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ShooterDefault extends Command {
 
     ShooterSubsystem m_shooter;
-    double shooterIdle = 20;
 
     /** Creates a new ShooterDefault. */
     public ShooterDefault(ShooterSubsystem shooter) {
@@ -26,7 +25,7 @@ public class ShooterDefault extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_shooter.runShooter(shooterIdle, shooterIdle);
+        m_shooter.runIdle();
     }
 
     // Called once the command ends or is interrupted.
@@ -38,9 +37,5 @@ public class ShooterDefault extends Command {
     @Override
     public boolean isFinished() {
         return false;
-    }
-
-    public void setIdleShooterSpeed(double speed) {
-        shooterIdle = speed;
     }
 }

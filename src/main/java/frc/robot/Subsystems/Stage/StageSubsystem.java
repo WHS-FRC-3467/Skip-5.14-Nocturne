@@ -9,33 +9,28 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CanConstants;
 import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.StageConstants;
+import frc.robot.Subsystems.LED.LEDSubsystem;
 import frc.robot.sim.PhysicsSim;
 
-import frc.robot.Util.shootTimer;
 public class StageSubsystem extends SubsystemBase {
 
     // Initialize devices
     TalonSRX m_stageMotor = new WPI_TalonSRX(CanConstants.ID_StageMotor);
     DigitalInput m_stageBeamBreak = new DigitalInput(DIOConstants.kStageBeamBreak);
-    shootTimer m_timer;
     boolean m_noteInStage = false;
-    long startShootTime;
-    boolean hasStarted = false;
-    boolean hasRun = false;
-    /* Timer */
-    //Timer m_timer = new Timer();
+    LEDSubsystem m_blinker;
 
     /** Creates a new StageSubsystem. */
-    public StageSubsystem(shootTimer shootTimer) {
-        m_timer = shootTimer;
-        startShootTime = 0;
+    public StageSubsystem(LEDSubsystem blinker) {
+
+        m_blinker = blinker;
+
         // Set motor to factory defaults
         m_stageMotor.configFactoryDefault();
 
@@ -67,11 +62,17 @@ public class StageSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        hasStarted = true;
-        SmartDashboard.putBoolean("hasStarted", hasStarted);
-        SmartDashboard.putBoolean("hasRun", hasRun);
-        // Default action is to hold the note in place if sensor detects note
-        m_noteInStage = m_stageBeamBreak.get() ? false : true;
+
+        // Check for change in beam break
+        boolean beam = m_stageBeamBreak.get();
+        // Sensor returns true when beam NOT broken,
+        // so we have to use the inverse of the signal
+        if (beam == m_noteInStage) {
+            m_noteInStage = !beam; 
+            if (m_noteInStage) {
+                m_blinker.yesNoteInStage();
+            }
+        }
 
         SmartDashboard.putBoolean("Note In Stage?", m_noteInStage);
 
@@ -91,15 +92,17 @@ public class StageSubsystem extends SubsystemBase {
      */
     public void runStage(double speed) {
         m_stageMotor.set(ControlMode.PercentOutput, speed);
+        m_blinker.lookingForNote();
     }
 
     public void runStage() {
         m_stageMotor.set(ControlMode.PercentOutput, StageConstants.kIntakeSpeed);
+        m_blinker.lookingForNote();
     }
 
     public void stopStage() {
-        this.hasRun = false;
         m_stageMotor.set(ControlMode.PercentOutput, 0.0);
+        m_blinker.intakeStopped();
     }
 
     // Do not use if the shooter's target velocity is zero.
@@ -121,13 +124,6 @@ public class StageSubsystem extends SubsystemBase {
      * Command Factories
      */
 
-    // To Intake a Note, drive the Stage until the sensor says we have a Note
-    public Command intakeNoteCommand() {
-        return new RunCommand(()-> this.runStage(StageConstants.kIntakeSpeed), this)
-            .until(()->this.isNoteInStage())
-            .andThen(()->this.stopStage());
-    }
-    
     // Pass the Note to the Shooter
     public Command feedNote2ShooterCommand() {        
         return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
@@ -135,6 +131,14 @@ public class StageSubsystem extends SubsystemBase {
             .andThen(()->this.stopStage());
     }
 
+/*
+    // To Intake a Note, drive the Stage until the sensor says we have a Note
+    public Command intakeNoteCommand() {
+        return new RunCommand(()-> this.runStage(StageConstants.kIntakeSpeed), this)
+            .until(()->this.isNoteInStage())
+            .andThen(()->this.stopStage());
+    }
+    
     // Feed the Note to the Amp
     public Command feedNote2AmpCommand() {
         return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToAmpSpeed), this)
@@ -158,12 +162,11 @@ public class StageSubsystem extends SubsystemBase {
 
     // Command to just stop the Stage
     public Command stopStageCommand() {
-        
         return new InstantCommand(() -> this.stopStage());
     }
 
     public Command runStageCommand() {
         return new RunCommand(() -> this.runStage(0.9));
     }
-
+*/
 }

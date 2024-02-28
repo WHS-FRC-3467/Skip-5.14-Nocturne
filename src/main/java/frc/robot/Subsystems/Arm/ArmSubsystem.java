@@ -22,8 +22,10 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.CanConstants;
 import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.Subsystems.LED.LEDSubsystem;
 import frc.robot.Util.Setpoints;
 import frc.robot.Util.TunableNumber;
+import frc.robot.Util.Setpoints.GameState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
@@ -69,13 +71,25 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     /* Working (current) tolerance */
     private double m_tolerance;
 
+    /* Working (current) arm state */
+    private GameState m_armState;
+
+    /* LED Subsystem */
+    private LEDSubsystem m_blinker;
+    private enum ledState {
+        kSTOWED,
+        kMOVING,
+        kONPOINT
+    }
+    private ledState m_ledState = ledState.kSTOWED;
+
     TunableNumber tempDegree = new TunableNumber("Arm go to degrees", 0.0);
     private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
     /*
      * Constructor
      */
-    public ArmSubsystem() {
+    public ArmSubsystem(LEDSubsystem blinker) {
 
         /* Create the Trapezoidal motion profile controller */
         super(
@@ -91,6 +105,9 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         // Config Duty Cycle Range for the encoders
         m_encoder.setDutyCycleRange(ArmConstants.kDuty_Cycle_Min, ArmConstants.kDuty_Cycle_Max);
 
+        // LED Subsystem reference
+        m_blinker = blinker;
+        
         // Config Motors
         var leadConfiguration = new TalonFXConfiguration();
         var followerConfiguration = new TalonFXConfiguration();
@@ -108,12 +125,12 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         leadConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         /* Current Limiting for the arm */
-        m_currentLimits.SupplyCurrentLimit = 30; // Limit to 5 amps
-        m_currentLimits.SupplyCurrentThreshold = 50; // If we exceed 10 amps
-        m_currentLimits.SupplyTimeThreshold = 0.1; // For at least 1 second
+        m_currentLimits.SupplyCurrentLimit = 30; // Limit to 30 amps
+        m_currentLimits.SupplyCurrentThreshold = 50; // If we exceed 50 amps
+        m_currentLimits.SupplyTimeThreshold = 0.1; // For at least 0.1 second
         m_currentLimits.SupplyCurrentLimitEnable = true; // And enable it
 
-        m_currentLimits.StatorCurrentLimit = 60; // Limit stator to 30 amps
+        m_currentLimits.StatorCurrentLimit = 60; // Limit stator to 60 amps
         m_currentLimits.StatorCurrentLimitEnable = true; // And enable it
         leadConfiguration.CurrentLimits = m_currentLimits;
         followerConfiguration.CurrentLimits = m_currentLimits;
@@ -154,7 +171,25 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
          * }
          */
         // Display useful info on the SmartDashboard
-        SmartDashboard.putBoolean("Arm Joint at Setpoint?", isArmJointAtSetpoint());
+        boolean atSetpoint = isArmJointAtSetpoint();
+        SmartDashboard.putBoolean("Arm Joint at Setpoint?", atSetpoint);
+        
+        // LED control logic
+        if (m_armState == GameState.STOWED) {
+            // Arm being stowed - just turn off LEDs
+            if (m_ledState != ledState.kSTOWED) {
+                m_ledState = ledState.kSTOWED;
+                m_blinker.armStowed();
+            }
+        } else if ((m_ledState == ledState.kSTOWED) || !atSetpoint) {
+            // Arm state has changed - update LEDs
+            m_ledState = ledState.kMOVING;
+            m_blinker.armNotAtPos();
+
+        } else if (atSetpoint && m_ledState != ledState.kONPOINT) {
+            m_ledState = ledState.kONPOINT;
+            m_blinker.armAtPos();
+        }
 
         if (Constants.RobotConstants.kIsTuningMode) {
             SmartDashboard.putNumber("Arm Joint Setpoint", m_armSetpoint);
@@ -218,12 +253,14 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         // Convert degrees to radians and set the profile goal
         m_armSetpoint = setpoints.arm;
         m_tolerance = setpoints.tolerance;
+        m_armState = setpoints.state;
+
         // Arm setpoint must be passed  in radians
         m_tpState.position = degreesToRadians(setpoints.arm);
         setGoal(m_tpState);
 
         // Display requested Arm State to dashboard
-        Setpoints.displayArmState(setpoints.state);
+        Setpoints.displayArmState(m_armState);
     }
 
     /**

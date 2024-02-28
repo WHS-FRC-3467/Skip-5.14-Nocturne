@@ -96,19 +96,19 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     public void clearAnimations() {
-        m_candle.clearAnimation(m_CANDleMatrix.animationSlot);
-        m_candle.clearAnimation(m_TimerStrip.animationSlot);
-        m_candle.clearAnimation(m_ShooterStrip.animationSlot);
-        m_candle.clearAnimation(m_ArmStrip.animationSlot);
-        m_candle.clearAnimation(m_IntakeStrip.animationSlot);
+        m_candle.clearAnimation(m_Matrix.animationSlot);
+        m_candle.clearAnimation(m_Timer.animationSlot);
+        m_candle.clearAnimation(m_Shooter.animationSlot);
+        m_candle.clearAnimation(m_Arm.animationSlot);
+        m_candle.clearAnimation(m_Intake.animationSlot);
     }
 
     public void disableLEDs() {
-        m_CANDleMatrix.setColor(black);
-        m_TimerStrip.setColor(black);
-        m_ShooterStrip.setColor(black);
-        m_ArmStrip.setColor(black);
-        m_IntakeStrip.setColor(black);
+        m_Matrix.setColor(black);
+        m_Timer.setColor(black);
+        m_Shooter.setColor(black);
+        m_Arm.setColor(black);
+        m_Intake.setColor(black);
     }
     
     /* 
@@ -116,19 +116,19 @@ public class LEDSubsystem extends SubsystemBase {
      * Aim is locked onto Speaker: Flashing Yellow
      * Otherwise: Off
      */
-    LEDSegment m_CANDleMatrix = new LEDSegment(0, 8, 0);
-    Animation a_SpeakerLock = new StrobeAnimation(yellow.r, yellow.g, yellow.b, 0, 0.09, m_CANDleMatrix.segmentSize, m_CANDleMatrix.startIndex);
+    LEDSegment m_Matrix = new LEDSegment(0, 8, 0);
+    Animation a_SpeakerLock = new StrobeAnimation(yellow.r, yellow.g, yellow.b, 0, 0.09, m_Matrix.segmentSize, m_Matrix.startIndex);
     
     public void lockedOnSpeaker() {
-        m_CANDleMatrix.setAnimation(a_SpeakerLock);
+        m_Matrix.setAnimation(a_SpeakerLock);
     }
 
     public void noSpeakerLock() {
-        m_CANDleMatrix.setColor(black);
+        m_Matrix.setColor(black);
     }
 
     public void CANdleDisabled() {
-        m_CANDleMatrix.setColor(black);
+        m_Matrix.setColor(black);
     }
 
     /* 
@@ -138,24 +138,24 @@ public class LEDSubsystem extends SubsystemBase {
      * Arm At Setpoint: Solid Green
      * Disabled: Rainbow
      */
-    LEDSegment m_ArmStrip = new LEDSegment(85, 48, 3);
-    Animation a_ArmNotReady = new StrobeAnimation(red.r, red.g, red.b, 0, 0.09, m_ArmStrip.segmentSize, m_ArmStrip.startIndex); // Flash
-    Animation a_ArmDisabled = new RainbowAnimation(0.7, 0.2, m_ArmStrip.segmentSize, false, m_ArmStrip.startIndex);
+    LEDSegment m_Arm = new LEDSegment(8, 48, 1);
+    Animation a_ArmNotReady = new StrobeAnimation(red.r, red.g, red.b, 0, 0.09, m_Arm.segmentSize, m_Arm.startIndex); // Flash
+    Animation a_ArmDisabled = new RainbowAnimation(0.7, 0.2, m_Arm.segmentSize, false, m_Arm.startIndex);
     
     public void armStowed() {
-        m_ArmStrip.setColor(black);
+        m_Arm.setColor(black);
     }
 
     public void armNotAtPos() {
-        m_ArmStrip.setAnimation(a_ArmNotReady);
+        m_Arm.setAnimation(a_ArmNotReady);
     }
 
     public void armAtPos() {
-        m_ArmStrip.setColor(green);
+        m_Arm.setColor(green);
     }
 
     public void armDisabled() {
-        m_ArmStrip.setAnimation(a_ArmDisabled);
+        m_Arm.setAnimation(a_ArmDisabled);
     }
 
      /* 
@@ -165,20 +165,29 @@ public class LEDSubsystem extends SubsystemBase {
      * Shooter At Speed: Solid Green
      * Disabled: Rainbow
     */
-    LEDSegment m_ShooterStrip = new LEDSegment(37, 48, 2);
-    Animation a_notReady2Shoot = new StrobeAnimation(red.r, red.g, red.b, 0, .5, m_ShooterStrip.segmentSize, m_ShooterStrip.startIndex);
-    Animation a_ShooterDisabled = new RainbowAnimation(0.7, 0.2, m_ShooterStrip.segmentSize, false, m_ShooterStrip.startIndex);
+    LEDSegment m_Shooter = new LEDSegment(56, 48, 2);
+    Animation a_ShooterSpoolUp = new StrobeAnimation(red.r, red.g, red.b, 0, .5, m_Shooter.segmentSize, m_Shooter.startIndex);
+    Animation a_ShooterIdle = new LarsonAnimation(red.r, red.g, red.b, 0, 0.1, m_Shooter.segmentSize, BounceMode.Back, m_Shooter.startIndex);
+    Animation a_ShooterDisabled = new RainbowAnimation(0.7, 0.2, m_Shooter.segmentSize, false, m_Shooter.startIndex);
 
     public void ready2Shoot() {
-        m_ShooterStrip.setColor(green);
+        m_Shooter.setColor(green);
     }
 
-    public void notReady2Shoot() {
-        m_ShooterStrip.setAnimation(a_notReady2Shoot);
+    public void shooterSpoolUp() {
+        m_Shooter.setAnimation(a_ShooterSpoolUp);
+    }
+
+    public void shooterIdle() {
+        m_Shooter.setColor(black);
+    }
+
+    public void shooterOff() {
+        m_Shooter.setColor(black);
     }
 
     public void shooterDisabled() {
-        m_ShooterStrip.setAnimation(a_ShooterDisabled);
+        m_Shooter.setAnimation(a_ShooterDisabled);
     }
 
     /* 
@@ -188,20 +197,24 @@ public class LEDSubsystem extends SubsystemBase {
      * Note In Stage: Solid Green
      * Disabled: Rainbow
      */
-    LEDSegment m_IntakeStrip = new LEDSegment(133, 86, 4);
-    Animation a_noNote = new StrobeAnimation(red.r, red.g, red.b, 0, 0.09, m_IntakeStrip.segmentSize, m_IntakeStrip.startIndex);
-    Animation a_IntakeDisabled = new RainbowAnimation(0.7, 0.2, m_IntakeStrip.segmentSize, false, m_IntakeStrip.startIndex);
+    LEDSegment m_Intake = new LEDSegment(133, 86, 4);
+    Animation a_noNote = new StrobeAnimation(red.r, red.g, red.b, 0, 0.09, m_Intake.segmentSize, m_Intake.startIndex);
+    Animation a_IntakeDisabled = new RainbowAnimation(0.7, 0.2, m_Intake.segmentSize, false, m_Intake.startIndex);
 
-    public void noNote() {
-        m_IntakeStrip.setAnimation(a_noNote);
+    public void lookingForNote() {
+        m_Intake.setAnimation(a_noNote);
     }
 
-    public void yesNote() {
-        m_IntakeStrip.setColor(green);
+    public void yesNoteInStage() {
+        m_Intake.setColor(green);
+    }
+
+    public void intakeStopped() {
+        m_Intake.setColor(black);
     }
 
     public void intakeDisabled() {
-        m_IntakeStrip.setColor(black);
+        m_Intake.setColor(black);
     }
 
 
@@ -213,33 +226,33 @@ public class LEDSubsystem extends SubsystemBase {
     * 0:10 -> 0:00: Strobing Red
     * Non-auto periods & Disabled: Off
     */
-    LEDSegment m_TimerStrip = new LEDSegment(8, 29, 1);
-    Animation a_TimeExpiring = new StrobeAnimation(red.r, red.g, red.b, 0, 0.5, m_TimerStrip.segmentSize, m_TimerStrip.startIndex);
-    Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.7, m_TimerStrip.segmentSize, BounceMode.Back, m_TimerStrip.startIndex);
+    LEDSegment m_Timer = new LEDSegment(104, 29, 3);
+    Animation a_TimeExpiring = new StrobeAnimation(red.r, red.g, red.b, 0, 0.5, m_Timer.segmentSize, m_Timer.startIndex);
+    Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.7, m_Timer.segmentSize, BounceMode.Back, m_Timer.startIndex);
 
     public void runMatchTimerPattern() {
 
         double matchTime = DriverStation.getMatchTime();
 
         if (matchTime > 60.0) {
-            m_TimerStrip.setColor(green);
+            m_Timer.setColor(green);
         } else if (matchTime > 20.0) {
-            m_TimerStrip.setColor(yellow);
+            m_Timer.setColor(yellow);
         } else if (matchTime > 10.0) {
-            m_TimerStrip.setColor(red);
+            m_Timer.setColor(red);
         } else if (matchTime > 0.0) {
-            m_TimerStrip.setAnimation(a_TimeExpiring);
+            m_Timer.setAnimation(a_TimeExpiring);
         } else {
-            m_TimerStrip.setColor(black);
+            m_Timer.setColor(black);
         }
     }
 
     public void runTimerAuto() {
-        m_TimerStrip.setAnimation(a_InAutonomous);
+        m_Timer.setAnimation(a_InAutonomous);
     }
 
     public void timerDisabled() {
-        m_TimerStrip.setColor(black);
+        m_Timer.setColor(black);
     }
 
     public void runDisabledPatterns() {

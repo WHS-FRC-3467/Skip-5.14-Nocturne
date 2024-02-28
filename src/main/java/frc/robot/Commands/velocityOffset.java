@@ -86,7 +86,7 @@ public class velocityOffset extends Command {
 
         //timeToShoot represents the time it take a note to leave the shooter after button is pressed
         //timeUntil shot calculates the time until the note leaves based on the constant and time since button press
-        timeUntilShot = Constants.ShooterConstants.timeToShoot - shotTimer.get();
+        timeUntilShot = Constants.ShooterConstants.kTimeToShoot - shotTimer.get();
         if (timeUntilShot < 0) {
             timeUntilShot = 0.00;
         }

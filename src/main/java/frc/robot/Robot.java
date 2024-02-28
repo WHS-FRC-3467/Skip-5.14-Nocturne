@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         m_robotContainer.disablePIDSubsystems();
+        m_robotContainer.disabledLEDs();
     }
 
     @Override
@@ -52,6 +53,7 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
         }
+        m_robotContainer.autoLEDs();
     }
 
     @Override
@@ -72,6 +74,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        m_robotContainer.timerLEDs();
     }
 
     @Override
