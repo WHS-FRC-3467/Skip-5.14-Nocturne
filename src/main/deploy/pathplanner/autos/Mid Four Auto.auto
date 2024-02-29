@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7626093884666401,
-      "y": 4.432084533684738
+      "x": 1.3669845521509223,
+      "y": 5.569261320340823
     },
     "rotation": 180.0
   },
@@ -18,13 +18,70 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunShooter"
+                  "name": "LookUpShot"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.0
+                  "waitTime": 0.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNote"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MA Collect1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "LookUpShot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.25
                 }
               }
             ]
@@ -43,7 +100,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "FirstCollect"
+                  "pathName": "MA Collect2"
                 }
               },
               {
@@ -53,18 +110,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WingShot"
           }
         },
         {
@@ -74,32 +119,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunShooter2"
+                  "name": "LookUpShot"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.0
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNote"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.0
+                  "waitTime": 0.25
                 }
               }
             ]
@@ -108,7 +134,7 @@
         {
           "type": "named",
           "data": {
-            "name": "DownIntake"
+            "name": "ShootNote"
           }
         },
         {
@@ -118,7 +144,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Second Collect"
+                  "pathName": "MA Collect3"
                 }
               },
               {
@@ -128,18 +154,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WingShot"
           }
         },
         {
@@ -149,13 +163,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShootNote"
+                  "name": "LookUpShot"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.0
+                  "waitTime": 0.4
                 }
               }
             ]
@@ -164,54 +178,23 @@
         {
           "type": "named",
           "data": {
-            "name": "DownIntake"
+            "name": "ShootNote"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MA Collect4"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "RunIntake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Third Collect"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WingShot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNote"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.0
                 }
               }
             ]
@@ -220,6 +203,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Week1",
   "choreoAuto": false
 }

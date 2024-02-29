@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.809086415893629,
+        "y": 7.004798511021523
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.399491420065461,
+        "y": 5.776912294565331
+      },
+      "isLocked": false,
+      "linkedName": "AS +1"
+    },
+    {
+      "anchor": {
+        "x": 5.264858848806016,
+        "y": 3.91754173821738
+      },
+      "prevControl": {
+        "x": 4.17602068500148,
+        "y": 4.555446925092764
+      },
+      "nextControl": {
+        "x": 6.422580138607571,
+        "y": 3.2392807805558634
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.165009150531121,
+        "y": 5.800300603450209
+      },
+      "prevControl": {
+        "x": 7.054064478499327,
+        "y": 4.478861151454497
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "AS4P Collect2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 7.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -178.6028189727037,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Amp Side",
+  "previewStartingState": {
+    "rotation": -158.27894919800272,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

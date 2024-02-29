@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7158327706968803,
+      "y": 4.408696224799858
+    },
+    "rotation": 119.89890183861456
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Far TEST"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go To Center 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go To Center3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go To Center1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go To Center 2"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Week1",
+  "choreoAuto": false
+}

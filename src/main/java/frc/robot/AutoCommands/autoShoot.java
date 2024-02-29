@@ -47,7 +47,7 @@ public class autoShoot extends Command {
     if (m_stageSubsystem.isNoteInStage()) {
         m_stageSubsystem.stopStage();
         // Set arm Setpoint
-        System.out.println("Trying to prep to shoot");
+        //System.out.println("Trying to prep to shoot");
         m_shooterSubsystem.setShooterSetpoints(Constants.RobotConstants.WING);
         // After we have a Note in the Stage, bring Arm to requested position
         m_armSubsystem.updateArmSetpoint(Constants.RobotConstants.WING);

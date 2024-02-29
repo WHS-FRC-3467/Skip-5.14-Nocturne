@@ -36,9 +36,10 @@ public class LEDSubsystem extends SubsystemBase {
 
     Color black = new Color(0, 0, 0); // This will Turn off the CANdle
     Color green = new Color(50, 168, 82); // Green
-    Color red = new Color(171, 41, 43); // Red
+//    Color red = new Color(171, 41, 43); // Red
+    Color red = new Color(255, 0, 0); // Red
     Color yellow = new Color(107, 107, 199); // Yellow
-    Color white = new Color(255, 230, 220); // White
+    Color white = new Color(255, 255, 255); // White
     Color blue = new Color(8, 32, 255); // Blue
     Color purple = new Color(184, 0, 185); // Purple
 
@@ -76,8 +77,10 @@ public class LEDSubsystem extends SubsystemBase {
         candleConfiguration.disableWhenLOS = false;
         candleConfiguration.stripType = LEDStripType.RGB;
         candleConfiguration.brightnessScalar = 0.5;
-        candleConfiguration.vBatOutputMode = VBatOutputMode.Modulated;
+        candleConfiguration.vBatOutputMode = VBatOutputMode.On;
         m_candle.configAllSettings(candleConfiguration, 100);
+
+        m_candle.configLEDType(LEDStripType.RGB, 300);
 
     }
 
@@ -156,6 +159,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     public void armDisabled() {
         m_Arm.setAnimation(a_ArmDisabled);
+        //m_Arm.setColor(white);
     }
 
      /* 
@@ -165,7 +169,7 @@ public class LEDSubsystem extends SubsystemBase {
      * Shooter At Speed: Solid Green
      * Disabled: Rainbow
     */
-    LEDSegment m_Shooter = new LEDSegment(56, 48, 2);
+    LEDSegment m_Shooter = new LEDSegment(56, 44, 2);
     Animation a_ShooterSpoolUp = new StrobeAnimation(red.r, red.g, red.b, 0, .5, m_Shooter.segmentSize, m_Shooter.startIndex);
     Animation a_ShooterIdle = new LarsonAnimation(red.r, red.g, red.b, 0, 0.1, m_Shooter.segmentSize, BounceMode.Back, m_Shooter.startIndex);
     Animation a_ShooterDisabled = new RainbowAnimation(0.7, 0.2, m_Shooter.segmentSize, false, m_Shooter.startIndex);
@@ -188,6 +192,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     public void shooterDisabled() {
         m_Shooter.setAnimation(a_ShooterDisabled);
+        //m_Shooter.setColor(white);
     }
 
     /* 
@@ -197,7 +202,7 @@ public class LEDSubsystem extends SubsystemBase {
      * Note In Stage: Solid Green
      * Disabled: Rainbow
      */
-    LEDSegment m_Intake = new LEDSegment(133, 86, 4);
+    LEDSegment m_Intake = new LEDSegment(128, 86, 4);
     Animation a_noNote = new StrobeAnimation(red.r, red.g, red.b, 0, 0.09, m_Intake.segmentSize, m_Intake.startIndex);
     Animation a_IntakeDisabled = new RainbowAnimation(0.7, 0.2, m_Intake.segmentSize, false, m_Intake.startIndex);
 
@@ -214,7 +219,8 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     public void intakeDisabled() {
-        m_Intake.setColor(black);
+        m_Intake.setAnimation(a_IntakeDisabled);
+        //m_Intake.setColor(white);
     }
 
 
@@ -226,7 +232,7 @@ public class LEDSubsystem extends SubsystemBase {
     * 0:10 -> 0:00: Strobing Red
     * Non-auto periods & Disabled: Off
     */
-    LEDSegment m_Timer = new LEDSegment(104, 29, 3);
+    LEDSegment m_Timer = new LEDSegment(100, 29, 3);
     Animation a_TimeExpiring = new StrobeAnimation(red.r, red.g, red.b, 0, 0.5, m_Timer.segmentSize, m_Timer.startIndex);
     Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.7, m_Timer.segmentSize, BounceMode.Back, m_Timer.startIndex);
 
@@ -252,7 +258,7 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     public void timerDisabled() {
-        m_Timer.setColor(black);
+        m_Timer.setColor(white);
     }
 
     public void runDisabledPatterns() {

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7626093884666401,
-      "y": 4.432084533684738
+      "x": 0.7509152340242001,
+      "y": 6.689056341075646
     },
-    "rotation": 180.0
+    "rotation": -122.2279359431205
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.0
+                  "waitTime": 0.6
                 }
               }
             ]
@@ -37,13 +37,19 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
+          "data": {
+            "pathName": "Get2Side"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "FirstCollect"
+                  "pathName": "Go Far"
                 }
               },
               {
@@ -56,15 +62,34 @@
           }
         },
         {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LetsGoToPlaces"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LookUpShot"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 1.5
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "WingShot"
+            "name": "ShootNote"
           }
         },
         {
@@ -74,72 +99,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunShooter2"
+                  "name": "RunIntake"
                 }
               },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.0
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNote"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.0
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DownIntake"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Second Collect"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntake"
+                  "pathName": "3rd Piece"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "WingShot"
           }
         },
         {
@@ -149,38 +118,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShootNote"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.0
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DownIntake"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntake"
+                  "name": "LookUpShot"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Third Collect"
+                  "pathName": "Back2WingAgain"
                 }
               }
             ]
@@ -189,37 +133,24 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.3
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "WingShot"
+            "name": "ShootNote"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNote"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.0
-                }
-              }
-            ]
+            "pathName": "AS Random"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Week1",
   "choreoAuto": false
 }

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7139723370355832,
-        "y": 4.3751818412727745
+        "x": 3.5809006090946656,
+        "y": 2.865067838397785
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9285334934306233,
-        "y": 3.321033551158012
+        "x": 4.949116678860137,
+        "y": 1.777511475250871
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "FA FirstShot"
     },
     {
       "anchor": {
-        "x": 7.85046297365322,
-        "y": 0.7556284203477498
+        "x": 8.1299266872038,
+        "y": 0.39760125104295896
       },
       "prevControl": {
-        "x": 6.85046297365322,
-        "y": 0.7556284203477498
+        "x": 4.890645906647938,
+        "y": 0.7250375754312781
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 7.0,
+    "maxAcceleration": 7.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "Far Side",
   "previewStartingState": {
-    "rotation": 119.98163936884934,
+    "rotation": 140.3893117599734,
     "velocity": 0
   },
   "useDefaultConstraints": true

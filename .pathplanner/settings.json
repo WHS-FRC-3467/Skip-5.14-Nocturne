@@ -4,10 +4,12 @@
   "holonomicMode": true,
   "pathFolders": [
     "Amp Side",
+    "Far Side",
     "Mid Auto",
-    "Far Side"
+    "PID"
   ],
   "autoFolders": [
+    "PID",
     "Week1"
   ],
   "defaultMaxVel": 3.0,

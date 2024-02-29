@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 /* Local */
+import frc.robot.AutoCommands.AutoLookUpShot;
+import frc.robot.AutoCommands.autoIntakeNote;
 import frc.robot.Commands.LookUpShot;
 import frc.robot.Commands.intakeNote;
 import frc.robot.Commands.prepareToShoot;
@@ -172,17 +174,20 @@ public class RobotContainer {
     private void registerNamedCommands() {
 
         // Register Named Commands for use in PathPlanner autos
-        NamedCommands.registerCommand("RunIntake", (new intakeNote(m_intakeSubsystem, m_stageSubsystem)));
+        NamedCommands.registerCommand("RunIntake", (new autoIntakeNote(m_intakeSubsystem, m_stageSubsystem)));
         NamedCommands.registerCommand("DownIntake", m_armSubsystem.prepareForIntakeCommand());
         NamedCommands.registerCommand("StopIntake", m_intakeSubsystem.stopIntakeCommand());
         NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(30, 35));
         NamedCommands.registerCommand("RunShooter2", m_shooterSubsystem.runShooterCommand());
         NamedCommands.registerCommand("StopShooter", m_shooterSubsystem.stopShooterCommand());
-        NamedCommands.registerCommand("ShootNote", m_stageSubsystem.feedNote2ShooterCommand());
-        NamedCommands.registerCommand("WingShot", new prepareToShoot(RobotConstants.WING, ()->m_stageSubsystem.isNoteInStage(),
-                m_armSubsystem, m_shooterSubsystem));
+        NamedCommands.registerCommand("ShootNote",
+                m_stageSubsystem.feedNote2ShooterCommand().andThen(m_armSubsystem.prepareForIntakeCommand()));
+        NamedCommands.registerCommand("WingShot",
+                new prepareToShoot(RobotConstants.WING, () -> m_stageSubsystem.isNoteInStage(),
+                        m_armSubsystem, m_shooterSubsystem));
+        NamedCommands.registerCommand("LookUpShot",
+                new AutoLookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker()));
 
-        
     }
 
     /**
