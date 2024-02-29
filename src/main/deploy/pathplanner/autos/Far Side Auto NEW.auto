@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7626093884666401,
-      "y": 4.432084533684738
+      "x": 0.72394368066646,
+      "y": 4.348392164717821
     },
-    "rotation": 130.0
+    "rotation": 118.5423492742116
   },
   "command": {
     "type": "sequential",
@@ -18,32 +18,39 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "LookUpShot"
+                  "name": "RunShooter"
                 }
               },
               {
-                "type": "path",
+                "type": "wait",
                 "data": {
-                  "pathName": "FA Shoot1"
+                  "waitTime": 0.5
                 }
               }
             ]
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.6
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNote"
-          }
-        },
-        {
           "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNote"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.1
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -81,19 +88,20 @@
           }
         },
         {
-          "type": "wait",
+          "type": "sequential",
           "data": {
-            "waitTime": 0.2
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNote"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "ShootNote"
-          }
-        },
-        {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -128,12 +136,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.4
           }
         },
         {
