@@ -466,7 +466,11 @@ public class RobotContainer {
         m_ledSubsystem.runDisabledPatterns();
     }
 
-    public void timerLEDs() {
+    public void teleopLEDs() {
         m_ledSubsystem.runMatchTimerPattern();
+    }
+
+    public void teleopInitLEDs() {
+        m_ledSubsystem.startTeleopPatterns();
     }
 }

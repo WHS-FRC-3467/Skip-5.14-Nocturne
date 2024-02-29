@@ -69,12 +69,12 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
-        
+        m_robotContainer.teleopInitLEDs();
     }
 
     @Override
     public void teleopPeriodic() {
-        m_robotContainer.timerLEDs();
+        m_robotContainer.teleopLEDs();
     }
 
     @Override
