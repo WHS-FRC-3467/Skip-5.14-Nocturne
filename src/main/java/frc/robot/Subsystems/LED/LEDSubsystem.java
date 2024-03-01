@@ -174,7 +174,7 @@ public class LEDSubsystem extends SubsystemBase {
      */
     LEDSegment m_Arm = new LEDSegment(8, 48, 1);
     Animation a_ArmNotReady = new StrobeAnimation(red.r, red.g, red.b, 0, 0.09, m_Arm.segmentSize, m_Arm.startIndex); // Flash
-    Animation a_ArmDisabled = new RainbowAnimation(0.7, 0.5, m_Arm.segmentSize, false, m_Arm.startIndex);
+    Animation a_ArmDisabled = new RainbowAnimation(0.7, 0.5, m_Arm.segmentSize, true, m_Arm.startIndex);
     
     public void armStowed() {
         m_Arm.setOff();
@@ -201,7 +201,7 @@ public class LEDSubsystem extends SubsystemBase {
     */
     LEDSegment m_Shooter = new LEDSegment(56, 44, 2);
     Animation a_ShooterSpoolUp = new StrobeAnimation(red.r, red.g, red.b, 0, .5, m_Shooter.segmentSize, m_Shooter.startIndex);
-    Animation a_ShooterIdle = new LarsonAnimation(red.r, red.g, red.b, 0, 0.1, m_Shooter.segmentSize, BounceMode.Back, m_Shooter.startIndex);
+    Animation a_ShooterIdle = new LarsonAnimation(green.r, green.g, green.b, 0, 0.4, m_Shooter.segmentSize, BounceMode.Back, m_Shooter.startIndex);
     Animation a_ShooterDisabled = new RainbowAnimation(0.7, 0.5, m_Shooter.segmentSize, false, m_Shooter.startIndex);
 
     public void ready2Shoot() {
@@ -260,7 +260,7 @@ public class LEDSubsystem extends SubsystemBase {
     * 0:10 -> 0:00: Strobing Red
     * Non-auto periods & Disabled: Off
     */
-    LEDSegment m_Timer = new LEDSegment(100, 29, 3);
+    LEDSegment m_Timer = new LEDSegment(100, 28, 3);
     Animation a_TimeExpiring = new StrobeAnimation(red.r, red.g, red.b, 0, 0.5, m_Timer.segmentSize, m_Timer.startIndex);
     Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.7, m_Timer.segmentSize, BounceMode.Back, m_Timer.startIndex);
     Timer m_pseudoTimer = new Timer();
@@ -283,7 +283,7 @@ public class LEDSubsystem extends SubsystemBase {
         } else if (matchTime > 0.0) {
             m_Timer.setAnimation(a_TimeExpiring);
         } else {
-            m_Timer.setColor(black);
+            m_Timer.setColor(white);
         }
     }
 
