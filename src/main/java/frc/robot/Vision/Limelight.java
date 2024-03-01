@@ -36,7 +36,7 @@ public class Limelight extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (DriverStation.isEnabled()) {
+        /* if (DriverStation.isEnabled()) {
             trust = false;
         } else {
             trust = true;
@@ -67,7 +67,7 @@ public class Limelight extends SubsystemBase {
                     SmartDashboard.putNumber("Field Error", fieldError);
                 }
             }
-        }
+        } */
     }
 
     public void setAlliance(Alliance alliance) {

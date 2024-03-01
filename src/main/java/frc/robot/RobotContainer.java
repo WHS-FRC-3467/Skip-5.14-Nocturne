@@ -42,6 +42,7 @@ import frc.robot.Subsystems.Shooter.ShooterDefault;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Stage.StageSubsystem;
 import frc.robot.Util.CommandXboxPS5Controller;
+import frc.robot.Vision.Limelight;
 import frc.robot.generated.TunerConstants;
 
 public class RobotContainer {
@@ -124,7 +125,7 @@ public class RobotContainer {
     //PhotonVision m_PhotonVision = new PhotonVision();
 
     // Setup Limelight periodic query (defaults to disabled)
-    //Limelight m_vision = new Limelight(m_drivetrain);
+    Limelight m_vision = new Limelight(m_drivetrain);
 
     public RobotContainer() {
 
@@ -132,8 +133,8 @@ public class RobotContainer {
         DriverStation.silenceJoystickConnectionWarning(true);
 
         // Change this to specify Limelight is in use
-        //m_vision.useLimelight(false);
-        // m_vision.setAlliance(Alliance.Blue);
+        m_vision.useLimelight(true);
+        //m_vision.setAlliance(Alliance.Blue);
         //m_vision.trustLL(true);
 
         // Sets autoAim Rot PID
@@ -279,7 +280,7 @@ public class RobotContainer {
          * Right Stick Button: <no-op>
          * *
          */
-        m_shooterSubsystem.setDefaultCommand(new ShooterDefault(m_shooterSubsystem));
+        //m_shooterSubsystem.setDefaultCommand(new ShooterDefault(m_shooterSubsystem));
 
         /*
          * DRIVER Controls
@@ -365,11 +366,12 @@ public class RobotContainer {
         //m_operatorCtrl.a().onTrue(m_shooterSubsystem.runShooterCommand());
        // m_operatorCtrl.a().onTrue(new setShooterSpeedLookUP(m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker()));
 
+         m_operatorCtrl.a().whileTrue(m_shooterSubsystem.runShooterCommand(40, 50));
          // Operator: X Button: Arm to Stowed Position (when pressed)
          m_operatorCtrl.x().onTrue(new prepareToShoot(RobotConstants.STOWED, ()->m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
 
-        m_operatorCtrl.a().whileTrue(m_shooterSubsystem.runShooterCommand(40, 50));
+        m_operatorCtrl.b().onTrue(m_shooterSubsystem.stopShooterCommand());
 
         // Operator: Use Left Bumper and Left Stick Y-Axis to manually control Arm
         m_armSubsystem.setDefaultCommand(

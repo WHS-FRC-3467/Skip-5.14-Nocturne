@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -99,14 +100,19 @@ public class velocityOffset extends Command {
         //futureRobotPose is the position the robot will be at timeUntilShot in the future
         futureRobotPose = currentPos.plus(moveDelta);
         //Angle to the speaker at future position
-        futureAngleToSpeaker = m_drivetrain.calcAngleToSpeaker(futureRobotPose);
+        futureAngleToSpeaker = m_drivetrain.calcAngleToSpeaker();
 
         //The amount to add to the current angle to speaker to aim for the future
         correctionAngle = currentAngleToSpeaker - futureAngleToSpeaker;
         correctedPose = Rotation2d.fromDegrees(-correctionAngle).plus(m_drivetrain.RotToSpeaker());
-        //Wrap the input using Modulus to prevent un-needed 180deg spins
-        correctedPose = Rotation2d.fromDegrees(MathUtil.inputModulus(correctedPose.getDegrees(),-180,180));
-        //Get the future distance to speaker
+        // Wrap the input using Modulus to prevent un-needed 180deg spins
+         
+         if (m_drivetrain.getAlliance() == DriverStation.Alliance.Red) {
+            correctedPose = Rotation2d.fromDegrees(MathUtil.inputModulus(correctedPose.getDegrees(), -180, 180));
+            //correctedPose = Rotation2d.fromDegrees(correctedPose.getDegrees() * -1);
+        }
+
+        // Get the future distance to speaker
         correctedDistance = m_drivetrain.calcDistToSpeaker(futureRobotPose);
         //Pass the offsets to the drivetrain
         m_drivetrain.setVelOffset(correctedPose,correctedDistance);
@@ -122,6 +128,8 @@ public class velocityOffset extends Command {
             SmartDashboard.putNumber("Correction Angle", correctionAngle);
             SmartDashboard.putNumber("timeUntilShot", timeUntilShot);
             SmartDashboard.putNumber("futureDist", correctedDistance);
+            SmartDashboard.putNumber("Rot2Speaker", m_drivetrain.RotToSpeaker().getDegrees());
+            SmartDashboard.putNumber("pose rot", m_drivetrain.getState().Pose.getRotation().getDegrees());
             
             //SmartDashboard.putNumber("time Const", Constants.ShooterConstants.timeToShoot);
             //SmartDashboard.putNumber("currentTime", shotTimer.get());

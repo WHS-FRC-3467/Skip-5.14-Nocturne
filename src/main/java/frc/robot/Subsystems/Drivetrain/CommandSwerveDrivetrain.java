@@ -158,6 +158,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         _field.setRobotPose(m_odometry.getEstimatedPosition());
         SmartDashboard.putData("Field Test",_field);
         SmartDashboard.putNumber("Distance2Speaker", calcDistToSpeaker());
+        SmartDashboard.putNumber("GetVelOffsetDeg", getVelocityOffset().getDegrees());
         
         
         var visionEst = _vision.getEstimatedGlobalPose();
@@ -193,7 +194,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     // Gets current alliance from driverstation to know which speaker to point at
-    private Alliance getAlliance() {
+    public Alliance getAlliance() {
         if (_alliance == null) {
             if (DriverStation.getAlliance().isPresent()) {
                 _alliance = DriverStation.getAlliance().get();

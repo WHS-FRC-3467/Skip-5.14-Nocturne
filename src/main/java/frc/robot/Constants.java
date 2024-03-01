@@ -30,18 +30,18 @@ public final class Constants {
 
     public static final class RobotConstants {
 
-        public static final boolean kIsTuningMode = false;
+        public static final boolean kIsTuningMode = true;
         public static final boolean kIsDriveTuningMode = false;
         public static final boolean kIsArmTuningMode = false;
         public static final boolean kIsIntakeTuningMode = false;
         public static final boolean kIsStageTuningMode = false;
-        public static final boolean kIsShooterTuningMode = false;
-        public static final boolean kIsAutoAimTuningMode = false;
+        public static final boolean kIsShooterTuningMode = true;
+        public static final boolean kIsAutoAimTuningMode = true;
 
         // Shooter and Arm Setpoints
         public static final Setpoints STOWED = new Setpoints(1.0, 0.4, 0.0, 0.0, GameState.STOWED);
         public static final Setpoints INTAKE = new Setpoints(1.0, 2.0, 0.0, 0.0, GameState.INTAKE);
-        public static final Setpoints SUBWOOFER = new Setpoints(3.0, 1.0, 30.0,30.0,  GameState.SUBWOOFER);
+        public static final Setpoints SUBWOOFER = new Setpoints(8.0, 1.0, 30.0,30.0,  GameState.SUBWOOFER);
         public static final Setpoints AMP = new Setpoints(88.0, 0.4, 30.0,30.0,  GameState.AMP);
         public static final Setpoints PODIUM = new Setpoints(23.0, 0.4, 50.0,50.0,  GameState.PODIUM);
         public static final Setpoints WING = new Setpoints(30.0, 0.4, 70.0,60.0,  GameState.WING);
@@ -199,7 +199,7 @@ public final class Constants {
                 //new Transform3d(new Translation3d(.174,-0.186, 0.588), new Rotation3d(0, Math.toRadians(10),0));
 
         public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(.25679,.2491, .22), new Rotation3d(0, Math.toRadians(-20.4),Math.toRadians(-13)));
+                new Transform3d(new Translation3d(.25679,.2491, .22), new Rotation3d(0, Math.toRadians(-19.6),Math.toRadians(-20.4)));
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout kTagLayout =

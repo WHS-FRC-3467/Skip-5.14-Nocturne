@@ -201,7 +201,7 @@ public class LEDSubsystem extends SubsystemBase {
     */
     LEDSegment m_Shooter = new LEDSegment(56, 44, 2);
     Animation a_ShooterSpoolUp = new StrobeAnimation(red.r, red.g, red.b, 0, .5, m_Shooter.segmentSize, m_Shooter.startIndex);
-    Animation a_ShooterIdle = new LarsonAnimation(green.r, green.g, green.b, 0, 0.4, m_Shooter.segmentSize, BounceMode.Back, m_Shooter.startIndex);
+    Animation a_ShooterIdle = new LarsonAnimation(green.r, green.g, green.b, 0, 0.4, m_Shooter.segmentSize, BounceMode.Back, 3,m_Shooter.startIndex);
     Animation a_ShooterDisabled = new RainbowAnimation(0.7, 0.5, m_Shooter.segmentSize, false, m_Shooter.startIndex);
 
     public void ready2Shoot() {
@@ -262,7 +262,7 @@ public class LEDSubsystem extends SubsystemBase {
     */
     LEDSegment m_Timer = new LEDSegment(100, 28, 3);
     Animation a_TimeExpiring = new StrobeAnimation(red.r, red.g, red.b, 0, 0.5, m_Timer.segmentSize, m_Timer.startIndex);
-    Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.7, m_Timer.segmentSize, BounceMode.Back, m_Timer.startIndex);
+    Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.7, m_Timer.segmentSize, BounceMode.Back, 3, m_Shooter.startIndex);
     Timer m_pseudoTimer = new Timer();
 
     public void runMatchTimerPattern() {

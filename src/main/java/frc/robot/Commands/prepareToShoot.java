@@ -59,7 +59,7 @@ public class prepareToShoot extends Command {
 
         // Exit once Arm is at setpoint and Shooter setpoint is != 0 and Shooter is up to speed 
         if (m_armSubsystem.isArmJointAtSetpoint() && (m_runShooter && m_shooterSubsystem.areWheelsAtSpeed())) {
-            m_isDone = true;
+            //m_isDone = true;
         }
     }
 
