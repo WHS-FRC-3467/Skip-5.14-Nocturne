@@ -46,6 +46,8 @@ public class velocityOffset extends Command {
     Boolean ranOnce;
     Double correctedDistance;
     Pose2d futureRobotPose2d;
+    Rotation2d currentRotation2d;
+    Rotation2d futureRotation2d;
 
     /** Creates a new velocityOffset. */
     public velocityOffset(CommandSwerveDrivetrain drivetrain, DoubleSupplier triggerAxis) {
@@ -81,7 +83,9 @@ public class velocityOffset extends Command {
         //Get current translation of the drivetrain
         currentPos = m_drivetrain.getState().Pose.getTranslation();
         //Calculate angle relative to the speaker from current pose
-        currentAngleToSpeaker = m_drivetrain.calcAngleToSpeaker(currentPos);
+        //currentAngleToSpeaker = m_drivetrain.compAngleToSpeaker(currentPos).getDegrees();
+        currentRotation2d = m_drivetrain.compAngleToSpeaker(currentPos);
+        //currentAngleToSpeaker = m_drivetrain.calcAngleToSpeaker(currentPos);
         //Get current drivetrain velocities in field relative terms
         speeds = m_drivetrain.getFieldRelativeChassisSpeeds();
 
@@ -100,22 +104,29 @@ public class velocityOffset extends Command {
         //futureRobotPose is the position the robot will be at timeUntilShot in the future
         futureRobotPose = currentPos.plus(moveDelta);
         //Angle to the speaker at future position
-        futureAngleToSpeaker = m_drivetrain.calcAngleToSpeaker();
+        //futureAngleToSpeaker = m_drivetrain.calcAngleToSpeaker();
+        //futureAngleToSpeaker = m_drivetrain.compAngleToSpeaker(futureRobotPose).getDegrees();
+        futureRotation2d = m_drivetrain.compAngleToSpeaker(futureRobotPose);
 
         //The amount to add to the current angle to speaker to aim for the future
-        correctionAngle = currentAngleToSpeaker - futureAngleToSpeaker;
-        correctedPose = Rotation2d.fromDegrees(-correctionAngle).plus(m_drivetrain.RotToSpeaker());
+        //correctionAngle = currentAngleToSpeaker - futureAngleToSpeaker;
+        correctedPose = (currentRotation2d.minus(futureRotation2d));
+        correctedPose = (correctedPose).plus(m_drivetrain.RotToSpeaker());
+
+        //correctedPose = Rotation2d.fromDegrees(-correctionAngle).plus(m_drivetrain.RotToSpeaker());
         // Wrap the input using Modulus to prevent un-needed 180deg spins
          
-         if (m_drivetrain.getAlliance() == DriverStation.Alliance.Red) {
+/*          if (m_drivetrain.getAlliance() == DriverStation.Alliance.Red) {
             correctedPose = Rotation2d.fromDegrees(MathUtil.inputModulus(correctedPose.getDegrees(), -180, 180));
             //correctedPose = Rotation2d.fromDegrees(correctedPose.getDegrees() * -1);
-        }
+        } */
 
         // Get the future distance to speaker
         correctedDistance = m_drivetrain.calcDistToSpeaker(futureRobotPose);
         //Pass the offsets to the drivetrain
+        //m_drivetrain.setVelOffset(correctedPose,correctedDistance);
         m_drivetrain.setVelOffset(correctedPose,correctedDistance);
+        
 
         
  
@@ -125,7 +136,7 @@ public class velocityOffset extends Command {
             //SmartDashboard.putNumber("xDelta", xDelta);
             //SmartDashboard.putNumber("yDelta", yDelta);
             //SmartDashboard.putNumber("futureang", futureAngleToSpeaker);
-            SmartDashboard.putNumber("Correction Angle", correctionAngle);
+            //SmartDashboard.putNumber("Correction Angle", correctionAngle);
             SmartDashboard.putNumber("timeUntilShot", timeUntilShot);
             SmartDashboard.putNumber("futureDist", correctedDistance);
             SmartDashboard.putNumber("Rot2Speaker", m_drivetrain.RotToSpeaker().getDegrees());

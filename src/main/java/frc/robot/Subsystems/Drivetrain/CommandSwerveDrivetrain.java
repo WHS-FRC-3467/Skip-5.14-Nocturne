@@ -255,13 +255,13 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         Pose2d speakerPos = Constants.BLUE_SPEAKER;
         double xDiff = robotPose.getX() - speakerPos.getX();
         double yDiff = robotPose.getY() - speakerPos.getY();
+        
         //System.out.print(xDiff);
         //System.out.print(yDiff);
         //System.out.println(180 - Math.toDegrees(Math.atan(yDiff / xDiff)));
         return Math.toDegrees(Math.atan(yDiff / xDiff));
     }
-
-
+    
 
     private double calcAngleToSpeakerForRed() {
         Pose2d robotPose = m_odometry.getEstimatedPosition();
@@ -304,6 +304,43 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         // System.out.print(yDiff);
         // System.out.println(Math.toDegrees(Math.atan(yDiff / xDiff)));
         return Math.toDegrees(Math.atan(yDiff / xDiff));
+    }
+
+    public Rotation2d compAngleToSpeaker(Translation2d pose) {
+        if (getAlliance() == Alliance.Blue) {
+            return compAngleToSpeakerBlue(pose);
+        } else {
+            return compAngleToSpeakerRed(pose);
+        }
+    }
+
+    public Rotation2d compAngleToSpeakerRed(Translation2d pose) {
+        Pose2d speakerPos = Constants.RED_SPEAKER;
+        if (pose != null) {
+            Translation2d deltaTrans = speakerPos.getTranslation().minus(pose);
+            return deltaTrans.getAngle();
+
+        } else {
+            return Rotation2d.fromDegrees(0);
+        }
+        
+        
+    }
+
+    public Rotation2d compAngleToSpeakerBlue(Translation2d pose) {
+        Pose2d speakerPos = Constants.BLUE_SPEAKER;
+        if (pose != null) {
+            Translation2d deltaTrans = speakerPos.getTranslation().minus(pose);
+            //deltaTrans = deltaTrans.unaryMinus();
+            //System.out.println(deltaTrans.getAngle().plus(Rotation2d.fromDegrees(180)));
+            //return deltaTrans.getAngle().plus(Rotation2d.fromDegrees(180));
+            return deltaTrans.getAngle();
+
+        } else {
+            return Rotation2d.fromDegrees(180);
+        }
+        
+        
     }
 
     private double calcAngleToSpeakerForBlue(Translation2d pose) {
