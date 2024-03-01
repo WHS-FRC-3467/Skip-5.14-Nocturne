@@ -95,7 +95,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 (speeds) -> this.setControl(autoRequest.withSpeeds(speeds)),
 
                 // Method for configuring the path following commands
-                new HolonomicPathFollowerConfig(new PIDConstants(.6, 0, .08), new PIDConstants(5, 0, 0),
+                new HolonomicPathFollowerConfig(new PIDConstants(5, 0, .08), new PIDConstants(5, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius, new ReplanningConfig()),
 
@@ -254,11 +254,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         Pose2d robotPose = m_odometry.getEstimatedPosition();
         Pose2d speakerPos = Constants.BLUE_SPEAKER;
         double xDiff = robotPose.getX() - speakerPos.getX();
-        double yDiff = speakerPos.getY() - robotPose.getY();
+        double yDiff = robotPose.getY() - speakerPos.getY();
         //System.out.print(xDiff);
         //System.out.print(yDiff);
         //System.out.println(180 - Math.toDegrees(Math.atan(yDiff / xDiff)));
-        return 180 - Math.toDegrees(Math.atan(yDiff / xDiff));
+        return Math.toDegrees(Math.atan(yDiff / xDiff));
     }
 
 
