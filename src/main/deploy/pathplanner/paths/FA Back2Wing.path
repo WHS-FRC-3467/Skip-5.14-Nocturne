@@ -3,43 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.036262343308536,
-        "y": 0.7409816244810651
+        "x": 7.4902758831645935,
+        "y": 1.3844656667935669
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.247056713615225,
-        "y": 1.0216413310996226
+        "x": 5.394077866540532,
+        "y": 0.6532338005293594
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "EndOfFACollect1"
     },
     {
       "anchor": {
-        "x": 2.3062377748687117,
-        "y": 3.2860573983256236
+        "x": 2.7713929062062417,
+        "y": 2.8274298828882696
       },
       "prevControl": {
-        "x": 2.1034770834110432,
-        "y": 2.14813643820502
+        "x": 2.568632214748573,
+        "y": 1.6895089227676658
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "EndOfFABack2Wing"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 7.0,
-    "maxAcceleration": 7.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 135.1472895971752,
+    "rotation": 132.27368900609375,
     "rotateFast": true
   },
   "reversed": false,

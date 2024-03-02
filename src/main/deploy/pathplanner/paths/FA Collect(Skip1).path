@@ -16,16 +16,32 @@
     },
     {
       "anchor": {
-        "x": 8.270256540513081,
-        "y": 0.7702308991316326
+        "x": 7.578023707116299,
+        "y": 1.0822231620710279
       },
       "prevControl": {
-        "x": 6.954039181237508,
-        "y": 0.8579787230833354
+        "x": 6.630388641898078,
+        "y": -0.04715013483287911
+      },
+      "nextControl": {
+        "x": 8.289756056946795,
+        "y": 1.9304521269375086
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.29950581516365,
+        "y": 2.8176801246714143
+      },
+      "prevControl": {
+        "x": 8.338504848031073,
+        "y": 1.8037052701183809
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "EndOfFACollect1Skip1"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +55,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -179.31793960682734,
+    "rotation": -111.16125981682833,
     "rotateFast": true
   },
   "reversed": false,

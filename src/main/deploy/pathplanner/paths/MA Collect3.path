@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9,
-        "y": 5.31
+        "x": 2.712894356905105,
+        "y": 5.6743592822102515
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.902633998850891,
-        "y": 5.306927001340626
+        "x": 2.715528355755996,
+        "y": 5.671286283550878
       },
       "isLocked": true,
-      "linkedName": null
+      "linkedName": "EndOfMACollect2"
     },
     {
       "anchor": {
@@ -25,15 +25,15 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "EndOfMACollect3"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 7.0,
-    "maxAcceleration": 7.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

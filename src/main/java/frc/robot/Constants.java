@@ -115,7 +115,7 @@ public final class Constants {
         public static final double kFeedToAmpSpeed = 0.7;
         public static final double kFeedToTrapSpeed = 0.5;
 
-        public static final double kFeedToShooterTime = 1.0;
+        public static final double kFeedToShooterTime = 0.5;
         public static final double kFeedToAmpTime = 1.0;
         public static final double kFeedToTrapTime = 5.0;
     }

@@ -16,30 +16,30 @@
     },
     {
       "anchor": {
-        "x": 2.527648950784839,
-        "y": 4.348392164717821
+        "x": 2.459400643266846,
+        "y": 4.4361399886695265
       },
       "prevControl": {
-        "x": 2.0798691461343206,
-        "y": 4.936103158321626
+        "x": 2.0116208386163277,
+        "y": 5.0238509822733315
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "EndOfMACollect1"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 7.0,
-    "maxAcceleration": 7.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 150.20674743594017,
+    "rotation": 151.99082329198615,
     "rotateFast": false
   },
   "reversed": false,

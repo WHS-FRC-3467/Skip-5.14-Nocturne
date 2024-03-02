@@ -56,7 +56,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "FA Collect1"
+                  "pathName": "FA Collect(Skip1)"
                 }
               },
               {
@@ -113,53 +113,15 @@
           }
         },
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "FA Collect2"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "FA Back2Podium"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "LookUpShot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.3
+            "pathName": "FA Collect2(Skip1)"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootNote"
+            "name": "RunIntake"
           }
         }
       ]

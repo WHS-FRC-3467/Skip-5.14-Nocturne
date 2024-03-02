@@ -12,8 +12,8 @@
     "PID",
     "Week1"
   ],
-  "defaultMaxVel": 7.0,
-  "defaultMaxAccel": 7.0,
+  "defaultMaxVel": 6.0,
+  "defaultMaxAccel": 6.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 4.5
