@@ -9,6 +9,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.ForwardReference;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -47,6 +48,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public PhotonVision _vision = new PhotonVision();
     private Rotation2d velocityOffset = new Rotation2d(0);
     private Double correctedDist = 0.0;
+
+    private final Rotation2d BlueAlliancePerspectiveRotation = Rotation2d.fromDegrees(180);
+    /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
+    private final Rotation2d RedAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
+    /* Keep track if we've ever applied the operator perspective before or not */
+    private boolean hasAppliedOperatorPerspective = false;
     
 
 
@@ -63,6 +70,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         configNeutralMode(NeutralModeValue.Brake);
         setSwerveDriveCustomCurrentLimits();        // Setup the current Limits
         configurePathPlanner();
+
+        
     }
 
     private void configurePathPlanner() {
@@ -154,6 +163,15 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     @Override
     public void periodic(){
+        if (!hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
+            DriverStation.getAlliance().ifPresent((allianceColor) -> {
+                this.setOperatorPerspectiveForward(
+                        allianceColor == Alliance.Red ? RedAlliancePerspectiveRotation
+                                : BlueAlliancePerspectiveRotation);
+                hasAppliedOperatorPerspective = true;
+            });
+        }
+    
         
         _field.setRobotPose(m_odometry.getEstimatedPosition());
         SmartDashboard.putData("Field Test",_field);
@@ -204,7 +222,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     //Gets coordinates for appriopriate speaker
-    private Pose2d getSpeakerPos() {
+    public Pose2d getSpeakerPos() {
         if (_speakerPosition == null) {
             if (getAlliance() != null) {
                 _speakerPosition = (getAlliance() == DriverStation.Alliance.Blue) ? Constants.BLUE_SPEAKER
@@ -249,6 +267,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public Rotation2d RotToSpeaker() {
         return Rotation2d.fromDegrees(calcAngleToSpeaker());
     }
+
 
     private double calcAngleToSpeakerForBlue() {
         Pose2d robotPose = m_odometry.getEstimatedPosition();
@@ -318,10 +337,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         Pose2d speakerPos = Constants.RED_SPEAKER;
         if (pose != null) {
             Translation2d deltaTrans = speakerPos.getTranslation().minus(pose);
+
             return deltaTrans.getAngle();
 
         } else {
-            return Rotation2d.fromDegrees(0);
+            return Rotation2d.fromDegrees(180);
         }
         
         
@@ -330,10 +350,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public Rotation2d compAngleToSpeakerBlue(Translation2d pose) {
         Pose2d speakerPos = Constants.BLUE_SPEAKER;
         if (pose != null) {
-            Translation2d deltaTrans = speakerPos.getTranslation().minus(pose);
+            Translation2d deltaTrans = pose.minus(speakerPos.getTranslation());
             //deltaTrans = deltaTrans.unaryMinus();
-            //System.out.println(deltaTrans.getAngle().plus(Rotation2d.fromDegrees(180)));
-            //return deltaTrans.getAngle().plus(Rotation2d.fromDegrees(180));
+            //System.out.println(deltaTrans.getAngle().plus(Rotation2d.fromDeg-rees(180)));
+            //return deltaTrans.getAngle().rotateBy(Rotation2d.fromDegrees(180));
             return deltaTrans.getAngle();
 
         } else {
@@ -364,6 +384,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public void setVelOffset(Rotation2d angle, double dist) {
+        System.out.println("Angle to go to");
+        System.out.println(angle.getDegrees());
+        System.out.println("Angle currently at");
+        System.out.println(m_odometry.getEstimatedPosition().getRotation().getDegrees());
         velocityOffset = angle;
         correctedDist = dist;
     }

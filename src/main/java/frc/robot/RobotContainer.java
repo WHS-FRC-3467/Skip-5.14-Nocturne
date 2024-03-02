@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.ForwardReference;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -97,6 +98,7 @@ public class RobotContainer {
     // Field-centric driving in Open Loop, can change to closed loop after characterization
     SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage)
             .withDeadband(m_MaxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
+    
 
     // Field-centric driving in Closed Loop. Comment above and uncomment below.
     //SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.Velocity)
@@ -109,6 +111,11 @@ public class RobotContainer {
     SwerveRequest.PointWheelsAt m_point = new SwerveRequest.PointWheelsAt();
     SwerveRequest.FieldCentricFacingAngle m_head = new SwerveRequest.FieldCentricFacingAngle()
             .withDriveRequestType(DriveRequestType.Velocity);
+
+    
+    
+    
+    
     
     SwerveRequest.FieldCentricFacingAngle m_cardinal = new SwerveRequest.FieldCentricFacingAngle();
 
@@ -139,7 +146,7 @@ public class RobotContainer {
         //m_vision.trustLL(true);
 
         // Sets autoAim Rot PID
-        m_head.HeadingController.setPID(10, 0, 0);
+        m_head.HeadingController.setPID(5, 0, 0);
         //m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
         // Sets Cardinal Rotation PID
@@ -236,7 +243,7 @@ public class RobotContainer {
     private double invertForAlliance() {
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-            return -1;
+            return 1;
         }
         return 1;
     }
@@ -321,7 +328,10 @@ public class RobotContainer {
         
         // Driver: While Right Stick button is pressed, drive while pointing to alliance speaker
         // AND adjusting Arm angle AND running Shooter
-           m_driverCtrl.rightStick().whileTrue(Commands.parallel(
+
+        
+
+            m_driverCtrl.rightStick().whileTrue(Commands.parallel(
             new velocityOffset(m_drivetrain, () -> m_driverCtrl.getRightTriggerAxis()),
             m_drivetrain.applyRequest(
                 () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
@@ -329,10 +339,15 @@ public class RobotContainer {
                         .withTargetDirection(m_drivetrain.getVelocityOffset())
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)
+                
                         
             ),
             new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance(), m_ledSubsystem)
         ));   
+
+
+
+        
 
 /*         m_driverCtrl.rightStick().whileTrue(Commands.parallel(
                 new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker(),

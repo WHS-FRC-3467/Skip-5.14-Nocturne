@@ -4,8 +4,10 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.ForwardReference;
 
 import edu.wpi.first.math.util.Units;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
@@ -25,7 +27,7 @@ public class TunerConstants {
     private static final Slot0Configs driveGains = new Slot0Configs()
         .withKP(.4).withKI(0).withKD(0)
         .withKV(0).withKS(0);
-
+    
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
     private static final ClosedLoopOutputType steerClosedLoopOutput = ClosedLoopOutputType.Voltage;
@@ -55,6 +57,8 @@ public class TunerConstants {
 
     private static final String kCANbusName = "Drivetrain";
     private static final int kPigeonId = 13;
+
+   
 
 
     // These are only used for simulation

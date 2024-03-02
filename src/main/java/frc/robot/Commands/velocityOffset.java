@@ -110,8 +110,8 @@ public class velocityOffset extends Command {
 
         //The amount to add to the current angle to speaker to aim for the future
         //correctionAngle = currentAngleToSpeaker - futureAngleToSpeaker;
-        correctedPose = (currentRotation2d.minus(futureRotation2d));
-        correctedPose = (correctedPose).plus(m_drivetrain.RotToSpeaker());
+        correctedPose = currentRotation2d.minus(futureRotation2d);
+        correctedPose = (correctedPose.times(-1)).plus(m_drivetrain.compAngleToSpeaker(currentPos));
 
         //correctedPose = Rotation2d.fromDegrees(-correctionAngle).plus(m_drivetrain.RotToSpeaker());
         // Wrap the input using Modulus to prevent un-needed 180deg spins
@@ -125,7 +125,7 @@ public class velocityOffset extends Command {
         correctedDistance = m_drivetrain.calcDistToSpeaker(futureRobotPose);
         //Pass the offsets to the drivetrain
         //m_drivetrain.setVelOffset(correctedPose,correctedDistance);
-        m_drivetrain.setVelOffset(correctedPose,correctedDistance);
+        m_drivetrain.setVelOffset(m_drivetrain.compAngleToSpeaker(currentPos),correctedDistance);
         
 
         
