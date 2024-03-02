@@ -146,7 +146,7 @@ public class RobotContainer {
         //m_vision.trustLL(true);
 
         // Sets autoAim Rot PID
-        m_head.HeadingController.setPID(5, 0, 0);
+        m_head.HeadingController.setPID(8, 0, 0);
         m_head.HeadingController.enableContinuousInput(Math.PI, -Math.PI);
 
         // Sets Cardinal Rotation PID
@@ -183,7 +183,8 @@ public class RobotContainer {
     private void registerNamedCommands() {
 
         // Register Named Commands for use in PathPlanner autos
-        NamedCommands.registerCommand("RunIntake", (new autoIntakeNote(m_intakeSubsystem, m_stageSubsystem)));
+        NamedCommands.registerCommand("RunIntake", m_armSubsystem.prepareForIntakeCommand()
+                .andThen(new autoIntakeNote(m_intakeSubsystem, m_stageSubsystem)));
         NamedCommands.registerCommand("DownIntake", m_armSubsystem.prepareForIntakeCommand());
         NamedCommands.registerCommand("StopIntake", m_intakeSubsystem.stopIntakeCommand());
         NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(30, 35));
@@ -390,6 +391,10 @@ public class RobotContainer {
          m_operatorCtrl.a().whileTrue(m_shooterSubsystem.runShooterCommand(40, 50));
          // Operator: X Button: Arm to Stowed Position (when pressed)
          m_operatorCtrl.x().onTrue(new prepareToShoot(RobotConstants.STOWED, ()->m_stageSubsystem.isNoteInStage(),
+                m_armSubsystem, m_shooterSubsystem));
+
+        //Climb setpoint
+        m_operatorCtrl.y().onTrue(new prepareToShoot(RobotConstants.CLIMB, ()->m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
 
         m_operatorCtrl.b().onTrue(m_shooterSubsystem.stopShooterCommand());
