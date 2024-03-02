@@ -125,7 +125,7 @@ public class velocityOffset extends Command {
         correctedDistance = m_drivetrain.calcDistToSpeaker(futureRobotPose);
         //Pass the offsets to the drivetrain
         //m_drivetrain.setVelOffset(correctedPose,correctedDistance);
-        m_drivetrain.setVelOffset(m_drivetrain.compAngleToSpeaker(currentPos),correctedDistance);
+        m_drivetrain.setVelOffset(correctedPose,correctedDistance);
         
 
         

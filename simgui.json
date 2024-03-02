@@ -36,6 +36,11 @@
           "open": true
         }
       }
+    },
+    "Timing": {
+      "window": {
+        "visible": false
+      }
     }
   },
   "NTProvider": {
@@ -44,18 +49,23 @@
       "/Pose": "Field2d",
       "/SmartDashboard/Arm Contoller": "ProfiledPIDController",
       "/SmartDashboard/Arm Controller": "Motor Controller",
+      "/SmartDashboard/Arm to Angle": "Command",
       "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/Auto Turning PID": "PIDController",
+      "/SmartDashboard/Cardinal Turning PID": "PIDController",
       "/SmartDashboard/Control Chooser": "String Chooser",
       "/SmartDashboard/Control Style Chooser": "String Chooser",
+      "/SmartDashboard/Field Test": "Field2d",
       "/SmartDashboard/Module 0": "Mechanism2d",
       "/SmartDashboard/Module 1": "Mechanism2d",
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
+      "/SmartDashboard/Move Arm To Setpoint": "Command",
       "/SmartDashboard/Run Shooter": "Command",
       "/SmartDashboard/Speed Limit": "String Chooser",
       "/SmartDashboard/Stop Shooter": "Command",
-      "/SmartDashboard/Update Shooter Gains": "Command"
+      "/SmartDashboard/Update Shooter Gains": "Command",
+      "/SmartDashboard/VisionSystemSim-main/Sim Field": "Field2d"
     },
     "windows": {
       "/Pose": {
@@ -74,22 +84,12 @@
           "visible": true
         }
       },
-      "/SmartDashboard/Control Chooser": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Run Shooter": {
         "window": {
           "visible": true
         }
       },
       "/SmartDashboard/Speed Limit": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/Stop Shooter": {
         "window": {
           "visible": true
         }
@@ -132,6 +132,15 @@
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Server": {
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
     "visible": true
   }
 }
