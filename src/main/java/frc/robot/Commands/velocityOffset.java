@@ -74,6 +74,7 @@ public class velocityOffset extends Command {
         //TODO: Sync trigger threashold with driver controller bindings
         if (m_trigger.getAsDouble() > Constants.ControllerConstants.triggerThreashold) {
             if (!ranOnce) {
+                System.out.println(m_trigger.getAsDouble());
                 //System.out.println("Starting Internal Timer");
                 shotTimer.start();
                 ranOnce = true;
