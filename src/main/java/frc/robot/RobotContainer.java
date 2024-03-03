@@ -244,9 +244,9 @@ public class RobotContainer {
     private double invertForAlliance() {
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-            return 1;
+            return -1;
         }
-        return 1;
+        return -1;
     }
 
     private void configureButtonBindings() {
