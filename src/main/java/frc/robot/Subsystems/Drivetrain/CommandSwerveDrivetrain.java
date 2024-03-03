@@ -44,7 +44,7 @@ import static edu.wpi.first.units.Units.*;
 public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem {
     private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();    
     public Field2d _field = new Field2d();
-    public PhotonVision _vision = new PhotonVision();
+    //public PhotonVision _vision = new PhotonVision();
     private Rotation2d velocityOffset = new Rotation2d(0);
     private Double correctedDist = 0.0;
     private FieldCentricAiming m_FieldCentricAiming = new FieldCentricAiming();
@@ -81,7 +81,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
          * distance from the center of the robot to the furthest
          * module.
          */
-        double driveBaseRadius = .74;
+        double driveBaseRadius = 0;
         for (var moduleLocation : m_moduleLocations) {
             driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
         }
@@ -167,16 +167,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         _field.setRobotPose(getState().Pose);
         SmartDashboard.putData("Robot Pose Field Map",_field);
                
-        var visionEst = _vision.getEstimatedGlobalPose();
-        visionEst.ifPresent(
-                est -> {
-                    var estPose = est.estimatedPose.toPose2d();
-                    // Change our trust in the measurement based on the tags we can see
-                    var estStdDevs = _vision.getEstimationStdDevs(estPose);
-                    //System.out.println("Adding to vision");
-                    this.addVisionMeasurement(
-                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                });
+        
     }
 
     @Override

@@ -33,7 +33,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
@@ -45,7 +47,8 @@ import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-public class PhotonVision {
+public class PhotonVision extends SubsystemBase{
+    CommandSwerveDrivetrain drivetrain;
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimator;
     private double lastEstTimestamp = 0;
@@ -54,7 +57,8 @@ public class PhotonVision {
     private PhotonCameraSim cameraSim;
     private VisionSystemSim visionSim;
 
-    public PhotonVision() {
+    public PhotonVision(CommandSwerveDrivetrain drivetrain) {
+        this.drivetrain = drivetrain;
         camera = new PhotonCamera(kCameraName);
 
         photonEstimator =
@@ -143,6 +147,22 @@ public class PhotonVision {
         else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
 
         return estStdDevs;
+    }
+
+    @Override
+    public void periodic() {
+        var visionEst = getEstimatedGlobalPose();
+        visionEst.ifPresent(
+                est -> {
+                    var estPose = est.estimatedPose.toPose2d();
+                    // Change our trust in the measurement based on the tags we can see
+                    var estStdDevs = getEstimationStdDevs(estPose);
+                    //System.out.println("Adding to vision");
+                    drivetrain.addVisionMeasurement(
+                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                });
+
+
     }
 
     // ----- Simulation
