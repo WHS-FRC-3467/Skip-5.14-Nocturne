@@ -162,17 +162,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     @Override
-    public void periodic(){
-/*         if (!hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
-            DriverStation.getAlliance().ifPresent((allianceColor) -> {
-                this.setOperatorPerspectiveForward(
-                        allianceColor == Alliance.Red ? RedAlliancePerspectiveRotation
-                                : BlueAlliancePerspectiveRotation);
-                hasAppliedOperatorPerspective = true;
-            });
-        } */
-    
-        
+    public void periodic() {
+
         _field.setRobotPose(getState().Pose);
         SmartDashboard.putData("Robot Pose Field Map",_field);
                
@@ -199,17 +190,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     //Gets current rotation from estimated pose
-    public Rotation2d getGyroscopeRotation(){
-        return m_odometry.getEstimatedPosition().getRotation();
+    public Rotation2d getRotation(){
+        return getState().Pose.getRotation();
     }
-  
+
     public ChassisSpeeds getFieldRelativeChassisSpeeds() {
-        return new ChassisSpeeds(
-                getCurrentRobotChassisSpeeds().vxMetersPerSecond * this.getState().Pose.getRotation().getCos()
-                        - getCurrentRobotChassisSpeeds().vyMetersPerSecond * this.getState().Pose.getRotation().getSin(),
-                getCurrentRobotChassisSpeeds().vyMetersPerSecond * this.getState().Pose.getRotation().getCos()
-                        + getCurrentRobotChassisSpeeds().vxMetersPerSecond * this.getState().Pose.getRotation().getSin(),
-                getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+        return ChassisSpeeds.fromRobotRelativeSpeeds(getCurrentRobotChassisSpeeds(), getRotation());
     }
 
     public void setVelocityOffset(Rotation2d angle, double dist) {

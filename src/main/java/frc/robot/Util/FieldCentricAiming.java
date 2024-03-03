@@ -22,7 +22,7 @@ public class FieldCentricAiming {
         if (_speakerPosition == null) {
             if (DriverStation.getAlliance() != null && !DriverStation.getAlliance().isEmpty()) {
                 _speakerPosition = (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) ? Constants.BLUE_SPEAKER
-                                                                                                : Constants.RED_SPEAKER;
+                                                                                                      : Constants.RED_SPEAKER;
             }
         }
         return _speakerPosition;

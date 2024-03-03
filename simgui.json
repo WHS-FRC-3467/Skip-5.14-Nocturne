@@ -36,11 +36,6 @@
           "open": true
         }
       }
-    },
-    "Timing": {
-      "window": {
-        "visible": false
-      }
     }
   },
   "NTProvider": {
@@ -94,6 +89,17 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/VisionSystemSim-main/Sim Field": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
       }
     }
   },
@@ -129,11 +135,7 @@
         "Robot Pose Field Map": {
           "double[]##v_/SmartDashboard/Robot Pose Field Map/Robot": {
             "open": true
-          },
-          "open": true
-        },
-        "TunableNumbers": {
-          "open": true
+          }
         },
         "open": true
       },

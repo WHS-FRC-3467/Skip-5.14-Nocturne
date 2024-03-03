@@ -21,7 +21,6 @@ import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import frc.robot.Subsystems.Stage.StageSubsystem;
 import frc.robot.Util.FieldCentricAiming;
 
-
 public class velocityOffset extends Command {
 
     CommandSwerveDrivetrain m_drivetrain;
@@ -30,30 +29,33 @@ public class velocityOffset extends Command {
 
     boolean m_isDone;
 
+    Timer shotTimer;
+    Boolean ranOnce;
+
     Pose2d currentRobotPose;
     Translation2d currentRobotTranslation;
-    Rotation2d currentRobotRotation;
-    Double currentAngleToSpeaker;
+    Rotation2d currentAngleToSpeaker;
 
     Pose2d futureRobotPose2d;
     Translation2d futureRobotTranslation;
-    Rotation2d futureRotation2d;
-    Double futureAngleToSpeaker;
+    Rotation2d futureAngleToSpeaker;
 
     ChassisSpeeds speeds;
-    Double correctionAngle;
-    Double timeUntilShot;
-    Double xDelta;
-    Double yDelta;
     Translation2d moveDelta;
-    Rotation2d correctedPose;
-    DoubleSupplier m_trigger;
-    Timer shotTimer;
-    Boolean ranOnce;
+
+    /**The calculated the time until the note leaves based on the constant and time since button press */
+    Double timeUntilShot; 
+    DoubleSupplier m_trigger; 
+
+    Rotation2d rotationalCompensation;
     Double correctedDistance;
+    Rotation2d correctedRotation;
 
-
-    /** Creates a new velocityOffset. */
+    /** Calculates the velocity compensated target to shoot at 
+     * @param drivetrain CommandSwerveDrivetrain instance
+     * @param triggerAxis The trigger axis on which shoot is bound
+     * @see FieldCentricAiming
+    */
     public velocityOffset(CommandSwerveDrivetrain drivetrain, DoubleSupplier triggerAxis) {
         m_drivetrain = drivetrain;
         m_trigger = triggerAxis;
@@ -79,51 +81,47 @@ public class velocityOffset extends Command {
                 ranOnce = true;
             }
         }
-
-        currentRobotTranslation = m_drivetrain.getState().Pose.getTranslation(); //Get current translation of the drivetrain
-        currentRobotRotation = m_FieldCentricAiming.getAngleToSpeaker(currentRobotTranslation); //Calculate angle relative to the speaker from current pose
-        speeds = m_drivetrain.getFieldRelativeChassisSpeeds(); //Get current drivetrain velocities in field relative terms
-
-        //timeToShoot represents the time it take a note to leave the shooter after button is pressed
-        //timeUntil shot calculates the time until the note leaves based on the constant and time since button press
+        //Get current translation of the drivetrain
+        currentRobotTranslation = m_drivetrain.getState().Pose.getTranslation(); 
+        //Calculate angle relative to the speaker from current pose
+        currentAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(currentRobotTranslation); 
+        //Get current drivetrain velocities in field relative terms
+        speeds = m_drivetrain.getFieldRelativeChassisSpeeds(); 
+        
         timeUntilShot = Constants.ShooterConstants.kTimeToShoot - shotTimer.get();
         if (timeUntilShot < 0) {
             timeUntilShot = 0.00;
         }
 
         //Calculate change in x/y distance due to time and velocity
-        xDelta = timeUntilShot*(speeds.vxMetersPerSecond);
-        yDelta = timeUntilShot*(speeds.vyMetersPerSecond);
-        moveDelta = new Translation2d(xDelta,yDelta);
+        moveDelta = new Translation2d(timeUntilShot*(speeds.vxMetersPerSecond),timeUntilShot*(speeds.vyMetersPerSecond));
 
         //futureRobotPose is the position the robot will be at timeUntilShot in the future
         futureRobotTranslation = currentRobotTranslation.plus(moveDelta);
         //Angle to the speaker at future position
-        futureRotation2d = m_FieldCentricAiming.getAngleToSpeaker(futureRobotTranslation);
+        futureAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(futureRobotTranslation);
 
         //The amount to add to the current angle to speaker to aim for the future
-        //correctionAngle = currentAngleToSpeaker - futureAngleToSpeaker;
-        correctedPose = currentRobotRotation.minus(futureRotation2d);
-        correctedPose = (correctedPose.times(-1)).plus(m_FieldCentricAiming.getAngleToSpeaker(currentRobotTranslation));
+        rotationalCompensation = futureAngleToSpeaker.minus(currentAngleToSpeaker);
+        correctedRotation = (rotationalCompensation).plus(m_FieldCentricAiming.getAngleToSpeaker(currentRobotTranslation));
 
         // Get the future distance to speaker
         correctedDistance = m_FieldCentricAiming.getDistToSpeaker(futureRobotTranslation);
-        m_drivetrain.setVelocityOffset(correctedPose,correctedDistance); //Pass the offsets to the drivetrain
-        
-
-        
- 
+        m_drivetrain.setVelocityOffset(correctedRotation,correctedDistance); //Pass the offsets to the drivetrain
+    
         if (Constants.RobotConstants.kIsAutoAimTuningMode) {
-            //SmartDashboard.putNumber("Robot Angle To Speaker",m_drivetrain.calcAngleToSpeaker());
-            //SmartDashboard.putNumber("Robot Dist To Speaker",m_drivetrain.calcDistToSpeaker());
-            //SmartDashboard.putNumber("xDelta", xDelta);
-            //SmartDashboard.putNumber("yDelta", yDelta);
-            //SmartDashboard.putNumber("futureang", futureAngleToSpeaker);
-            SmartDashboard.putNumber("Correction Angle", correctedPose.getDegrees());
-            SmartDashboard.putNumber("timeUntilShot", timeUntilShot);
+            SmartDashboard.putNumber("Robot Angle To Speaker",currentAngleToSpeaker.getDegrees());
+            SmartDashboard.putNumber("Robot Dist To Speaker",m_FieldCentricAiming.getDistToSpeaker(currentRobotTranslation));
+            SmartDashboard.putNumber("xDelta", speeds.vxMetersPerSecond);
+            SmartDashboard.putNumber("yDelta", speeds.vyMetersPerSecond);
+            SmartDashboard.putNumber("futureang", futureAngleToSpeaker.getDegrees());
             SmartDashboard.putNumber("futureDist", correctedDistance);
+            SmartDashboard.putNumber("Correction Angle", rotationalCompensation.getDegrees());
+            SmartDashboard.putNumber("Correction Angle", correctedRotation.getDegrees());
+            SmartDashboard.putNumber("timeUntilShot", timeUntilShot);
+
             //SmartDashboard.putNumber("Rot2Speaker", m_drivetrain.RotToSpeaker().getDegrees());
-            SmartDashboard.putNumber("pose rot", m_drivetrain.getState().Pose.getRotation().getDegrees());
+            //SmartDashboard.putNumber("pose rot", m_drivetrain.getState().Pose.getRotation().getDegrees());
             
             //SmartDashboard.putNumber("time Const", Constants.ShooterConstants.timeToShoot);
             //SmartDashboard.putNumber("currentTime", shotTimer.get());
@@ -150,7 +148,7 @@ public class velocityOffset extends Command {
     }
 
     public Rotation2d getCorrectedTarget() {
-        return this.correctedPose;
+        return this.rotationalCompensation;
     }
 
 }
