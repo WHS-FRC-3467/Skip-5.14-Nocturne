@@ -373,11 +373,11 @@ public class RobotContainer {
                 .andThen(() -> m_AngularRate = m_MaxAngularRate));
         
         // Driver: When LeftTrigger is pressed, lower the Arm and then run the Intake and Stage until a Note is found
-        m_driverCtrl.leftTrigger(0.4).whileTrue(m_armSubsystem.prepareForIntakeCommand()
+        m_driverCtrl.leftTrigger(Constants.ControllerConstants.triggerThreashold).whileTrue(m_armSubsystem.prepareForIntakeCommand()
             .andThen(new intakeNote(m_intakeSubsystem, m_stageSubsystem)));
 
         // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
-        m_driverCtrl.rightTrigger(0.4).onTrue(m_stageSubsystem.feedNote2ShooterCommand());
+        m_driverCtrl.rightTrigger(Constants.ControllerConstants.triggerThreashold).onTrue(m_stageSubsystem.feedNote2ShooterCommand());
             //.withTimeout(2)
             //.andThen(m_armSubsystem.prepareForIntakeCommand()));
             

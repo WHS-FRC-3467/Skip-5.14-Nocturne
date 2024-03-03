@@ -351,9 +351,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         Pose2d speakerPos = Constants.BLUE_SPEAKER;
         if (pose != null) {
             Translation2d deltaTrans = pose.minus(speakerPos.getTranslation());
-            //deltaTrans = deltaTrans.unaryMinus();
-            //System.out.println(deltaTrans.getAngle().plus(Rotation2d.fromDeg-rees(180)));
-            //return deltaTrans.getAngle().rotateBy(Rotation2d.fromDegrees(180));
             return deltaTrans.getAngle();
 
         } else {
@@ -367,9 +364,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         Pose2d speakerPos = Constants.BLUE_SPEAKER;
         double xDiff = pose.getX() - speakerPos.getX();
         double yDiff = speakerPos.getY() - pose.getY();
-        // System.out.print(xDiff);
-        // System.out.print(yDiff);
-        // System.out.println(180 - Math.toDegrees(Math.atan(yDiff / xDiff)));
         return 180 - Math.toDegrees(Math.atan(yDiff / xDiff));
     }
     
@@ -384,10 +378,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public void setVelOffset(Rotation2d angle, double dist) {
-        System.out.println("Angle to go to");
+/*         System.out.println("Angle to go to");
         System.out.println(angle.getDegrees());
         System.out.println("Angle currently at");
-        System.out.println(m_odometry.getEstimatedPosition().getRotation().getDegrees());
+        System.out.println(m_odometry.getEstimatedPosition().getRotation().getDegrees()); */
         velocityOffset = angle;
         correctedDist = dist;
     }

@@ -219,7 +219,7 @@ public final class Constants {
     }
 
     public static class ControllerConstants {
-        public static final double triggerThreashold = 0.01;
+        public static final double triggerThreashold = 0.4;
 
     }
 
