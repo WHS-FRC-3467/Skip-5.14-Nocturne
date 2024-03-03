@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Util.FieldCentricAiming;
 import frc.robot.Vision.PhotonVision;
 import frc.robot.generated.TunerConstants;
 
@@ -41,15 +42,14 @@ import static edu.wpi.first.units.Units.*;
  * subsystem so it can be used in command-based projects easily.
  */
 public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem {
-    private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
-    private Alliance _alliance;
-    private Pose2d _speakerPosition;
+    private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();    
     public Field2d _field = new Field2d();
     public PhotonVision _vision = new PhotonVision();
     private Rotation2d velocityOffset = new Rotation2d(0);
     private Double correctedDist = 0.0;
+    private FieldCentricAiming m_FieldCentricAiming = new FieldCentricAiming();
 
-    private final Rotation2d BlueAlliancePerspectiveRotation = Rotation2d.fromDegrees(180);
+    private final Rotation2d BlueAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
     /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
     private final Rotation2d RedAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
     /* Keep track if we've ever applied the operator perspective before or not */
@@ -163,22 +163,19 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     @Override
     public void periodic(){
-        if (!hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
+/*         if (!hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent((allianceColor) -> {
                 this.setOperatorPerspectiveForward(
                         allianceColor == Alliance.Red ? RedAlliancePerspectiveRotation
                                 : BlueAlliancePerspectiveRotation);
                 hasAppliedOperatorPerspective = true;
             });
-        }
+        } */
     
         
-        _field.setRobotPose(m_odometry.getEstimatedPosition());
-        SmartDashboard.putData("Field Test",_field);
-        SmartDashboard.putNumber("Distance2Speaker", calcDistToSpeaker());
-        SmartDashboard.putNumber("GetVelOffsetDeg", getVelocityOffset().getDegrees());
-        
-        
+        _field.setRobotPose(getState().Pose);
+        SmartDashboard.putData("Robot Pose Field Map",_field);
+               
         var visionEst = _vision.getEstimatedGlobalPose();
         visionEst.ifPresent(
                 est -> {
@@ -186,16 +183,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                     // Change our trust in the measurement based on the tags we can see
                     var estStdDevs = _vision.getEstimationStdDevs(estPose);
                     //System.out.println("Adding to vision");
-
                     this.addVisionMeasurement(
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 });
-        
-        
-
-
-
     }
+
     @Override
     public void simulationPeriodic() {
         /* Assume 20ms update rate, get battery voltage from WPILib */
@@ -206,168 +198,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
 
-    //Gets current rotation in from Pidgeon 
+    //Gets current rotation from estimated pose
     public Rotation2d getGyroscopeRotation(){
         return m_odometry.getEstimatedPosition().getRotation();
     }
-
-    // Gets current alliance from driverstation to know which speaker to point at
-    public Alliance getAlliance() {
-        if (_alliance == null) {
-            if (DriverStation.getAlliance().isPresent()) {
-                _alliance = DriverStation.getAlliance().get();
-            }
-        }
-        return _alliance;
-    }
-
-    //Gets coordinates for appriopriate speaker
-    public Pose2d getSpeakerPos() {
-        if (_speakerPosition == null) {
-            if (getAlliance() != null) {
-                _speakerPosition = (getAlliance() == DriverStation.Alliance.Blue) ? Constants.BLUE_SPEAKER
-                        : Constants.RED_SPEAKER;
-            }
-        }
-
-        return _speakerPosition;
-    }
-
-    // this setup lets us test the math, but when we actually run the code we don't
-    // have to give a pose estimator
-    public static double getRadiusToSpeakerInMeters(Pose2d robotPose, Pose2d speakerPos) {
-
-        if (speakerPos == null) return 0;
-        
-        double xDiff = robotPose.getX() - speakerPos.getX();
-        double yDiff = robotPose.getY() - speakerPos.getY();
-        double xPow = Math.pow(xDiff, 2);
-        double yPow = Math.pow(yDiff, 2);
-        // Use pythagorean thm to find hypotenuse, which is our radius
-        return Math.sqrt(xPow + yPow);
-    }
-
-    
-    public double calcAngleToSpeaker() {
-        if (getAlliance() == Alliance.Blue) {
-            return calcAngleToSpeakerForBlue();
-        } else {
-            return calcAngleToSpeakerForRed();
-        }
-    }
-
-    public double calcAngleToSpeaker(Translation2d pose) {
-        if (getAlliance() == Alliance.Blue) {
-            return calcAngleToSpeakerForBlue(pose);
-        } else {
-            return calcAngleToSpeakerForRed(pose);
-        }
-    }
-
-    public Rotation2d RotToSpeaker() {
-        return Rotation2d.fromDegrees(calcAngleToSpeaker());
-    }
-
-
-    private double calcAngleToSpeakerForBlue() {
-        Pose2d robotPose = m_odometry.getEstimatedPosition();
-        Pose2d speakerPos = Constants.BLUE_SPEAKER;
-        double xDiff = robotPose.getX() - speakerPos.getX();
-        double yDiff = robotPose.getY() - speakerPos.getY();
-        
-        //System.out.print(xDiff);
-        //System.out.print(yDiff);
-        //System.out.println(180 - Math.toDegrees(Math.atan(yDiff / xDiff)));
-        return Math.toDegrees(Math.atan(yDiff / xDiff));
-    }
-    
-
-    private double calcAngleToSpeakerForRed() {
-        Pose2d robotPose = m_odometry.getEstimatedPosition();
-        Pose2d speakerPos = Constants.RED_SPEAKER;
-        double xDiff = speakerPos.getX() - robotPose.getX();
-        double yDiff = speakerPos.getY() - robotPose.getY();
-        //System.out.print(xDiff);
-        //System.out.print(yDiff);
-        //System.out.println(Math.toDegrees(Math.atan(yDiff / xDiff)));
-        return Math.toDegrees(Math.atan(yDiff / xDiff));
-    }
-
-
-
-    public double calcDistToSpeaker() {
-        if(getSpeakerPos()!=null) {
-            return getRadiusToSpeakerInMeters(m_odometry.getEstimatedPosition(),getSpeakerPos());
-        } else {
-            return 999;
-        }
-        
-    }
-
-    public double calcDistToSpeaker(Translation2d pose) {
-        if(getSpeakerPos()!=null) {
-            return getRadiusToSpeakerInMeters(new Pose2d(pose, m_odometry.getEstimatedPosition().getRotation()),getSpeakerPos());
-        } else {
-            return 999;
-        }
-        
-    }
-
-    
-
-    private double calcAngleToSpeakerForRed(Translation2d pose) {
-        Pose2d speakerPos = Constants.RED_SPEAKER;
-        double xDiff = speakerPos.getX() - pose.getX();
-        double yDiff = speakerPos.getY() - pose.getY();
-        // System.out.print(xDiff);
-        // System.out.print(yDiff);
-        // System.out.println(Math.toDegrees(Math.atan(yDiff / xDiff)));
-        return Math.toDegrees(Math.atan(yDiff / xDiff));
-    }
-
-    public Rotation2d compAngleToSpeaker(Translation2d pose) {
-        if (getAlliance() == Alliance.Blue) {
-            return compAngleToSpeakerBlue(pose);
-        } else {
-            return compAngleToSpeakerRed(pose);
-        }
-    }
-
-    public Rotation2d compAngleToSpeakerRed(Translation2d pose) {
-        Pose2d speakerPos = Constants.RED_SPEAKER;
-        if (pose != null) {
-            Translation2d deltaTrans = speakerPos.getTranslation().minus(pose);
-
-            return deltaTrans.getAngle();
-
-        } else {
-            return Rotation2d.fromDegrees(180);
-        }
-        
-        
-    }
-
-    public Rotation2d compAngleToSpeakerBlue(Translation2d pose) {
-        Pose2d speakerPos = Constants.BLUE_SPEAKER;
-        if (pose != null) {
-            Translation2d deltaTrans = pose.minus(speakerPos.getTranslation());
-            return deltaTrans.getAngle();
-
-        } else {
-            return Rotation2d.fromDegrees(180);
-        }
-        
-        
-    }
-
-    private double calcAngleToSpeakerForBlue(Translation2d pose) {
-        Pose2d speakerPos = Constants.BLUE_SPEAKER;
-        double xDiff = pose.getX() - speakerPos.getX();
-        double yDiff = speakerPos.getY() - pose.getY();
-        return 180 - Math.toDegrees(Math.atan(yDiff / xDiff));
-    }
-    
-    
+  
     public ChassisSpeeds getFieldRelativeChassisSpeeds() {
         return new ChassisSpeeds(
                 getCurrentRobotChassisSpeeds().vxMetersPerSecond * this.getState().Pose.getRotation().getCos()
@@ -377,11 +212,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
     }
 
-    public void setVelOffset(Rotation2d angle, double dist) {
-/*         System.out.println("Angle to go to");
-        System.out.println(angle.getDegrees());
-        System.out.println("Angle currently at");
-        System.out.println(m_odometry.getEstimatedPosition().getRotation().getDegrees()); */
+    public void setVelocityOffset(Rotation2d angle, double dist) {
         velocityOffset = angle;
         correctedDist = dist;
     }
@@ -392,109 +223,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public double getCorrectedDistance() {
         return correctedDist;
-    }
-
-
-
-    /*
-     * SysID robot drive characterization routines
-     */
-    //private SwerveVoltageRequest driveVoltageRequest = new SwerveVoltageRequest(true);
-    
-/* 
-    private SysIdRoutine m_driveSysIdRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(null, null, null, ModifiedSignalLogger.logState()),
-            new SysIdRoutine.Mechanism(
-                    (Measure<Voltage> volts) -> setControl(driveVoltageRequest.withVoltage(volts.in(Volts))), null,
-                    this));
-
-    private SwerveVoltageRequest steerVoltageRequest = new SwerveVoltageRequest(false);
-
-    private SysIdRoutine m_steerSysIdRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(null, null, null, ModifiedSignalLogger.logState()),
-            new SysIdRoutine.Mechanism(
-                    (Measure<Voltage> volts) -> setControl(steerVoltageRequest.withVoltage(volts.in(Volts))), null,
-                    this));
-
-    private SysIdRoutine m_slipSysIdRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(Volts.of(0.25).per(Seconds.of(1)), null, null, ModifiedSignalLogger.logState()),
-            new SysIdRoutine.Mechanism(
-                    (Measure<Voltage> volts) -> setControl(driveVoltageRequest.withVoltage(volts.in(Volts))), null,
-                    this));
-
-    public Command runDriveQuasiTest(Direction direction) {
-        return m_driveSysIdRoutine.quasistatic(direction);
-    }
-
-    public Command runDriveDynamTest(SysIdRoutine.Direction direction) {
-        return m_driveSysIdRoutine.dynamic(direction);
-    }
-
-    public Command runSteerQuasiTest(Direction direction) {
-        return m_steerSysIdRoutine.quasistatic(direction);
-    }
-
-    public Command runSteerDynamTest(SysIdRoutine.Direction direction) {
-        return m_steerSysIdRoutine.dynamic(direction);
-    }
-
-    public Command runDriveSlipTest() {
-        return m_slipSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
-    }
-}
- */
-
- private final SwerveRequest.SysIdSwerveTranslation TranslationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
-    private final SwerveRequest.SysIdSwerveRotation RotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
-    private final SwerveRequest.SysIdSwerveSteerGains SteerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
-
-    /* Use one of these sysidroutines for your particular test */
-    private SysIdRoutine SysIdRoutineTranslation = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                    null,
-                    Volts.of(4),
-                    null,
-                    (state) -> SignalLogger.writeString("state", state.toString())),
-            new SysIdRoutine.Mechanism(
-                    (volts) -> setControl(TranslationCharacterization.withVolts(volts)),
-                    null,
-                    this));
-
-    private final SysIdRoutine SysIdRoutineRotation = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                    null,
-                    Volts.of(4),
-                    null,
-                    (state) -> SignalLogger.writeString("state", state.toString())),
-            new SysIdRoutine.Mechanism(
-                    (volts) -> setControl(RotationCharacterization.withVolts(volts)),
-                    null,
-                    this));
-    private final SysIdRoutine SysIdRoutineSteer = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                    null,
-                    Volts.of(7),
-                    null,
-                    (state) -> SignalLogger.writeString("state", state.toString())),
-            new SysIdRoutine.Mechanism(
-                    (volts) -> setControl(SteerCharacterization.withVolts(volts)),
-                    null,
-                    this));
-
-    /* Change this to the sysid routine you want to test */
-    private final SysIdRoutine RoutineToApply = SysIdRoutineTranslation;
-
-
-    /*
-     * Both the sysid commands are specific to one particular sysid routine, change
-     * which one you're trying to characterize
-     */
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return RoutineToApply.quasistatic(direction);
-    }
-
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return RoutineToApply.dynamic(direction);
     }
 
 }

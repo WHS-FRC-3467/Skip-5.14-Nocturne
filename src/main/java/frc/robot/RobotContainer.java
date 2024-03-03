@@ -147,7 +147,7 @@ public class RobotContainer {
 
         // Sets autoAim Rot PID
         m_head.HeadingController.setPID(8, 0, 0);
-        m_head.HeadingController.enableContinuousInput(Math.PI, -Math.PI);
+        m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
         // Sets Cardinal Rotation PID
         m_cardinal.HeadingController.setPID(6.0, 0, 0.6);
@@ -165,9 +165,6 @@ public class RobotContainer {
 
         // Configure Driver and Operator controller buttons
         configureButtonBindings();
-
-        // Configure button bindings for SysID robot profiling commands
-        configureSysIDProfiling();
 
         // Set up the Telemetry function
         m_drivetrain.registerTelemetry(m_logger::telemeterize);
@@ -195,8 +192,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("WingShot",
                 new prepareToShoot(RobotConstants.WING, () -> m_stageSubsystem.isNoteInStage(),
                         m_armSubsystem, m_shooterSubsystem));
-        NamedCommands.registerCommand("LookUpShot",
-                new AutoLookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker()));
+/*         NamedCommands.registerCommand("LookUpShot",
+                new AutoLookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker())); */
 
     }
 
@@ -216,29 +213,6 @@ public class RobotContainer {
         
         // Set the initial Drive Control Style
         newControlStyle();
-
-        // Build a speed limit chooser
-        /* speedChooser.addOption("100%", 1.0);
-        speedChooser.addOption("95%", 0.95);
-        speedChooser.addOption("90%", 0.9);
-        speedChooser.addOption("85%", 0.85);
-        speedChooser.addOption("80%", 0.8);
-        speedChooser.addOption("75%", 0.75);
-        speedChooser.addOption("70%", 0.7);
-        speedChooser.setDefaultOption("65%", 0.65);
-        speedChooser.addOption("60%", 0.6);
-        speedChooser.addOption("55%", 0.55);
-        speedChooser.addOption("50%", 0.5);
-        speedChooser.addOption("35%", 0.35);
-        SmartDashboard.putData("Speed Limit", speedChooser);
-
-        // Configure a Trigger to change the speed limit when a selection is made on the Speed Limit Chooser
-        Trigger speedPick = new Trigger(() -> m_lastSpeed != speedChooser.getSelected());
-        speedPick.onTrue(runOnce(() -> newSpeed())); */
-
-        // Set the initial Speed Limit
-        //newSpeed();
-
     }
 
     private double invertForAlliance() {
@@ -246,7 +220,7 @@ public class RobotContainer {
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             return -1;
         }
-        return -1;
+        return 1;
     }
 
     private void configureButtonBindings() {
@@ -289,7 +263,6 @@ public class RobotContainer {
          * Right Stick Button: <no-op>
          * *
          */
-        //m_shooterSubsystem.setDefaultCommand(new ShooterDefault(m_shooterSubsystem));
 
         /*
          * DRIVER Controls
@@ -330,8 +303,6 @@ public class RobotContainer {
         // Driver: While Right Stick button is pressed, drive while pointing to alliance speaker
         // AND adjusting Arm angle AND running Shooter
 
-        
-
             m_driverCtrl.rightStick().whileTrue(Commands.parallel(
             new velocityOffset(m_drivetrain, () -> m_driverCtrl.getRightTriggerAxis()),
             m_drivetrain.applyRequest(
@@ -340,19 +311,9 @@ public class RobotContainer {
                         .withTargetDirection(m_drivetrain.getVelocityOffset())
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)
-                
-                        
             ),
             new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance(), m_ledSubsystem)
-        ));   
-
-
-
-        
-
-/*         m_driverCtrl.rightStick().whileTrue(Commands.parallel(
-                new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker(),
-                        m_ledSubsystem))); */
+        ));
 
         // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X') (while pressed)
         m_driverCtrl.povLeft().whileTrue(m_drivetrain.applyRequest(() -> m_brake));
@@ -385,8 +346,6 @@ public class RobotContainer {
          * OPERATOR Controls
          */
         // Operator: When A button is pressed, stop Shooter
-        //m_operatorCtrl.a().onTrue(m_shooterSubsystem.runShooterCommand());
-       // m_operatorCtrl.a().onTrue(new setShooterSpeedLookUP(m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker()));
 
          m_operatorCtrl.a().whileTrue(m_shooterSubsystem.runShooterCommand(40, 50));
          // Operator: X Button: Arm to Stowed Position (when pressed)
@@ -438,29 +397,6 @@ public class RobotContainer {
        
     }
 
-    private void configureSysIDProfiling() {
-
-        /*
-         * These bindings will only be used when characterizing the Drivetrain. They can
-         * eventually be commented out.
-         */
-/*      
-        m_driverCtrl.x().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.sysIdQuasistatic(Direction.kForward));
-        m_driverCtrl.x().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.sysIdQuasistatic(Direction.kReverse));
-
-        m_driverCtrl.y().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.sysIdDynamic(Direction.kForward));
-        m_driverCtrl.y().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.sysIdDynamic(Direction.kReverse));
-
-         m_driverCtrl.a().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runSteerQuasiTest(Direction.kForward));
-        m_driverCtrl.a().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runSteerQuasiTest(Direction.kReverse));
-
-        m_driverCtrl.b().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runSteerDynamTest(Direction.kForward));
-        m_driverCtrl.b().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runSteerDynamTest(Direction.kReverse));
-
-        // Drivetrain needs to be placed against a sturdy wall and test stopped immediately upon wheel slip
-        m_driverCtrl.back().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveSlipTest());
-*/
-    }
 
     public Command getAutonomousCommand() {
 
@@ -469,8 +405,6 @@ public class RobotContainer {
     }
 
     private void newControlStyle() {
-
-
         m_controlStyle = () -> m_drive.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance()) // Drive forward -Y
                 .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance()) // Drive left with negative X (left)
                 .withRotationalRate(-m_driverCtrl.getRightX() * m_AngularRate); // Drive counterclockwise with
@@ -479,12 +413,6 @@ public class RobotContainer {
         // Drivetrain will execute this command periodically
         m_drivetrain.setDefaultCommand(m_drivetrain.applyRequest(m_controlStyle).ignoringDisable(true));
     } 
-
-    private void newSpeed() {
-
-        m_lastSpeed = speedChooser.getSelected();
-        m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_lastSpeed;
-    }
 
     public void autoLEDs() {
         m_ledSubsystem.runAutonomousPatterns();

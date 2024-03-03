@@ -61,6 +61,7 @@
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
       "/SmartDashboard/Move Arm To Setpoint": "Command",
+      "/SmartDashboard/Robot Pose Field Map": "Field2d",
       "/SmartDashboard/Run Shooter": "Command",
       "/SmartDashboard/Speed Limit": "String Chooser",
       "/SmartDashboard/Stop Shooter": "Command",
@@ -121,13 +122,25 @@
       "Pose": {
         "double[]##v_/Pose/robotPose": {
           "open": true
-        }
+        },
+        "open": true
       },
       "SmartDashboard": {
+        "Robot Pose Field Map": {
+          "double[]##v_/SmartDashboard/Robot Pose Field Map/Robot": {
+            "open": true
+          },
+          "open": true
+        },
         "TunableNumbers": {
           "open": true
         },
         "open": true
+      },
+      "photonvision": {
+        "front_left": {
+          "open": true
+        }
       }
     }
   },
