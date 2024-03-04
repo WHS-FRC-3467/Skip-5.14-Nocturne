@@ -337,9 +337,9 @@ public class RobotContainer {
         /*
          * OPERATOR Controls
          */
-        // Operator: When A button is pressed, stop Shooter
+        // Operator: When A button is pressed, run Shooter
 
-         m_operatorCtrl.a().whileTrue(m_shooterSubsystem.runShooterCommand(40, 50));
+         m_operatorCtrl.a().whileTrue(m_shooterSubsystem.runShooterCommand(40, 50).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf));
          // Operator: X Button: Arm to Stowed Position (when pressed)
          m_operatorCtrl.x().onTrue(new prepareToShoot(RobotConstants.STOWED, ()->m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
