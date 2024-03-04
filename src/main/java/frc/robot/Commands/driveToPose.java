@@ -4,10 +4,6 @@
 
 package frc.robot.Commands;
 
-import java.util.function.Supplier;
-
-import org.photonvision.PhotonCamera;
-
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
@@ -16,22 +12,19 @@ import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
-import frc.robot.Util.FieldCentricAiming;
 
 public class driveToPose extends Command {
     CommandSwerveDrivetrain m_drivetrain;
-    FieldCentricAiming m_FieldCentricAiming;
     double xSpeed;
     double ySpeed;
     double omegaSpeed;
     Pose2d robotPose;
+    Translation2d targetTranslation = new Translation2d(0, 0);
+    Rotation2d targetAngle = new Rotation2d(0);
     boolean isFinished;
 
     private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(2, 2);
@@ -49,10 +42,9 @@ public class driveToPose extends Command {
     .withVelocityY(0.0);
 
     public driveToPose(CommandSwerveDrivetrain drivetrain) {
+        m_drivetrain = drivetrain;
         xController.setTolerance(0.1);
         yController.setTolerance(0.1);
-        m_drivetrain = drivetrain;
-        m_FieldCentricAiming = new FieldCentricAiming();
         swerveRequestFacing.HeadingController = new PhoenixPIDController(10, 0, 0);
         swerveRequestFacing.HeadingController.setTolerance(0.01);
 
@@ -63,12 +55,11 @@ public class driveToPose extends Command {
     @Override
     public void initialize() {
         robotPose = m_drivetrain.getState().Pose;
-        var speakerPose = m_FieldCentricAiming.getSpeakerPos();
         omegaController.reset(robotPose.getRotation().getRadians());
         xController.reset(robotPose.getX());
         yController.reset(robotPose.getY());
-        xController.setGoal(speakerPose.getX()-2);
-        yController.setGoal(speakerPose.getY());
+        xController.setGoal(targetTranslation.getX());
+        yController.setGoal(targetTranslation.getY());
         isFinished = false;
     }
 
@@ -84,7 +75,7 @@ public class driveToPose extends Command {
 
         m_drivetrain.setControl(swerveRequestFacing.withVelocityX(xSpeed)
                     .withVelocityY(ySpeed)
-                    .withTargetDirection(Rotation2d.fromDegrees(0)));
+                    .withTargetDirection(targetAngle));
 
     }
 
@@ -92,11 +83,21 @@ public class driveToPose extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+      return false;
+  }
+
+  public void setTarget(Translation2d pose) {
+      targetTranslation = pose;
+  }
+
+  public void setAngle(Rotation2d angle) {
+    targetAngle = angle;
+
   }
 }
