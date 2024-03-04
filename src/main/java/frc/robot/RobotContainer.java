@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.ForwardReference;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -25,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.AutoCommands.autoIntakeNote;
 import frc.robot.Commands.LookUpShot;
+import frc.robot.Commands.driveToPose;
 import frc.robot.Commands.intakeNote;
 import frc.robot.Commands.prepareToShoot;
 import frc.robot.Commands.velocityOffset;
@@ -87,7 +89,6 @@ public class RobotContainer {
     SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage)
             .withDeadband(m_MaxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
     
-
     // Field-centric driving in Closed Loop. Comment above and uncomment below.
     //SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.Velocity)
     //        .withDeadband(m_MaxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
@@ -97,8 +98,7 @@ public class RobotContainer {
     SwerveRequest.FieldCentricFacingAngle m_head = new SwerveRequest.FieldCentricFacingAngle()
             .withDriveRequestType(DriveRequestType.Velocity);
 
-    SwerveRequest.FieldCentricFacingAngle m_cardinal = new SwerveRequest.FieldCentricFacingAngle();
-
+   
     // Set up Drivetrain Telemetry
     Telemetry m_logger = new Telemetry(m_MaxSpeed);
     Pose2d m_odomStart = new Pose2d(0, 0, new Rotation2d(0, 0));
@@ -125,7 +125,9 @@ public class RobotContainer {
         //m_limelightVision.setAlliance(Alliance.Blue);
         //m_limelightVision.trustLL(true);
 
+        m_drive.ForwardReference = ForwardReference.RedAlliance;
         // Creates PID for heading controller for aiming at angle
+        m_head.ForwardReference = ForwardReference.RedAlliance;
         m_head.HeadingController.setPID(8, 0, 0);
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -280,24 +282,23 @@ public class RobotContainer {
         m_driverCtrl.x().whileTrue(m_drivetrain.applyRequest(
                 () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
                         .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
-                        .withTargetDirection(Rotation2d.fromDegrees(90.0  + addForAlliance()*180))
+                        .withTargetDirection(Rotation2d.fromDegrees(90.0 + addForAlliance() * 180))
                         .withDeadband(m_MaxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
-        
+
         // Driver: While Right Stick button is pressed, drive while pointing to alliance speaker
         // AND adjusting Arm angle AND running Shooter
 
-            m_driverCtrl.rightStick().whileTrue(Commands.parallel(
-            new velocityOffset(m_drivetrain, () -> m_driverCtrl.getRightTriggerAxis()),
-            m_drivetrain.applyRequest(
-                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
-                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
-                        .withTargetDirection(m_drivetrain.getVelocityOffset())
-                        .withDeadband(m_MaxSpeed * 0.1)
-                        .withRotationalDeadband(m_AngularRate * 0.1)
-            ),
-            new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance(), m_ledSubsystem)
-        ));
+        m_driverCtrl.rightStick().whileTrue(Commands.parallel(
+                new velocityOffset(m_drivetrain, () -> m_driverCtrl.getRightTriggerAxis()),
+                m_drivetrain.applyRequest(
+                        () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
+                                .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
+                                .withTargetDirection(m_drivetrain.getVelocityOffset())
+                                .withDeadband(m_MaxSpeed * 0.1)
+                                .withRotationalDeadband(m_AngularRate * 0.1)),
+                new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance(),
+                        m_ledSubsystem)));
 
         // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X') (while pressed)
         m_driverCtrl.povLeft().whileTrue(m_drivetrain.applyRequest(() -> m_brake));
@@ -310,7 +311,7 @@ public class RobotContainer {
                 .andThen(() -> m_AngularRate = m_QuarterAngularRate));
         m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_lastSpeed)
                 .andThen(() -> m_AngularRate = m_MaxAngularRate));
-        
+
         // Driver: While Right Bumper is held, reduce speed by 50%
          m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_HalfSpeed)
                 .andThen(() -> m_AngularRate = m_HalfAngularRate));
@@ -325,6 +326,13 @@ public class RobotContainer {
         m_driverCtrl.rightTrigger(Constants.ControllerConstants.triggerThreashold).onTrue(m_stageSubsystem.feedNote2ShooterCommand());
             //.withTimeout(2)
             //.andThen(m_armSubsystem.prepareForIntakeCommand()));
+
+        m_driverCtrl.start().whileTrue(new driveToPose(m_drivetrain));
+/*         m_driverCtrl.start().whileTrue(m_drivetrain.applyRequest(
+            () -> m_drive.withVelocityX(5)
+                    .withVelocityY(0)
+                    .withRotationalRate(0))); */
+        
             
         /*
          * OPERATOR Controls
@@ -383,7 +391,6 @@ public class RobotContainer {
 
 
     public Command getAutonomousCommand() {
-
         /* First put the drivetrain into auto run mode, then run the auto */
         return autoChooser.getSelected();
     }

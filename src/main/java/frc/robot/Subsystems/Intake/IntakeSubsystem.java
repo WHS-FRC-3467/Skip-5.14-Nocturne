@@ -5,13 +5,6 @@
 
 package frc.robot.Subsystems.Intake;
 
-//import com.ctre.phoenix.motorcontrol.NeutralMode;
-//import com.ctre.phoenix.motorcontrol.StatusFrame;
-//import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-//import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-//import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-//import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -34,8 +27,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     /* Initialize Talons */
     TalonFX m_intakeMotor = new TalonFX(CanConstants.ID_IntakeMotor);
-    // No centering wheels on Nocturne
-    //TalonSRX m_centeringMotor = new WPI_TalonSRX(CanConstants.ID_IntakeCtrRoller);
 
     /* Current Limits config */
     private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
@@ -82,37 +73,6 @@ public class IntakeSubsystem extends SubsystemBase {
         m_intakeMotor.getStatorCurrent().setUpdateFrequency(100);
         m_intakeMotor.optimizeBusUtilization();
  
-       /*
-        // Set Centering motors to factory defaults
-        m_centeringMotor.configFactoryDefault();
-
-        // Set centering motors direction
-        m_centeringMotor.setInverted(true);
-
-        // Set Centering motors to Coast
-        m_centeringMotor.setNeutralMode(NeutralMode.Coast);
-
-        // Config centering motor current limit
-        m_centeringMotor.configSupplyCurrentLimit(
-            new SupplyCurrentLimitConfiguration(
-                true,
-                15,
-                20,
-                0.10
-            )
-        );
-
-        // Config the peak and nominal outputs
-        m_centeringMotor.configNominalOutputForward(0.0, 30);
-        m_centeringMotor.configNominalOutputReverse(0.0, 30);
-        m_centeringMotor.configPeakOutputForward(1.0, 30);
-        m_centeringMotor.configPeakOutputReverse(1.0, 30);
-
-        // slows unneeded CAN status fames
-        m_centeringMotor.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 255);
-        m_centeringMotor.setStatusFramePeriod(StatusFrame.Status_10_Targets, 255);
-        m_centeringMotor.setStatusFramePeriod(StatusFrame.Status_9_MotProfBuffer, 255);
-    */
 
     }
 
@@ -141,16 +101,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
     /**
      * 
-     * @param speed speed to set intake motor at
+     * @param speed speed to set intake motor at (-1,1)
      */
     public void runIntake(double speed) {
         m_intakeMotor.setControl(m_speed.withOutput(speed));
-        //m_centeringMotor.set(TalonSRXControlMode.PercentOutput, speed);
     }
 
     public void stopIntake() {
         m_intakeMotor.setControl(m_brake);
-        //m_centeringMotor.set(TalonSRXControlMode.PercentOutput, 0.0);
     }
 
     /*
