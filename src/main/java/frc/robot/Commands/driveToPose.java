@@ -41,8 +41,10 @@ public class driveToPose extends Command {
     .withVelocityX(0.0)
     .withVelocityY(0.0);
 
-    public driveToPose(CommandSwerveDrivetrain drivetrain) {
+    public driveToPose(CommandSwerveDrivetrain drivetrain, Translation2d translation, Rotation2d angle) {
         m_drivetrain = drivetrain;
+        targetTranslation = translation;
+        targetAngle = angle;
         xController.setTolerance(0.1);
         yController.setTolerance(0.1);
         swerveRequestFacing.HeadingController = new PhoenixPIDController(10, 0, 0);
@@ -92,12 +94,12 @@ public class driveToPose extends Command {
       return false;
   }
 
-  public void setTarget(Translation2d pose) {
+/*   public void setTarget(Translation2d pose) {
       targetTranslation = pose;
   }
 
   public void setAngle(Rotation2d angle) {
     targetAngle = angle;
 
-  }
+  } */
 }

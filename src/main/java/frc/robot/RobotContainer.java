@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.AutoCommands.autoIntakeNote;
 import frc.robot.Commands.LookUpShot;
+import frc.robot.Commands.calibrateLookupTable;
 import frc.robot.Commands.driveToPose;
 import frc.robot.Commands.intakeNote;
 import frc.robot.Commands.prepareToShoot;
@@ -327,7 +328,7 @@ public class RobotContainer {
             //.withTimeout(2)
             //.andThen(m_armSubsystem.prepareForIntakeCommand()));
 
-        m_driverCtrl.start().whileTrue(new driveToPose(m_drivetrain));
+        m_driverCtrl.start().whileTrue(new calibrateLookupTable(m_drivetrain,m_armSubsystem));
 /*         m_driverCtrl.start().whileTrue(m_drivetrain.applyRequest(
             () -> m_drive.withVelocityX(5)
                     .withVelocityY(0)
