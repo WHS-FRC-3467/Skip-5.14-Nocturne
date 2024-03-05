@@ -41,10 +41,10 @@ public class driveToPose extends Command {
     .withVelocityX(0.0)
     .withVelocityY(0.0);
 
-    public driveToPose(CommandSwerveDrivetrain drivetrain, Translation2d translation, Rotation2d angle) {
+    public driveToPose(CommandSwerveDrivetrain drivetrain) {
         m_drivetrain = drivetrain;
-        targetTranslation = translation;
-        targetAngle = angle;
+        targetTranslation = m_drivetrain.getTrans();
+        targetAngle = m_drivetrain.getRot();
         xController.setTolerance(0.1);
         yController.setTolerance(0.1);
         swerveRequestFacing.HeadingController = new PhoenixPIDController(10, 0, 0);
@@ -56,6 +56,8 @@ public class driveToPose extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        targetTranslation = m_drivetrain.getTrans();
+        targetAngle = m_drivetrain.getRot();
         robotPose = m_drivetrain.getState().Pose;
         omegaController.reset(robotPose.getRotation().getRadians());
         xController.reset(robotPose.getX());
@@ -68,9 +70,15 @@ public class driveToPose extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        targetTranslation = m_drivetrain.getTrans();
+        targetAngle = m_drivetrain.getRot();
+        xController.setGoal(targetTranslation.getX());
+        yController.setGoal(targetTranslation.getY());
         robotPose = m_drivetrain.getState().Pose;
         xSpeed = xController.calculate(robotPose.getX());
-        if (xController.atGoal()) {xSpeed = 0;}
+        if (xController.atGoal()) {
+            xSpeed = 0;
+        }
 
         ySpeed = yController.calculate(robotPose.getY());
         if (yController.atGoal()) {ySpeed = 0;}
@@ -94,12 +102,12 @@ public class driveToPose extends Command {
       return false;
   }
 
-/*   public void setTarget(Translation2d pose) {
+   public void setTarget(Translation2d pose) {
       targetTranslation = pose;
   }
 
   public void setAngle(Rotation2d angle) {
     targetAngle = angle;
 
-  } */
+  } 
 }

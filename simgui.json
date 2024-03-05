@@ -51,6 +51,8 @@
       "/SmartDashboard/Control Chooser": "String Chooser",
       "/SmartDashboard/Control Style Chooser": "String Chooser",
       "/SmartDashboard/Field Test": "Field2d",
+      "/SmartDashboard/Lookup Table: Next Index": "Command",
+      "/SmartDashboard/Lookup Table: Print Setpoint": "Command",
       "/SmartDashboard/Module 0": "Mechanism2d",
       "/SmartDashboard/Module 1": "Mechanism2d",
       "/SmartDashboard/Module 2": "Mechanism2d",
@@ -76,6 +78,16 @@
         }
       },
       "/SmartDashboard/Auto Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Lookup Table: Next Index": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Lookup Table: Print Setpoint": {
         "window": {
           "visible": true
         }
@@ -136,6 +148,9 @@
           "double[]##v_/SmartDashboard/Robot Pose Field Map/Robot": {
             "open": true
           }
+        },
+        "TunableNumbers": {
+          "open": true
         },
         "open": true
       },

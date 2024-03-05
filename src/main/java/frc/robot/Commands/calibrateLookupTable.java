@@ -16,16 +16,17 @@ import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import frc.robot.Util.FieldCentricAiming;
 import frc.robot.Util.Setpoints;
 import frc.robot.Util.TunableNumber;
+import frc.robot.Util.Setpoints.GameState;
 
 public class calibrateLookupTable extends Command {
     CommandSwerveDrivetrain m_drivetrain;
     ArmSubsystem m_arm;
     driveToPose m_driveToPose;
-    FieldCentricAiming m_fieldCentricAiming;
+    FieldCentricAiming m_fieldCentricAiming = new FieldCentricAiming();
 
     Translation2d currentTarget;
     Rotation2d currentAngle;
-    ArrayList<Translation2d> aimingPositions;
+    ArrayList<Translation2d> aimingPositions = new ArrayList<>();
     Setpoints currentSetpoint;
     TunableNumber indexer = new TunableNumber("Lookup Table: Calibration Index", 0);
     TunableNumber angleTuner = new TunableNumber("Lookup Table: Angle", 0);
@@ -37,7 +38,22 @@ public class calibrateLookupTable extends Command {
         m_drivetrain = drivetrain;
         m_arm = arm;
         m_fieldCentricAiming = new FieldCentricAiming();
-        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 1,
+        currentSetpoint = new Setpoints(0, 0.4, 0, 0, GameState.LOOKUP);
+        
+
+        SmartDashboard.putData("Lookup Table: Next Index", new InstantCommand(() -> incIndex()));
+        SmartDashboard.putData("Lookup Table: Print Setpoint", new InstantCommand(() -> printSetpoints()));
+
+        
+
+        // Use addRequirements() here to declare subsystem dependencies.
+        addRequirements(arm);
+    }
+
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 1.5,
                 m_fieldCentricAiming.getSpeakerPos().getY()));
         aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 2,
                 m_fieldCentricAiming.getSpeakerPos().getY()));
@@ -52,16 +68,13 @@ public class calibrateLookupTable extends Command {
         aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 7,
                 m_fieldCentricAiming.getSpeakerPos().getY()));
 
-        SmartDashboard.putData("Lookup Table: Next Index", new InstantCommand(() -> incIndex()));
-        SmartDashboard.putData("Lookup Table: Print Setpoint", new InstantCommand(() -> printSetpoints()));
 
-        // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(drivetrain,arm);
-    }
-
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {
+        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 3,
+                m_fieldCentricAiming.getSpeakerPos().getY()));
+        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 3,
+                m_fieldCentricAiming.getSpeakerPos().getY() + 1.45));
+        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 3,
+                m_fieldCentricAiming.getSpeakerPos().getY() - 1.45));
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -70,7 +83,7 @@ public class calibrateLookupTable extends Command {
         currentSetpoint.arm = angleTuner.get();
         currentSetpoint.shooterLeft = leftSpeedTuner.get();
         currentSetpoint.shooterRight = rightSpeedTuner.get();
-        m_driveToPose = new driveToPose(m_drivetrain, aimingPositions.get((int) indexer.get()),
+        m_drivetrain.setAutoDrive(aimingPositions.get((int) indexer.get()),
                 m_fieldCentricAiming.getAngleToSpeaker(aimingPositions.get((int) indexer.get())));
         m_arm.updateArmSetpoint(currentSetpoint);
 
@@ -93,13 +106,13 @@ public class calibrateLookupTable extends Command {
 
     public void printSetpoints() {
         System.out.println("Current Good Setpoint");
-        System.out.print("Dist from Speaker");
+        System.out.print(" Dist from Speaker ");
         System.out.print(m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()));
-        System.out.print("Angle of Arm");
+        System.out.print(" Angle of Arm ");
         System.out.print(angleTuner.get());
-        System.out.print("Left Shooter Speed");
+        System.out.print(" Left Shooter Speed ");
         System.out.print(leftSpeedTuner.get());
-        System.out.print("Right Shooter Speed");
+        System.out.print(" Right Shooter Speed ");
         System.out.print(rightSpeedTuner.get());
         System.out.println("");
     }
