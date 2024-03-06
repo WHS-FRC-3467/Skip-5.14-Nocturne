@@ -23,6 +23,7 @@ public class calibrateLookupTable extends Command {
     ArmSubsystem m_arm;
     driveToPose m_driveToPose;
     FieldCentricAiming m_fieldCentricAiming = new FieldCentricAiming();
+    Command driveCommand;
 
     Translation2d currentTarget;
     Rotation2d currentAngle;
@@ -39,6 +40,7 @@ public class calibrateLookupTable extends Command {
         m_arm = arm;
         m_fieldCentricAiming = new FieldCentricAiming();
         currentSetpoint = new Setpoints(0, 0.4, 0, 0, GameState.LOOKUP);
+       
         
 
         SmartDashboard.putData("Lookup Table: Next Index", new InstantCommand(() -> incIndex()));
@@ -75,6 +77,9 @@ public class calibrateLookupTable extends Command {
                 m_fieldCentricAiming.getSpeakerPos().getY() + 1.45));
         aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 3,
                 m_fieldCentricAiming.getSpeakerPos().getY() - 1.45));
+        
+        driveCommand = new driveToPose(m_drivetrain,getTranslationTarget(),getRotationTarget());
+        driveCommand.schedule();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -83,15 +88,14 @@ public class calibrateLookupTable extends Command {
         currentSetpoint.arm = angleTuner.get();
         currentSetpoint.shooterLeft = leftSpeedTuner.get();
         currentSetpoint.shooterRight = rightSpeedTuner.get();
-        m_drivetrain.setAutoDrive(aimingPositions.get((int) indexer.get()),
-                m_fieldCentricAiming.getAngleToSpeaker(aimingPositions.get((int) indexer.get())));
-        m_arm.updateArmSetpoint(currentSetpoint);
 
+        m_arm.updateArmSetpoint(currentSetpoint);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        driveCommand.cancel();;
     }
 
     // Returns true when the command should end.
@@ -100,8 +104,21 @@ public class calibrateLookupTable extends Command {
         return false;
     }
 
+    public Translation2d getTranslationTarget() {
+        return aimingPositions.get((int) indexer.get());
+    }
+
+    public Rotation2d getRotationTarget() {
+        return m_fieldCentricAiming.getAngleToSpeaker(aimingPositions.get((int) indexer.get()));
+    }
+
     public void incIndex() {
-        indexer.set(indexer.get() + 1);
+        if (aimingPositions.size() > indexer.get() + 1) {
+            indexer.set(indexer.get() + 1);
+        } else {
+            indexer.set(0);
+        }
+
     }
 
     public void printSetpoints() {

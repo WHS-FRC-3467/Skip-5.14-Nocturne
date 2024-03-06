@@ -328,7 +328,7 @@ public class RobotContainer {
             //.withTimeout(2)
             //.andThen(m_armSubsystem.prepareForIntakeCommand()));
 
-        m_driverCtrl.start().whileTrue(Commands.parallel(new calibrateLookupTable(m_drivetrain,m_armSubsystem),new driveToPose(m_drivetrain)));
+        m_driverCtrl.start().whileTrue(new calibrateLookupTable(m_drivetrain,m_armSubsystem));
 /*         m_driverCtrl.start().whileTrue(m_drivetrain.applyRequest(
             () -> m_drive.withVelocityX(5)
                     .withVelocityY(0)
