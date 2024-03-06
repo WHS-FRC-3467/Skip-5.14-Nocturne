@@ -4,18 +4,30 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.phoenix6.SignalLogger;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.hal.AllianceStationID;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
 
     private Command m_autonomousCommand;
+    private Command m_lastAutonomousCommand;
     private RobotContainer m_robotContainer;
+    private Field2d m_autoTraj = new Field2d();
+    private List<Pose2d> m_pathsToShow = new ArrayList<Pose2d>();
 
     @Override
     public void robotInit() {
@@ -38,10 +50,28 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         m_robotContainer.disablePIDSubsystems();
         m_robotContainer.disabledLEDs();
+        SmartDashboard.putData(m_autoTraj);
     }
 
     @Override
     public void disabledPeriodic() {
+        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        if (m_autonomousCommand != m_lastAutonomousCommand) {
+            if (AutoBuilder.getAllAutoNames().contains(m_autonomousCommand.getName())) {
+                //m_autoTraj.getObject("traj").close();
+                m_pathsToShow.clear();
+                System.out.println(m_autonomousCommand.getName());
+                for (PathPlannerPath path : PathPlannerAuto.getPathGroupFromAutoFile(m_autonomousCommand.getName())) {
+                    m_pathsToShow.addAll(path.getPathPoses());
+                }
+                m_autoTraj.getObject("traj").setPoses(m_pathsToShow);
+                SmartDashboard.putData("Auto Path",m_autoTraj);
+
+            }
+
+        }
+        m_lastAutonomousCommand = m_autonomousCommand;
+
     }
 
     @Override

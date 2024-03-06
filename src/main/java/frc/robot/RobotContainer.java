@@ -14,6 +14,9 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.ForwardReference;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -133,6 +136,7 @@ public class RobotContainer {
 
         if (RobotConstants.kIsTuningMode) {
             SmartDashboard.putData("Auto Turning PID", m_head.HeadingController);
+            
         }
 
         // Register NamedCommands for use in PathPlanner autos
@@ -189,9 +193,11 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
         
+        
         // Set the initial Drive Control Style
         newControlStyle();
     }
+
 
     private double invertForAlliance() {
         var alliance = DriverStation.getAlliance();

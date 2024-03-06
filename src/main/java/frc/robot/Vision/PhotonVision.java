@@ -32,6 +32,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -60,11 +61,12 @@ public class PhotonVision extends SubsystemBase{
     public PhotonVision(CommandSwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;
         camera = new PhotonCamera(kCameraName);
-
         photonEstimator =
                 new PhotonPoseEstimator(
                         kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+        PortForwarder.add(5800, "photonvision.local", 5800); // Forward the photon vision page for tethered connection to RIO
 
         // ----- Simulation
         if (Robot.isSimulation()) {
