@@ -47,7 +47,6 @@ public class velocityOffset extends Command {
     Double timeUntilShot; 
     DoubleSupplier m_trigger; 
 
-    Rotation2d rotationalCompensation;
     Double correctedDistance;
     Rotation2d correctedRotation;
 
@@ -102,8 +101,7 @@ public class velocityOffset extends Command {
         futureAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(futureRobotTranslation);
 
         //The amount to add to the current angle to speaker to aim for the future
-        rotationalCompensation = futureAngleToSpeaker.minus(currentAngleToSpeaker);
-        correctedRotation = (rotationalCompensation).plus(m_FieldCentricAiming.getAngleToSpeaker(currentRobotTranslation));
+        correctedRotation = futureAngleToSpeaker;
 
         // Get the future distance to speaker
         correctedDistance = m_FieldCentricAiming.getDistToSpeaker(futureRobotTranslation);
@@ -116,16 +114,8 @@ public class velocityOffset extends Command {
             SmartDashboard.putNumber("yDelta", speeds.vyMetersPerSecond);
             SmartDashboard.putNumber("futureang", futureAngleToSpeaker.getDegrees());
             SmartDashboard.putNumber("futureDist", correctedDistance);
-            SmartDashboard.putNumber("Correction Angle", rotationalCompensation.getDegrees());
             SmartDashboard.putNumber("Correction Angle", correctedRotation.getDegrees());
             SmartDashboard.putNumber("timeUntilShot", timeUntilShot);
-
-            //SmartDashboard.putNumber("Rot2Speaker", m_drivetrain.RotToSpeaker().getDegrees());
-            //SmartDashboard.putNumber("pose rot", m_drivetrain.getState().Pose.getRotation().getDegrees());
-            
-            //SmartDashboard.putNumber("time Const", Constants.ShooterConstants.timeToShoot);
-            //SmartDashboard.putNumber("currentTime", shotTimer.get());
-            //SmartDashboard.putNumber("trig", m_trigger.getAsDouble());
         }
 
               
@@ -145,10 +135,6 @@ public class velocityOffset extends Command {
     @Override
     public boolean isFinished() {
         return m_isDone;
-    }
-
-    public Rotation2d getCorrectedTarget() {
-        return this.rotationalCompensation;
     }
 
 }
