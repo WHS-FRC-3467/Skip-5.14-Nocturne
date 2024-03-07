@@ -18,6 +18,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Util.Setpoints;
 import frc.robot.Util.Setpoints.GameState;
+import frc.robot.generated.TunerConstants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean constants. This class should not be
@@ -222,5 +223,21 @@ public final class Constants {
         public static final double triggerThreashold = 0.4;
 
     }
+
+    // Initial max is true top speed
+    public static final double maxSpeed = TunerConstants.kSpeedAt12VoltsMps;
+    // Reduction in speed from Max Speed, 0.5 = 50%
+    public static final double halfSpeed = 0.5;
+    // Reduction in speed from Max Speed, 0.25 = 25%
+    public static final double quarterSpeed = 0.25;
+    // .75 rotation per second max angular velocity. Adjust for max turning rate
+    // speed.
+    public static final double maxAngularRate = Math.PI * 1.5;
+    // .75 rotation per second max angular velocity. Adjust for max turning rate
+    // speed.
+    public static final double halfAngularRate = Math.PI * 1.0;
+    // .75 rotation per second max angular velocity. Adjust for max turning rate
+    // speed.
+    public static final double quarterAngularRate = Math.PI * 0.5;
 
 }

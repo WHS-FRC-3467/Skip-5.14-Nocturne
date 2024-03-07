@@ -14,9 +14,6 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.ForwardReference;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -55,20 +52,11 @@ public class RobotContainer {
      */
     private SendableChooser<Command> autoChooser;
 
-    // Initial max is true top speed
-    private double m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps;
-    // Reduction in speed from Max Speed, 0.5 = 50%
-    private final double m_HalfSpeed = 0.5;
-    // Reduction in speed from Max Speed, 0.25 = 25%
-    private final double m_QuarterSpeed = 0.25;
-    // .75 rotation per second max angular velocity. Adjust for max turning rate speed.
-    private final double m_MaxAngularRate = Math.PI * 1.5;
-    // .75 rotation per second max angular velocity. Adjust for max turning rate speed.
-    private final double m_HalfAngularRate = Math.PI * 1.0;
-    // .75 rotation per second max angular velocity. Adjust for max turning rate speed.
-    private final double m_QuarterAngularRate = Math.PI * 0.5;
+
+    // Track current MaxSpeed
+    private double m_MaxSpeed =  Constants.maxSpeed;;
     // Track current AngularRate
-    private double m_AngularRate = m_MaxAngularRate;
+    private double m_AngularRate = Constants.maxAngularRate;
     // Save last Speed Limit so we know if it needs updating
     private Double m_lastSpeed = 1.0;
 
@@ -90,11 +78,11 @@ public class RobotContainer {
 
     // Field-centric driving in Open Loop, can change to closed loop after characterization
     SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-            .withDeadband(m_MaxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
+            .withDeadband(Constants.maxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
     
     // Field-centric driving in Closed Loop. Comment above and uncomment below.
     //SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.Velocity)
-    //        .withDeadband(m_MaxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
+    //        .withDeadband(Constants.maxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
 
     // Swerve Drive functional requests
     SwerveRequest.SwerveDriveBrake m_brake = new SwerveRequest.SwerveDriveBrake();
@@ -103,7 +91,7 @@ public class RobotContainer {
 
    
     // Set up Drivetrain Telemetry
-    Telemetry m_logger = new Telemetry(m_MaxSpeed);
+    Telemetry m_logger = new Telemetry(Constants.maxSpeed);
     Pose2d m_odomStart = new Pose2d(0, 0, new Rotation2d(0, 0));
 
     // Instantiate other Subsystems
@@ -125,19 +113,14 @@ public class RobotContainer {
 
         // Change this to specify Limelight is in use
         m_limelightVision.useLimelight(true);
-        //m_limelightVision.setAlliance(Alliance.Blue);
-        //m_limelightVision.trustLL(true);
-
+        // Sets forward reference for drive to always be towards red alliance
         m_drive.ForwardReference = ForwardReference.RedAlliance;
         // Creates PID for heading controller for aiming at angle
         m_head.ForwardReference = ForwardReference.RedAlliance;
         m_head.HeadingController.setPID(8, 0, 0);
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
-        if (RobotConstants.kIsTuningMode) {
-            SmartDashboard.putData("Auto Turning PID", m_head.HeadingController);
-            
-        }
+        setupSmartDashboard();
 
         // Register NamedCommands for use in PathPlanner autos
         registerNamedCommands();
@@ -192,13 +175,11 @@ public class RobotContainer {
         // Build an auto chooser. This will use Commands.none() as the default option.
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
-        
-        
         // Set the initial Drive Control Style
         newControlStyle();
     }
 
-
+    // Inverts the joystick direction if on red alliance
     private double invertForAlliance() {
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
@@ -206,13 +187,30 @@ public class RobotContainer {
         }
         return 1;
     }
-
+    // Adds 180 degrees if on red alliance
     private double addForAlliance() {
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-            return 1;
+            return 180;
         }
         return 0;
+    }
+
+    private void setupSmartDashboard() {
+
+        if (RobotConstants.kIsAutoAimTuningMode) {
+            SmartDashboard.putData("Auto Turning PID", m_head.HeadingController);
+        }
+        if (RobotConstants.kIsShooterTuningMode) {
+            SmartDashboard.putData("Update Shooter Gains", m_shooterSubsystem.updateShooterGainsCommand());
+            SmartDashboard.putData("Run Shooter", m_shooterSubsystem.runShooterCommand());
+            SmartDashboard.putData("Stop Shooter", m_shooterSubsystem.stopShooterCommand());
+            SmartDashboard.putData("Arm to Angle", m_armSubsystem.moveToDegreeCommand());
+        }
+        if (RobotConstants.kIsArmTuningMode) {
+            SmartDashboard.putData("Move Arm To Setpoint", m_armSubsystem.tuneArmSetPointCommand());            
+        }
+        
     }
 
     private void configureButtonBindings() {
@@ -262,34 +260,34 @@ public class RobotContainer {
         // Driver: While Y button is pressed, rotate to North
 
          m_driverCtrl.y().whileTrue(m_drivetrain.applyRequest(
-                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
-                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
-                        .withTargetDirection(Rotation2d.fromDegrees(0.0  + addForAlliance()*180))
-                        .withDeadband(m_MaxSpeed * 0.1)
+                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
+                        .withTargetDirection(Rotation2d.fromDegrees(0.0  + addForAlliance()))
+                        .withDeadband(Constants.maxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While B button is pressed, rotate to East
         m_driverCtrl.b().whileTrue(m_drivetrain.applyRequest(
-                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
-                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
-                        .withTargetDirection(Rotation2d.fromDegrees(-90.0 + addForAlliance()*180))
-                        .withDeadband(m_MaxSpeed * 0.1)
+                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
+                        .withTargetDirection(Rotation2d.fromDegrees(-90.0 + addForAlliance()))
+                        .withDeadband(Constants.maxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While A button is pressed, rotate to South
         m_driverCtrl.a().whileTrue(m_drivetrain.applyRequest(
-                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
-                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
-                        .withTargetDirection(Rotation2d.fromDegrees(180.0  + addForAlliance()*180))
-                        .withDeadband(m_MaxSpeed * 0.1)
+                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
+                        .withTargetDirection(Rotation2d.fromDegrees(180.0  + addForAlliance()))
+                        .withDeadband(Constants.maxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While X button is pressed, rotate to West
         m_driverCtrl.x().whileTrue(m_drivetrain.applyRequest(
-                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
-                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
-                        .withTargetDirection(Rotation2d.fromDegrees(90.0 + addForAlliance() * 180))
-                        .withDeadband(m_MaxSpeed * 0.1)
+                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
+                        .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
+                        .withTargetDirection(Rotation2d.fromDegrees(90.0 + addForAlliance()))
+                        .withDeadband(Constants.maxSpeed * 0.1)
                         .withRotationalDeadband(m_AngularRate * 0.1)));
 
         // Driver: While Right Stick button is pressed, drive while pointing to alliance speaker
@@ -298,10 +296,10 @@ public class RobotContainer {
         m_driverCtrl.rightStick().whileTrue(Commands.parallel(
                 new velocityOffset(m_drivetrain, () -> m_driverCtrl.getRightTriggerAxis()),
                 m_drivetrain.applyRequest(
-                        () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance())
-                                .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance())
+                        () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
+                                .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
                                 .withTargetDirection(m_drivetrain.getVelocityOffset())
-                                .withDeadband(m_MaxSpeed * 0.1)
+                                .withDeadband(Constants.maxSpeed * 0.1)
                                 .withRotationalDeadband(m_AngularRate * 0.1)),
                 new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance(),
                         m_ledSubsystem)));
@@ -313,16 +311,16 @@ public class RobotContainer {
         m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
 
         // Driver: While Left Bumper is held, reduce speed by 25%
-         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_QuarterSpeed)
-                .andThen(() -> m_AngularRate = m_QuarterAngularRate));
-        m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_lastSpeed)
-                .andThen(() -> m_AngularRate = m_MaxAngularRate));
+         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * Constants.quarterSpeed)
+                .andThen(() -> m_AngularRate = Constants.quarterAngularRate));
+        m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = Constants.maxSpeed)
+                .andThen(() -> m_AngularRate = Constants.maxAngularRate));
 
         // Driver: While Right Bumper is held, reduce speed by 50%
-         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_HalfSpeed)
-                .andThen(() -> m_AngularRate = m_HalfAngularRate));
-        m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_lastSpeed)
-                .andThen(() -> m_AngularRate = m_MaxAngularRate));
+         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * Constants.halfSpeed)
+                .andThen(() -> m_AngularRate = Constants.halfAngularRate));
+        m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = Constants.maxSpeed)
+                .andThen(() -> m_AngularRate = Constants.maxAngularRate));
         
         // Driver: When LeftTrigger is pressed, lower the Arm and then run the Intake and Stage until a Note is found
         m_driverCtrl.leftTrigger(Constants.ControllerConstants.triggerThreashold).whileTrue(m_armSubsystem.prepareForIntakeCommand()
@@ -333,12 +331,7 @@ public class RobotContainer {
             //.withTimeout(2)
             //.andThen(m_armSubsystem.prepareForIntakeCommand()));
 
-        m_driverCtrl.start().whileTrue(new driveToPose(m_drivetrain));
-/*         m_driverCtrl.start().whileTrue(m_drivetrain.applyRequest(
-            () -> m_drive.withVelocityX(5)
-                    .withVelocityY(0)
-                    .withRotationalRate(0))); */
-        
+        m_driverCtrl.start().whileTrue(new driveToPose(m_drivetrain));        
             
         /*
          * OPERATOR Controls
@@ -382,16 +375,8 @@ public class RobotContainer {
                                             ()-> m_operatorCtrl.getLeftTriggerAxis(),
                                             () -> m_operatorCtrl.getRightTriggerAxis()));
 
-        /*
-         * Put Commands on Shuffleboard
-         */
-        if (RobotConstants.kIsShooterTuningMode) {
-            SmartDashboard.putData("Update Shooter Gains", m_shooterSubsystem.updateShooterGainsCommand());
-            SmartDashboard.putData("Run Shooter", m_shooterSubsystem.runShooterCommand());
-            SmartDashboard.putData("Stop Shooter", m_shooterSubsystem.stopShooterCommand());
-            SmartDashboard.putData("Arm to Angle", m_armSubsystem.moveToDegreeCommand());
-        }
-        SmartDashboard.putData("Move Arm To Setpoint", m_armSubsystem.tuneArmSetPointCommand());
+
+        
        
     }
 
@@ -402,8 +387,8 @@ public class RobotContainer {
     }
 
     private void newControlStyle() {
-        m_controlStyle = () -> m_drive.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance()) // Drive forward -Y
-                .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance()) // Drive left with negative X (left)
+        m_controlStyle = () -> m_drive.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance()) // Drive forward -Y
+                .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance()) // Drive left with negative X (left)
                 .withRotationalRate(-m_driverCtrl.getRightX() * m_AngularRate); // Drive counterclockwise with
                                                                                 // negative X (left)
         // Specify the desired Control Style as the Drivetrain's default command
