@@ -50,28 +50,29 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         m_robotContainer.disablePIDSubsystems();
         m_robotContainer.disabledLEDs();
-        SmartDashboard.putData(m_autoTraj);
+        SmartDashboard.putData("Auto Path Preview",m_autoTraj);
     }
 
     @Override
     public void disabledPeriodic() {
+        // Get currently selected command
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        // Check if is the same as the last one
         if (m_autonomousCommand != m_lastAutonomousCommand) {
+            // Check if its contained in the list of our autos
             if (AutoBuilder.getAllAutoNames().contains(m_autonomousCommand.getName())) {
-                //m_autoTraj.getObject("traj").close();
+                // Clear the current path
                 m_pathsToShow.clear();
-                System.out.println(m_autonomousCommand.getName());
+                // Grabs all paths from the auto
                 for (PathPlannerPath path : PathPlannerAuto.getPathGroupFromAutoFile(m_autonomousCommand.getName())) {
+                    // Adds all poses to master list
                     m_pathsToShow.addAll(path.getPathPoses());
                 }
+                // Displays all poses on Field2d widget
                 m_autoTraj.getObject("traj").setPoses(m_pathsToShow);
-                SmartDashboard.putData("Auto Path",m_autoTraj);
-
             }
-
         }
         m_lastAutonomousCommand = m_autonomousCommand;
-
     }
 
     @Override
