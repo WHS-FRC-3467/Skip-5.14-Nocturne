@@ -54,6 +54,8 @@
       "/SmartDashboard/Control Style Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Field Test": "Field2d",
+      "/SmartDashboard/Lookup Table: Next Index": "Command",
+      "/SmartDashboard/Lookup Table: Print Setpoint": "Command",
       "/SmartDashboard/Module 0": "Mechanism2d",
       "/SmartDashboard/Module 1": "Mechanism2d",
       "/SmartDashboard/Module 2": "Mechanism2d",
@@ -83,34 +85,17 @@
           "visible": true
         }
       },
-      "/SmartDashboard/Auto Path Preview": {
-        "bottom": 1476,
-        "height": 8.210550308227539,
-        "left": 150,
-        "right": 2961,
-        "top": 79,
-        "width": 16.541748046875,
+      "/SmartDashboard/Lookup Table: Next Index": {
         "window": {
           "visible": true
         }
       },
-      "/SmartDashboard/Field": {
-        "bottom": 1476,
-        "height": 8.210550308227539,
-        "left": 150,
-        "right": 2961,
-        "top": 79,
-        "width": 16.541748046875,
+      "/SmartDashboard/Lookup Table: Print Setpoint": {
         "window": {
           "visible": true
         }
       },
       "/SmartDashboard/Run Shooter": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/Speed Limit": {
         "window": {
           "visible": true
         }
@@ -161,6 +146,9 @@
           "double[]##v_/SmartDashboard/Robot Pose Field Map/Robot": {
             "open": true
           }
+        },
+        "TunableNumbers": {
+          "open": true
         },
         "open": true
       },

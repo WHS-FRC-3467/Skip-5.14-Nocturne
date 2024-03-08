@@ -54,6 +54,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private final Rotation2d RedAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean hasAppliedOperatorPerspective = false;
+
+    private Translation2d transT = new Translation2d();
+    private Rotation2d rotR = new Rotation2d();
     
 
 
@@ -200,6 +203,19 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public double getCorrectedDistance() {
         return correctedDist;
+    }
+
+    public void setAutoDrive(Translation2d trans, Rotation2d rot) {
+        transT = trans;
+        rotR = rot;
+    }
+
+    public Translation2d getTrans() {
+        return transT;
+    }
+
+    public Rotation2d getRot() {
+        return rotR;
     }
 
 }
