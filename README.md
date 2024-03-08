@@ -1,7 +1,7 @@
 
-# 3467 Base Alpha Code
+# 3467 Nocturne Code
 
-- This is now the code base for the Beta robot. Repos for subsequent robots will most likely be based on this code as well.
+- This is now the active competition code, 
 - This code base was started with Jason Daming's improved version of the CTRE Swerve Example (see notes below).
 - Added basic Subsystems: Drive, Arm, Shooter, Intake and Stage.
 - Cleaned up and reorganized RobotContainer.jave to make it clearer for new programmers.
