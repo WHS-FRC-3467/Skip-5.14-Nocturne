@@ -120,7 +120,7 @@ public class RobotContainer {
         m_head.HeadingController.setPID(8, 0, 0);
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
-        setupSmartDashboard();
+        configureSmartDashboard();
 
         // Register NamedCommands for use in PathPlanner autos
         registerNamedCommands();
@@ -196,7 +196,7 @@ public class RobotContainer {
         return 0;
     }
 
-    private void setupSmartDashboard() {
+    private void configureSmartDashboard() {
 
         if (RobotConstants.kIsAutoAimTuningMode) {
             SmartDashboard.putData("Auto Turning PID", m_head.HeadingController);

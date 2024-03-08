@@ -12,19 +12,19 @@ import frc.robot.Constants;
 
 
 public class FieldCentricAiming {
-    private Pose2d _speakerPosition;
+    private Pose2d speakerPosition;
     
     public FieldCentricAiming() {
         getSpeakerPos();
     }
 
     public Pose2d getSpeakerPos() {
-        if (_speakerPosition == null) {
+        if (speakerPosition == null) {
             if (DriverStation.getAlliance() != null && !DriverStation.getAlliance().isEmpty()) {
-                _speakerPosition = (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) ? Constants.BLUE_SPEAKER : Constants.RED_SPEAKER;
+                speakerPosition = (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) ? Constants.FieldConstants.BLUE_SPEAKER : Constants.FieldConstants.RED_SPEAKER;
             }
         }
-        return _speakerPosition;
+        return speakerPosition;
     }
 
     public double getDistToSpeaker(Translation2d robotPose) {
