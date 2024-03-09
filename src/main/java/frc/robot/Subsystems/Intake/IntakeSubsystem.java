@@ -13,6 +13,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import com.ctre.phoenix6.controls.Follower;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -27,7 +29,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     /* Initialize Talons */
     TalonFX m_intakeMotor = new TalonFX(CanConstants.ID_IntakeMotor);
-
+    TalonFX m_intakeFollower = new TalonFX(CanConstants.ID_IntakeFollower);
+    
     /* Current Limits config */
     private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
@@ -42,10 +45,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
         /* Configure the Intake motor */
         var m_configuration = new TalonFXConfiguration();
+        var m_followerConfiguration = new TalonFXConfiguration();
 
         /* Set Intake motor to Brake */
         m_configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        
+        m_followerConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
         /* Set the motor direction */
         m_configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
@@ -58,11 +63,13 @@ public class IntakeSubsystem extends SubsystemBase {
         m_currentLimits.StatorCurrentLimit = 70; // Limit stator to 70 amps
         m_currentLimits.StatorCurrentLimitEnable = true; // And enable it
         m_configuration.CurrentLimits = m_currentLimits;
-
+        m_followerConfiguration.CurrentLimits = m_currentLimits;
 
         /* Config the peak outputs */
         m_configuration.Voltage.PeakForwardVoltage = 12.0;
         m_configuration.Voltage.PeakReverseVoltage = -12.0;
+        m_followerConfiguration.Voltage.PeakForwardVoltage = 12.0;
+        m_followerConfiguration.Voltage.PeakReverseVoltage = -12.0;
 
         /* Apply Intake motor configs */
         //m_intakeMotor.getConfigurator().apply(m_configuration);
@@ -72,17 +79,28 @@ public class IntakeSubsystem extends SubsystemBase {
         m_intakeMotor.getSupplyCurrent().setUpdateFrequency(100);
         m_intakeMotor.getStatorCurrent().setUpdateFrequency(100);
         m_intakeMotor.optimizeBusUtilization();
- 
 
+        
+        m_intakeFollower.getDutyCycle().setUpdateFrequency(100);
+        m_intakeFollower.getSupplyCurrent().setUpdateFrequency(100);
+        m_intakeFollower.getStatorCurrent().setUpdateFrequency(100);
+        m_intakeFollower.optimizeBusUtilization();
+
+        /*
+         * Apply the configurations to the motors, and set one to follow the other in
+         * the opposite direction
+         */
+        m_intakeMotor.getConfigurator().apply(m_configuration);
+        m_intakeFollower.getConfigurator().apply(m_followerConfiguration);
+        m_intakeFollower.setControl(new Follower(m_intakeMotor.getDeviceID(), false));
     }
 
     public void simulationInit() {
         /* If running in Simulation, setup simulated Talons */
         PhysicsSim.getInstance().addTalonFX(m_intakeMotor, 0.001);
-        //PhysicsSim.getInstance().addTalonSRX(m_centeringMotor, 1.0, 89975.0);
+        PhysicsSim.getInstance().addTalonFX(m_intakeFollower, 0.001);
+        // PhysicsSim.getInstance().addTalonSRX(m_centeringMotor, 1.0, 89975.0);
     }
-
-
 
     @Override
     public void periodic() {
@@ -90,13 +108,14 @@ public class IntakeSubsystem extends SubsystemBase {
         // This method will be called once per scheduler run
         if (RobotConstants.kIsIntakeTuningMode) {
             SmartDashboard.putNumber("Intake Current Draw", m_intakeMotor.getSupplyCurrent().getValueAsDouble());
-            //SmartDashboard.putNumber("Intake Center Current Draw", m_centeringMotor.getSupplyCurrent());
+            // SmartDashboard.putNumber("Intake Center Current Draw",
+            // m_centeringMotor.getSupplyCurrent());
         }
     }
 
     public void simulationPeriodic() {
         // If running in simulation, update the sims
-            PhysicsSim.getInstance().run();
+        PhysicsSim.getInstance().run();
     }
 
     /**
@@ -115,15 +134,15 @@ public class IntakeSubsystem extends SubsystemBase {
      * Command Factories
      */
     public Command runIntakeCommand() {
-        return new RunCommand(()->this.runIntake(IntakeConstants.kIntakeSpeed), this);
+        return new RunCommand(() -> this.runIntake(IntakeConstants.kIntakeSpeed), this);
     }
 
     public Command stopIntakeCommand() {
-        return new InstantCommand(()->this.stopIntake(), this);
+        return new InstantCommand(() -> this.stopIntake(), this);
     }
 
     public Command ejectIntakeCommand() {
-        return new RunCommand(()->this.runIntake(IntakeConstants.kEjectSpeed), this);
+        return new RunCommand(() -> this.runIntake(IntakeConstants.kEjectSpeed), this);
     }
 
 }
