@@ -12,18 +12,22 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.ForwardReference;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.SteerRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.AutoCommands.AutoLookUpShot;
+import frc.robot.AutoCommands.autoIntakeNote;
 import frc.robot.AutoCommands.autoIntakeNote;
 import frc.robot.Commands.LookUpShot;
 import frc.robot.Commands.calibrateLookupTable;
@@ -42,6 +46,7 @@ import frc.robot.Subsystems.LED.LEDSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Stage.StageSubsystem;
 import frc.robot.Util.CommandXboxPS5Controller;
+import frc.robot.Util.FieldCentricAiming;
 import frc.robot.Vision.Limelight;
 import frc.robot.Vision.PhotonVision;
 import frc.robot.generated.TunerConstants;
@@ -89,6 +94,7 @@ public class RobotContainer {
     SwerveRequest.SwerveDriveBrake m_brake = new SwerveRequest.SwerveDriveBrake();
     SwerveRequest.FieldCentricFacingAngle m_head = new SwerveRequest.FieldCentricFacingAngle()
             .withDriveRequestType(DriveRequestType.Velocity);
+            //.withSteerRequestType(SteerRequestType.MotionMagic);
 
    
     // Set up Drivetrain Telemetry
@@ -104,6 +110,8 @@ public class RobotContainer {
     PhotonVision m_photonVision = new PhotonVision(m_drivetrain);
     Limelight m_limelightVision = new Limelight(m_drivetrain);
 
+    FieldCentricAiming m_fieldCentricAiming = new FieldCentricAiming();
+
 
     // Setup Limelight periodic query (defaults to disabled)
     
@@ -118,8 +126,11 @@ public class RobotContainer {
         m_drive.ForwardReference = ForwardReference.RedAlliance;
         // Creates PID for heading controller for aiming at angle
         m_head.ForwardReference = ForwardReference.RedAlliance;
-        m_head.HeadingController.setPID(8, 0, 0);
+        m_head.HeadingController.setP(14);
+        m_head.HeadingController.setI(0);
+        m_head.HeadingController.setD(3);
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
+        m_head.HeadingController.setTolerance(Units.degreesToRadians(0.5));
 
         configureSmartDashboard();
 
@@ -158,9 +169,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("WingShot",
                 new prepareToShoot(RobotConstants.WING, () -> m_stageSubsystem.isNoteInStage(),
                         m_armSubsystem, m_shooterSubsystem));
-/*         NamedCommands.registerCommand("LookUpShot",
-                new AutoLookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker())); */
-
+         NamedCommands.registerCommand("LookUpShot",
+                new AutoLookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())));
     }
 
     /**
@@ -209,9 +219,8 @@ public class RobotContainer {
             SmartDashboard.putData("Arm to Angle", m_armSubsystem.moveToDegreeCommand());
         }
         if (RobotConstants.kIsArmTuningMode) {
-            SmartDashboard.putData("Move Arm To Setpoint", m_armSubsystem.tuneArmSetPointCommand());            
-        }
-        
+            SmartDashboard.putData("Move Arm To Setpoint", m_armSubsystem.tuneArmSetPointCommand());          
+        }        
     }
 
     private void configureButtonBindings() {
@@ -301,7 +310,7 @@ public class RobotContainer {
                                 .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
                                 .withTargetDirection(m_drivetrain.getVelocityOffset())
                                 .withDeadband(Constants.maxSpeed * 0.1)
-                                .withRotationalDeadband(m_AngularRate * 0.1)),
+                                .withRotationalDeadband(0)),
                 new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance(),
                         m_ledSubsystem)));
 

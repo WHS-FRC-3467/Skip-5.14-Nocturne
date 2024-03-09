@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import frc.robot.Util.Setpoints;
 import frc.robot.Util.Setpoints.GameState;
 import frc.robot.generated.TunerConstants;
@@ -33,23 +34,23 @@ public final class Constants {
 
         public static final boolean kIsTuningMode = true;
         public static final boolean kIsDriveTuningMode = false;
-        public static final boolean kIsArmTuningMode = false;
+        public static final boolean kIsArmTuningMode = true;
         public static final boolean kIsIntakeTuningMode = false;
         public static final boolean kIsStageTuningMode = false;
         public static final boolean kIsShooterTuningMode = true;
-        public static final boolean kIsAutoAimTuningMode = false;
+        public static final boolean kIsAutoAimTuningMode = true;
 
         // Shooter and Arm Setpoints
-        public static final Setpoints STOWED = new Setpoints(1.0, 0.4, 0.0, 0.0, GameState.STOWED);
-        public static final Setpoints INTAKE = new Setpoints(1.0, 2.0, 0.0, 0.0, GameState.INTAKE);
+        public static final Setpoints STOWED =    new Setpoints(1.0, 0.4, 0.0, 0.0, GameState.STOWED);
+        public static final Setpoints INTAKE =    new Setpoints(1.0, 2.0, 0.0, 0.0, GameState.INTAKE);
         public static final Setpoints SUBWOOFER = new Setpoints(8.0, 1.0, 30.0,30.0,  GameState.SUBWOOFER);
-        public static final Setpoints AMP = new Setpoints(88.0, 0.4, 30.0,30.0,  GameState.AMP);
-        public static final Setpoints PODIUM = new Setpoints(23.0, 0.4, 50.0,50.0,  GameState.PODIUM);
-        public static final Setpoints WING = new Setpoints(30.0, 0.4, 70.0,60.0,  GameState.WING);
+        public static final Setpoints AMP =       new Setpoints(88.0, 0.4, 30.0,30.0,  GameState.AMP);
+        public static final Setpoints PODIUM =    new Setpoints(23.0, 0.4, 50.0,50.0,  GameState.PODIUM);
+        public static final Setpoints WING =      new Setpoints(30.0, 0.4, 70.0,60.0,  GameState.WING);
         public static final Setpoints PREPCLIMB = new Setpoints(0.0, 0.4, 0.0,0.0,  GameState.PREPCLIMB);
-        public static final Setpoints CLIMB = new Setpoints(88.0, 0.4, 0.0,0.0,  GameState.CLIMB);
-        public static final Setpoints TRAP = new Setpoints(0.0, 0.4, 20.0,20.0,  GameState.TRAP);
-        public static final Setpoints LOOKUP = new Setpoints(0.0, 0.4, 20.0,25.0,  GameState.LOOKUP);
+        public static final Setpoints CLIMB =     new Setpoints(88.0, 0.4, 0.0,0.0,  GameState.CLIMB);
+        public static final Setpoints TRAP =      new Setpoints(0.0, 0.4, 20.0,20.0,  GameState.TRAP);
+        public static final Setpoints LOOKUP =    new Setpoints(0.0, 0.4, 20.0,25.0,  GameState.LOOKUP);
     }
     
     public static final class CanConstants {
@@ -132,8 +133,8 @@ public final class Constants {
 
         // Shooter speeds are set in the individual position Setpoints at the top of this file
         
-        public static final double kShooterTolerance = 10.0;
-        public static final double kTimeToShoot = .3; //Time it takes before note leave the shooter
+        public static final double kShooterTolerance = 5.0;
+        public static final double kTimeToShoot = .13; //Time it takes before note leave the shooter
         public static final double kShooterIdleSpeed = 15.0;
 
     }
@@ -169,7 +170,7 @@ public final class Constants {
 
         // Feedforward Gains
         public static final double kS = .5;  // The Static Gain, in volts
-        public static final double kG = .25;  // The Gravity Gain, in volts
+        public static final double kG = .4;  // The Gravity Gain, in volts //.25
         public static final double kV = 3.45;  // The Velocity Gain, in volt seconds per radian
         public static final double kA = .01;  // The acceleration gain, in volt seconds^2 per radian
 
@@ -199,7 +200,8 @@ public final class Constants {
                 //new Transform3d(new Translation3d(.174,-0.186, 0.588), new Rotation3d(0, Math.toRadians(10),0));
 
         public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(.25679,.2491, .22), new Rotation3d(0, Math.toRadians(-19.6),Math.toRadians(-20.4)));
+                new Transform3d(new Translation3d(Units.inchesToMeters(9.812),Units.inchesToMeters(9.29), Units.inchesToMeters(8.693)),
+                new Rotation3d(0, Units.degreesToRadians(-25),Units.degreesToRadians(0)));
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout kTagLayout =

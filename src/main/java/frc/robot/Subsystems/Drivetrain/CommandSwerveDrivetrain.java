@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Util.FieldCentricAiming;
 import frc.robot.Vision.PhotonVision;
@@ -169,6 +170,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
         _field.setRobotPose(getState().Pose);
         SmartDashboard.putData("Robot Pose Field Map",_field);
+        if (RobotConstants.kIsArmTuningMode) {
+            SmartDashboard.putNumber("Distance to Speaker", m_FieldCentricAiming.getDistToSpeaker(getState().Pose.getTranslation()));            
+        }
+        if (RobotConstants.kIsAutoAimTuningMode) {
+            SmartDashboard.putNumber("vel Offset drivertrain", getVelocityOffset().getDegrees());
+        }
                
         
     }

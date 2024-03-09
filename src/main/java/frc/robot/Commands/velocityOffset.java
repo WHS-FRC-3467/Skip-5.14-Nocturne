@@ -116,6 +116,7 @@ public class velocityOffset extends Command {
             SmartDashboard.putNumber("futureDist", correctedDistance);
             SmartDashboard.putNumber("Correction Angle", correctedRotation.getDegrees());
             SmartDashboard.putNumber("timeUntilShot", timeUntilShot);
+            SmartDashboard.putNumber("Angle to ADD", futureAngleToSpeaker.minus(currentAngleToSpeaker).getDegrees());
         }
 
               

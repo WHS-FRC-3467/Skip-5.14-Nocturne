@@ -83,7 +83,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     }
     private ledState m_ledState = ledState.kSTOWED;
 
-    TunableNumber tempDegree = new TunableNumber("Arm go to degrees", 0.0);
+    TunableNumber tempDegree = new TunableNumber("Set Arm To Degrees", 0.0);
     
     private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 

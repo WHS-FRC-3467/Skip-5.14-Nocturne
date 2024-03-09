@@ -13,19 +13,19 @@ public class VisionLookUpTable {
     }
     public VisionLookUpTable() {
         shooterConfig = new ShooterConfig();
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(13, 40, 30, 1.5)); 
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(16.7, 70, 50, 2)); 
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(23.5, 70, 50, 2.5)); //Good 10:51
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(26.8, 70, 45, 3)); //Good 10:51
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(31.0, 70, 45, 3.8)); //Good 10:51
-        //shooterConfig.getShooterConfigs().add(new ShooterPreset(32.5, 70, 50, 4)); 
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(34, 70, 45, 4.5)); 
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(35, 70, 45, 5)); //Maybe was good in match
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(37.40, 70, 55, 5.5)); 
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(37.3, 75, 55, 6)); 
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(38.3, 75, 55, 6.5)); 
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(38.1, 80, 55, 7)); 
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(39.2, 80, 55, 7.5)); 
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5)); 
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(17, 70, 40, 2)); 
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(23.2, 70, 40, 2.5)); 
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(26.4, 70, 40, 3)); 
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(30.0, 70, 40, 3.5)); 
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(32.5, 80,45, 4)); 
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(34, 80, 45, 4.5)); 
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(35.85, 80, 45, 5)); //Maybe was good in match
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(36, 80, 45, 5.5)); 
+        //shooterConfig.getShooterConfigs().add(new ShooterPreset(37.3, 75, 55, 6)); 
+        //shooterConfig.getShooterConfigs().add(new ShooterPreset(38.3, 75, 55, 6.5)); 
+        //shooterConfig.getShooterConfigs().add(new ShooterPreset(38.1, 80, 55, 7)); 
+        //shooterConfig.getShooterConfigs().add(new ShooterPreset(39.2, 80, 55, 7.5)); 
 
         Collections.sort(shooterConfig.getShooterConfigs());
     }

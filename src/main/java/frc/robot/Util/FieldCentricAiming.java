@@ -15,7 +15,13 @@ public class FieldCentricAiming {
     private Pose2d speakerPosition;
     
     public FieldCentricAiming() {
-        getSpeakerPos();
+        try {
+            getSpeakerPos();
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        
     }
 
     public Pose2d getSpeakerPos() {
