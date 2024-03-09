@@ -94,10 +94,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunShooter"
+                  "name": "LookUpShot"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.4
           }
         },
         {
@@ -151,10 +157,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunShooter"
+                  "name": "LookUpShot"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.4
           }
         },
         {
