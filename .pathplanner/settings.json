@@ -3,18 +3,15 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "Amp Side",
-    "Far Side",
-    "Mid Auto",
-    "Source Side",
+    "PSW-R2NL-M1WL-M2NL-R1NL (AS)",
     "PID",
-    "Safe Subwoofer 4",
-    "Under Stage 5"
+    "PSW-R2SW-R3SW-R1SW (Mid)",
+    "PSW-R5NL-R4NL (SSA)",
+    "PSW-R2SW-R3SW-R1SW-M3NL (Mid)"
   ],
   "autoFolders": [
-    "Week3",
     "PID",
-    "Week1"
+    "Week3"
   ],
   "defaultMaxVel": 6.0,
   "defaultMaxAccel": 6.0,
