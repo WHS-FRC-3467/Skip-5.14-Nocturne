@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.890235494756704,
-        "y": 6.998240302786913
+        "x": 1.3479282065452507,
+        "y": 5.55472336015897
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.8902354947567126,
-        "y": 6.998240302786913
+        "x": 2.347928206545249,
+        "y": 5.55472336015897
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SubCenter"
     },
     {
       "anchor": {
-        "x": 2.890235494756704,
-        "y": 5.52661562465982
+        "x": 2.5868974814872705,
+        "y": 5.55472336015897
       },
       "prevControl": {
-        "x": 1.8902354947567042,
-        "y": 5.52661562465982
+        "x": 1.5868974814872705,
+        "y": 5.55472336015897
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Safe Sub 4 R2"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Safe Subwoofer 4",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -178.8393705872981,
     "velocity": 0
   },
   "useDefaultConstraints": true

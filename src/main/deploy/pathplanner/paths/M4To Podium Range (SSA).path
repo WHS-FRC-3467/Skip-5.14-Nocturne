@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7158327706968803,
-        "y": 4.408696224799858
+        "x": 7.929015002923118,
+        "y": 2.417940037780313
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.224378693771632,
-        "y": 1.414992687535233
+        "x": 5.608572547311367,
+        "y": 0.682483075179928
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "M4 (SSA)"
     },
     {
       "anchor": {
-        "x": 8.10653837831892,
-        "y": 0.7601200387585969
+        "x": 2.547148467218551,
+        "y": 3.3051680355142192
       },
       "prevControl": {
-        "x": 5.296108073860038,
-        "y": 0.1469685775652031
+        "x": 3.6878701785907144,
+        "y": 1.881703335853228
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center5"
+      "linkedName": "ShootM5 (SSA)"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 178.72696997994322,
-    "rotateFast": false
+    "rotation": 136.93783976544114,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Source Side",
   "previewStartingState": {
-    "rotation": 122.42106476250694,
+    "rotation": 179.49297093908518,
     "velocity": 0
   },
   "useDefaultConstraints": true

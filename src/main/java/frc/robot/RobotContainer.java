@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.AutoCommands.autoIntakeNote;
+import frc.robot.AutoCommands.AutoLookUpShot;
 import frc.robot.Commands.LookUpShot;
 import frc.robot.Commands.calibrateLookupTable;
 import frc.robot.Commands.driveToPose;
@@ -158,9 +159,11 @@ public class RobotContainer {
         NamedCommands.registerCommand("WingShot",
                 new prepareToShoot(RobotConstants.WING, () -> m_stageSubsystem.isNoteInStage(),
                         m_armSubsystem, m_shooterSubsystem));
-/*         NamedCommands.registerCommand("LookUpShot",
-                new AutoLookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker())); */
-
+        //NamedCommands.registerCommand("LookUpShot",
+                //new AutoLookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker()));
+        
+        //NamedCommands.registerCommand("IntakeNote", new autoCollectNote(m_intakeSubsystem, m_stageSubsystem, some double supplier));
+        
     }
 
     /**

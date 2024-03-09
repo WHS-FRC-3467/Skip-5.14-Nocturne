@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.3479282065452507,
+        "y": 5.55472336015897
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.4161765140632432,
+        "y": 6.1520974348362
+      },
+      "isLocked": false,
+      "linkedName": "SubCenter"
+    },
+    {
+      "anchor": {
+        "x": 2.547148467218551,
+        "y": 7.0198259161363925
+      },
+      "prevControl": {
+        "x": 1.1724325586418405,
+        "y": 7.010076157919536
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "R1 (Safe Sub 4)"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -179.51445416999186,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Safe Subwoofer 4",
+  "previewStartingState": {
+    "rotation": 179.7784667509369,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

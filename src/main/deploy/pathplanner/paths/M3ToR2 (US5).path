@@ -3,51 +3,51 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.3638097760526,
-        "y": 7.4608705342766815
+        "x": 7.9875135522242555,
+        "y": 4.1046482092964185
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.878652161862727,
-        "y": 7.952025020859159
+        "x": 6.817542566201523,
+        "y": 3.9876511106941464
       },
       "isLocked": false,
-      "linkedName": "Center1"
+      "linkedName": "M3 (US5 Auto)"
     },
     {
       "anchor": {
-        "x": 5.557212709867014,
-        "y": 6.595503105536126
+        "x": 5.0235870543,
+        "y": 4.231395066115549
       },
       "prevControl": {
-        "x": 5.541133247508659,
-        "y": 7.507647152046442
+        "x": 5.277080767938259,
+        "y": 3.8511544956581605
       },
       "nextControl": {
-        "x": 5.5679566977473005,
-        "y": 5.98602597487258
+        "x": 4.513235869637129,
+        "y": 4.9969218431098525
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.3638097760526,
-        "y": 5.753523985680451
+        "x": 2.5868974814872705,
+        "y": 5.55472336015897
       },
       "prevControl": {
-        "x": 6.703239845226128,
-        "y": 5.5196408968316515
+        "x": 3.9413638922289733,
+        "y": 5.567111941824834
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Safe Sub 4 R2"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": -173.11174172300528,
+      "rotationDegrees": 137.20259816176574,
       "rotateFast": false
     }
   ],
@@ -61,13 +61,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 178.78112476486874,
+    "rotation": -179.33171721426174,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Under Stage 5",
   "previewStartingState": {
-    "rotation": 177.33699923393286,
+    "rotation": 178.37885408634656,
     "velocity": 0
   },
   "useDefaultConstraints": true

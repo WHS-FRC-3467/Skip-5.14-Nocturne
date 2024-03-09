@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7531929553170285,
-        "y": 6.737082927847566
+        "x": 2.547148467218551,
+        "y": 3.3051680355142192
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8646653920386238,
-        "y": 6.4835892142093074
+        "x": 3.8438663100604122,
+        "y": 2.057198983756638
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ShootM5 (SSA)"
     },
     {
       "anchor": {
-        "x": 2.7226441151219607,
-        "y": 7.000326399702681
+        "x": 7.929015002923118,
+        "y": 2.417940037780313
       },
       "prevControl": {
-        "x": 2.09865958924317,
-        "y": 6.561587279944157
+        "x": 6.885790873719516,
+        "y": 1.637959380431825
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Wing1"
+      "linkedName": "M4 (SSA)"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": -150.1958329924337,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,11 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -150.0316960852362,
+    "rotation": 180.0,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
-  "previewStartingState": null,
+  "folder": "Source Side",
+  "previewStartingState": {
+    "rotation": 134.2212703684774,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }

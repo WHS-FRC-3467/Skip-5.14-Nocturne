@@ -6,9 +6,13 @@
     "Amp Side",
     "Far Side",
     "Mid Auto",
-    "PID"
+    "Source Side",
+    "PID",
+    "Safe Subwoofer 4",
+    "Under Stage 5"
   ],
   "autoFolders": [
+    "Week3",
     "PID",
     "Week1"
   ],
