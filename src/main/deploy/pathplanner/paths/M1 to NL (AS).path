@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.12401016726024,
+        "y": 7.439065519461206
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.885790873719516,
+        "y": 7.409816244810638
+      },
+      "isLocked": false,
+      "linkedName": "M1 (AS)"
+    },
+    {
+      "anchor": {
+        "x": 3.629371629289578,
+        "y": 6.239845258787905
+      },
+      "prevControl": {
+        "x": 4.340966420650183,
+        "y": 6.65518616547922
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "PodiumRange (AS)"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -170.48577945515984,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "PSW-R2NL-M1WL-M2NL-R1NL (AS)",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

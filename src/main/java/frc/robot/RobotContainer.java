@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.AutoCommands.AutoLookUpShot;
 import frc.robot.AutoCommands.autoIntakeNote;
 import frc.robot.AutoCommands.autoIntakeNote;
+import frc.robot.AutoCommands.AutoLookUpShot;
 import frc.robot.Commands.LookUpShot;
 import frc.robot.Commands.calibrateLookupTable;
 import frc.robot.Commands.driveToPose;

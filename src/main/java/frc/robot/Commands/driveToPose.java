@@ -47,7 +47,7 @@ public class driveToPose extends Command {
         targetAngle = angle;
         xController.setTolerance(0.1);
         yController.setTolerance(0.1);
-        swerveRequestFacing.HeadingController = new PhoenixPIDController(10, 0, 0);
+        swerveRequestFacing.HeadingController = new PhoenixPIDController(10, 0, 2.25);
         swerveRequestFacing.HeadingController.setTolerance(0.01);
 
         addRequirements(drivetrain);

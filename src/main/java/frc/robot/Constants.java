@@ -192,7 +192,7 @@ public final class Constants {
 
 	}
 	
-    public static class Vision {
+    public static class PhotonVisionConstants {
         //public static final String kCameraName = "front_cam";
         public static final String kCameraName = "front_left";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
@@ -211,6 +211,10 @@ public final class Constants {
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+    }
+
+    public static class LimelightConstants {
+        public static final String kCameraName = "limelight";
     }
 
     public static class SwerveConstants {

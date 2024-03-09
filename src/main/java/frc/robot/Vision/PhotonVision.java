@@ -24,7 +24,7 @@
 
 package frc.robot.Vision;
 
-import static frc.robot.Constants.Vision.*;
+import static frc.robot.Constants.PhotonVisionConstants.*;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -66,7 +66,13 @@ public class PhotonVision extends SubsystemBase{
                         kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
-        PortForwarder.add(5800, "photonvision.local", 5800); // Forward the photon vision page for tethered connection to RIO
+        PortForwarder.add(5800, "10.34.67.11", 5800); // Forward the photon vision page for tethered connection to RIO
+        PortForwarder.add(1181, "10.34.67.11", 1181);
+        PortForwarder.add(1182, "10.34.67.11", 1182);
+        PortForwarder.add(1183, "10.34.67.11", 1183);
+        PortForwarder.add(1184, "10.34.67.11", 1184);
+        PortForwarder.add(1185, "10.34.67.11", 1185);
+        PortForwarder.add(1186, "10.34.67.11", 1186);
 
         // ----- Simulation
         if (Robot.isSimulation()) {
