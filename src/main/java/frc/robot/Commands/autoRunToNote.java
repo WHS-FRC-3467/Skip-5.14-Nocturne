@@ -47,19 +47,19 @@ public class autoRunToNote extends Command {
         ty = LimelightHelpers.getTY(kCameraName);
 
         if (m_limelight.hasTarget()) {
-            if (Math.abs(ty) < 5) {
-                m_drivetrain.setControl(m_forwardStraight
-                        .withVelocityX(Constants.maxSpeed * Constants.halfSpeed)
+            if (Math.abs(tx) > 3) {
+                m_drivetrain.setControl(m_head
+                        .withVelocityX(0)
                         .withVelocityY(0)
-                        .withRotationalRate(0)
+                        .withTargetDirection(m_drivetrain.getRotation().plus(Rotation2d.fromDegrees(-tx)))
                         .withDeadband(Constants.maxSpeed * 0.1)
                         .withRotationalDeadband(Units.degreesToRadians(2)));
 
             } else {
-                m_drivetrain.setControl(m_head
-                        .withVelocityX(0)
+                m_drivetrain.setControl(m_forwardStraight
+                        .withVelocityX(-Constants.maxSpeed * Constants.halfSpeed)
                         .withVelocityY(0)
-                        .withTargetDirection(m_drivetrain.getRotation().plus(Rotation2d.fromDegrees(tx)))
+                        .withRotationalRate(0)
                         .withDeadband(Constants.maxSpeed * 0.1)
                         .withRotationalDeadband(Units.degreesToRadians(2)));
             }

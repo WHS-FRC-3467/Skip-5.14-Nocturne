@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Subsystems.Arm.ArmSubsystem;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
+import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Util.FieldCentricAiming;
 import frc.robot.Util.Setpoints;
 import frc.robot.Util.TunableNumber;
@@ -21,6 +22,7 @@ import frc.robot.Util.Setpoints.GameState;
 public class calibrateLookupTable extends Command {
     CommandSwerveDrivetrain m_drivetrain;
     ArmSubsystem m_arm;
+    ShooterSubsystem m_shooter;
     driveToPose m_driveToPose;
     FieldCentricAiming m_fieldCentricAiming = new FieldCentricAiming();
     Command driveCommand;
@@ -35,9 +37,10 @@ public class calibrateLookupTable extends Command {
     TunableNumber rightSpeedTuner = new TunableNumber("Lookup Table: Right Shooter Speed", 0);
 
     /** Creates a new calibrateLookupTable. */
-    public calibrateLookupTable(CommandSwerveDrivetrain drivetrain, ArmSubsystem arm) {
+    public calibrateLookupTable(CommandSwerveDrivetrain drivetrain, ArmSubsystem arm, ShooterSubsystem shooter) {
         m_drivetrain = drivetrain;
         m_arm = arm;
+        m_shooter = shooter;
         m_fieldCentricAiming = new FieldCentricAiming();
         currentSetpoint = new Setpoints(0, 0.4, 0, 0, GameState.LOOKUP);
        
@@ -90,12 +93,18 @@ public class calibrateLookupTable extends Command {
         currentSetpoint.shooterRight = rightSpeedTuner.get();
 
         m_arm.updateArmSetpoint(currentSetpoint);
+        if (currentSetpoint.shooterLeft > 0) {
+            m_shooter.runShooter(currentSetpoint.shooterLeft, currentSetpoint.shooterRight);
+        } else {
+            m_shooter.stopShooter();
+        }
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        driveCommand.cancel();;
+        m_shooter.stopShooter();
+        driveCommand.cancel();
     }
 
     // Returns true when the command should end.

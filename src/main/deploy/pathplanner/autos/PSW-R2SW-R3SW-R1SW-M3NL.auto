@@ -31,7 +31,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -56,7 +56,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeNote"
+                  "name": "RunIntake"
                 }
               },
               {
@@ -89,12 +89,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "R2 to SW (S4)"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
                 }
               }
             ]
@@ -147,12 +141,6 @@
                 "data": {
                   "pathName": "R3 to SW (S4)"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
-                }
               }
             ]
           }
@@ -204,12 +192,6 @@
                 "data": {
                   "pathName": "R1 to SW (S4)"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
-                }
               }
             ]
           }
@@ -225,43 +207,37 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "SW to M3 (Mid)"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "RunIntake"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "M3 to R2 (Mid)"
-                }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "LookUpShot"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "SW to M3 (Mid)"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.3
+            "pathName": "M3 to SW (Mid)"
           }
         },
         {

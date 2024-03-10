@@ -53,8 +53,8 @@ public class autoIntakeNote extends Command {
     @Override
     public void end(boolean interrupted) {
         // Turn off the Stage and Intake
-        //m_stageSubsystem.stopStage();
-        //m_intakeSubsystem.stopIntake();
+        m_stageSubsystem.stopStage();
+        m_intakeSubsystem.stopIntake();
     }
 
     // Returns true when the command should end.

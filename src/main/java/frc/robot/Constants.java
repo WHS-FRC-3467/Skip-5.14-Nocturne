@@ -125,7 +125,7 @@ public final class Constants {
 
     public static final class IntakeConstants {
 
-        public static final double kIntakeSpeed = 0.75;
+        public static final double kIntakeSpeed = 0.5;
         public static final double kEjectSpeed = -0.3;
     }
 
@@ -133,7 +133,7 @@ public final class Constants {
 
         // Shooter speeds are set in the individual position Setpoints at the top of this file
         
-        public static final double kShooterTolerance = 5.0;
+        public static final double kShooterTolerance = 10.0;
         public static final double kTimeToShoot = .13; //Time it takes before note leave the shooter
         public static final double kShooterIdleSpeed = 15.0;
 

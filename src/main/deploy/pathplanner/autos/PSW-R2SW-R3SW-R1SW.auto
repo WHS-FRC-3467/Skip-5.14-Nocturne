@@ -24,14 +24,14 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.45
+                  "waitTime": 0.4
                 }
               }
             ]
           }
         },
         {
-          "type": "race",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -39,24 +39,18 @@
                 "data": {
                   "name": "ShootNote"
                 }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.1
-                }
               }
             ]
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeNote"
+                  "name": "RunIntake"
                 }
               },
               {
@@ -89,12 +83,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "R2 to SW (S4)"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
                 }
               }
             ]
@@ -147,12 +135,6 @@
                 "data": {
                   "pathName": "R3 to SW (S4)"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
-                }
               }
             ]
           }
@@ -203,12 +185,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "R1 to SW (S4)"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
                 }
               }
             ]

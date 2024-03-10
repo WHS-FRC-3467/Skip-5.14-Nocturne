@@ -55,8 +55,8 @@ public class IntakeSubsystem extends SubsystemBase {
         m_configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // Configure the motor to use a supply limit of 60 amps IF we exceed 80 amps for over 0.1 second
-        m_currentLimits.SupplyCurrentLimit = 60; // Limit to 60 amps
-        m_currentLimits.SupplyCurrentThreshold = 80; // If we exceed 80 amps
+        m_currentLimits.SupplyCurrentLimit = 20; // Limit to 60 amps
+        m_currentLimits.SupplyCurrentThreshold = 40; // If we exceed 80 amps
         m_currentLimits.SupplyTimeThreshold = 0.1; // For at least 0.1 second
         m_currentLimits.SupplyCurrentLimitEnable = true; // And enable it
 

@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 2.5868974814872705,
+        "x": 2.790408422104303,
         "y": 5.55472336015897
       },
       "prevControl": {
-        "x": 1.5868974814872705,
+        "x": 1.7904084221043028,
         "y": 5.55472336015897
       },
       "nextControl": null,
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "PSW-R2SW-R3SW-R1SW (Mid)",
   "previewStartingState": {
-    "rotation": -178.8393705872981,
+    "rotation": 179.98993574532037,
     "velocity": 0
   },
   "useDefaultConstraints": true

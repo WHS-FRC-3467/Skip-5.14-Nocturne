@@ -31,6 +31,7 @@ import frc.robot.AutoCommands.autoIntakeNote;
 import frc.robot.AutoCommands.autoIntakeNote;
 import frc.robot.AutoCommands.AutoLookUpShot;
 import frc.robot.Commands.LookUpShot;
+import frc.robot.Commands.autoCollectNote;
 import frc.robot.Commands.calibrateLookupTable;
 import frc.robot.Commands.driveToPose;
 import frc.robot.Commands.intakeNote;
@@ -163,10 +164,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("DownIntake", m_armSubsystem.prepareForIntakeCommand());
         NamedCommands.registerCommand("StopIntake", m_intakeSubsystem.stopIntakeCommand());
         NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(30, 35));
-        NamedCommands.registerCommand("RunShooter2", m_shooterSubsystem.runShooterCommand());
         NamedCommands.registerCommand("StopShooter", m_shooterSubsystem.stopShooterCommand());
         NamedCommands.registerCommand("ShootNote",
-                m_stageSubsystem.feedNote2ShooterCommand().andThen(m_armSubsystem.prepareForIntakeCommand()));
+                m_stageSubsystem.feedNote2ShooterCommand());
         NamedCommands.registerCommand("WingShot",
                 new prepareToShoot(RobotConstants.WING, () -> m_stageSubsystem.isNoteInStage(),
                         m_armSubsystem, m_shooterSubsystem));
@@ -342,11 +342,12 @@ public class RobotContainer {
             //.withTimeout(2)
             //.andThen(m_armSubsystem.prepareForIntakeCommand()));
 
-        m_driverCtrl.start().whileTrue(new calibrateLookupTable(m_drivetrain,m_armSubsystem));
+        m_driverCtrl.start().whileTrue(new calibrateLookupTable(m_drivetrain,m_armSubsystem,m_shooterSubsystem));
 /*         m_driverCtrl.start().whileTrue(m_drivetrain.applyRequest(
             () -> m_drive.withVelocityX(5)
                     .withVelocityY(0)
                     .withRotationalRate(0))); */
+        //m_driverCtrl.start().whileTrue(new autoCollectNote(m_drivetrain,m_intakeSubsystem,m_stageSubsystem,m_limelightVision,m_head));
         
             
         /*

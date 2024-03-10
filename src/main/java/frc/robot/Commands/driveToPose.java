@@ -27,13 +27,13 @@ public class driveToPose extends Command {
     Rotation2d targetAngle = new Rotation2d(0);
     boolean isFinished;
 
-    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(7, 5);
-    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(7, 5);
+    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(4, 2);
+    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(4, 2);
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = new TrapezoidProfile.Constraints(8, 8);
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(6, 0, 0, X_CONSTRAINTS);
-    private final ProfiledPIDController yController = new ProfiledPIDController(6, 0, 0, Y_CONSTRAINTS);
-    private final ProfiledPIDController omegaController = new ProfiledPIDController(2, 0, 0, OMEGA_CONSTRATINTS);
+    private final ProfiledPIDController xController = new ProfiledPIDController(3, 0.5, 0, X_CONSTRAINTS);
+    private final ProfiledPIDController yController = new ProfiledPIDController(3, 0.5, 0, Y_CONSTRAINTS);
+    private final ProfiledPIDController omegaController = new ProfiledPIDController(3, .5, 0, OMEGA_CONSTRATINTS);
 
     private final SwerveRequest.FieldCentricFacingAngle swerveRequestFacing = new SwerveRequest.FieldCentricFacingAngle()
     .withDriveRequestType(DriveRequestType.Velocity)

@@ -24,7 +24,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.45
+                  "waitTime": 0.5
                 }
               }
             ]
@@ -56,7 +56,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeNote"
+                  "name": "RunIntake"
                 }
               },
               {
@@ -94,7 +94,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.6
+                  "waitTime": 1.0
                 }
               }
             ]
@@ -129,7 +129,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 1.0
                       }
                     }
                   ]
@@ -143,15 +143,28 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "M1 to NL (AS)"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "LookUpShot"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "M1 to NL (AS)"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -186,7 +199,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 1.0
                       }
                     }
                   ]
@@ -253,15 +266,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "LookUpShot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.6
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "LookUpShot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.3
+                }
+              }
+            ]
           }
         },
         {

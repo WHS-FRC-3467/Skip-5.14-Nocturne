@@ -16,8 +16,10 @@ public class VisionLookUpTable {
         shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5)); 
         shooterConfig.getShooterConfigs().add(new ShooterPreset(17, 70, 40, 2)); 
         shooterConfig.getShooterConfigs().add(new ShooterPreset(23.2, 70, 40, 2.5)); 
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(26.4, 70, 40, 3)); 
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(30.0, 70, 40, 3.5)); 
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(26.4, 70, 40, 3));
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(28.3, 70, 40, 3.3)); 
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(30.0, 70, 40, 3.5));
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(30.9, 70, 40, 3.7)); 
         shooterConfig.getShooterConfigs().add(new ShooterPreset(32.5, 80,45, 4)); 
         shooterConfig.getShooterConfigs().add(new ShooterPreset(34, 80, 45, 4.5)); 
         shooterConfig.getShooterConfigs().add(new ShooterPreset(35.85, 80, 45, 5)); //Maybe was good in match
