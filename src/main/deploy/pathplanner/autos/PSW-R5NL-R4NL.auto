@@ -101,9 +101,22 @@
           }
         },
         {
-          "type": "wait",
+          "type": "race",
           "data": {
-            "waitTime": 0.4
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "LookUpShot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
           }
         },
         {
@@ -164,9 +177,22 @@
           }
         },
         {
-          "type": "wait",
+          "type": "race",
           "data": {
-            "waitTime": 0.4
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "LookUpShot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
           }
         },
         {

@@ -29,7 +29,7 @@ public class Setpoints {
     }
 
     public enum GameState {
-        STOWED, INTAKE, SUBWOOFER, AMP, PODIUM, WING, PREPCLIMB, CLIMB, TRAP, LOOKUP
+        STOWED, INTAKE, SUBWOOFER, AMP, PODIUM, WING, PREPCLIMB, CLIMB, TRAP, LOOKUP, FEED
     }
 
     // Display the commanded Arm state on the dashboard
@@ -65,6 +65,9 @@ public class Setpoints {
                 break;
             case LOOKUP:
                 SmartDashboard.putString("Arm State", "LOOKUP");
+                break;
+            case FEED:
+                SmartDashboard.putString("Arm State", "FEED");
                 break;
             default:
                 SmartDashboard.putString("Arm State", "OTHER");

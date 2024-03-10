@@ -167,9 +167,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("StopShooter", m_shooterSubsystem.stopShooterCommand());
         NamedCommands.registerCommand("ShootNote",
                 m_stageSubsystem.feedNote2ShooterCommand());
-        NamedCommands.registerCommand("WingShot",
+/*         NamedCommands.registerCommand("WingShot",
                 new prepareToShoot(RobotConstants.WING, () -> m_stageSubsystem.isNoteInStage(),
-                        m_armSubsystem, m_shooterSubsystem));
+                        m_armSubsystem, m_shooterSubsystem)); */
          NamedCommands.registerCommand("LookUpShot",
                 new AutoLookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())));
     }
@@ -180,6 +180,10 @@ public class RobotContainer {
      */
     public void disablePIDSubsystems() {
         m_armSubsystem.disable();
+    }
+
+    public void stopShooter() {
+        m_shooterSubsystem.stopShooter();
     }
 
     private void configureChooserBindings() {
@@ -246,9 +250,9 @@ public class RobotContainer {
          * 
          * 
          * Operator Controls:
-         * Y Button: <no-op>
-         * B Button: <no-op>
-         * A Button: Stop Shooter 
+         * Y Button: Arm to CLIMB position
+         * B Button: Stop Shooter
+         * A Button: Speed Up Shooter 
          * X Button: Arm to STOWED Position (when pressed)
          * Start Button: <no-op>
          * DPad Left: Arm to PODIUM position & Start Shooter (when pressed)
@@ -355,7 +359,7 @@ public class RobotContainer {
          */
         // Operator: When A button is pressed, run Shooter
 
-         m_operatorCtrl.a().whileTrue(m_shooterSubsystem.runShooterCommand(40, 50).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf));
+         m_operatorCtrl.a().whileTrue(m_shooterSubsystem.runShooterCommand(50, 40).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf));
          // Operator: X Button: Arm to Stowed Position (when pressed)
          m_operatorCtrl.x().onTrue(new prepareToShoot(RobotConstants.STOWED, ()->m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
@@ -386,6 +390,8 @@ public class RobotContainer {
          // Operator: DPad Down: Arm to Subwoofer Position (when pressed)
          m_operatorCtrl.povDown().onTrue(new prepareToShoot(RobotConstants.SUBWOOFER, ()->m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
+
+        m_operatorCtrl.start().onTrue(new prepareToShoot(RobotConstants.FEED, ()->m_stageSubsystem.isNoteInStage(), m_armSubsystem, m_shooterSubsystem));
 
         // Operator: Use Left and Right Triggers to run Intake at variable speed (left = in, right = out)
         m_intakeSubsystem.setDefaultCommand(new IntakeDefault(m_intakeSubsystem, m_stageSubsystem,
