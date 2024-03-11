@@ -15,12 +15,14 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -66,6 +68,7 @@ public class RobotContainer {
      */
     CommandXboxPS5Controller m_driverCtrl = new CommandXboxPS5Controller(0);
     CommandXboxPS5Controller m_operatorCtrl = new CommandXboxPS5Controller(1);
+    GenericHID m_driveRmbl = m_driverCtrl.getHID();
 
     // Drive Control style settings
     private Supplier<SwerveRequest> m_controlStyle;
@@ -340,10 +343,12 @@ public class RobotContainer {
         m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = Constants.maxSpeed)
                 .andThen(() -> m_AngularRate = Constants.maxAngularRate));
         
-        // Driver: When LeftTrigger is pressed, lower the Arm and then run the Intake and Stage until a Note is found
+        // Driver: When LeftTrigger is pressed, lower the Arm and then run the Intake and Stage until a Note is found and then Rumble the driver controller for 1/2 sec
         m_driverCtrl.leftTrigger(Constants.ControllerConstants.triggerThreashold).whileTrue(m_armSubsystem.prepareForIntakeCommand()
-            .andThen(new intakeNote(m_intakeSubsystem, m_stageSubsystem)));
-
+            .andThen(new intakeNote(m_intakeSubsystem, m_stageSubsystem))
+            .andThen(rumbleDriverCommand().withTimeout(0.5))
+            );
+        
         // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
         m_driverCtrl.rightTrigger(Constants.ControllerConstants.triggerThreashold).onTrue(m_stageSubsystem.feedNote2ShooterCommand());
             //.withTimeout(2)
@@ -422,4 +427,12 @@ public class RobotContainer {
     } 
 
  
+
+    public Command rumbleDriverCommand() {
+        return new InstantCommand(()-> rumbleDriverCtrl());
+    }
+
+    public void rumbleDriverCtrl() {
+        m_driveRmbl.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+    }
 }
