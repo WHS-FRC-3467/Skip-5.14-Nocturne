@@ -7,6 +7,7 @@ package frc.robot.Subsystems.LED;
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
@@ -18,12 +19,31 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Subsystems.LED.LEDSubsystem.LEDSegment;
+import frc.robot.Subsystems.Arm.ArmSubsystem;
+import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
+import frc.robot.Subsystems.Intake.IntakeSubsystem;
+import frc.robot.Subsystems.Shooter.ShooterSubsystem;
+import frc.robot.Subsystems.Stage.StageSubsystem;
 
 public class LEDSubsystem extends SubsystemBase {
 
-    /** Creates a new LEDSubsystem. */
+    // Subsystems to query
+    StageSubsystem m_stageSub;
+    IntakeSubsystem m_intakeSub;
+    ArmSubsystem m_armSub;
+    ShooterSubsystem m_shooterSub;
+    CommandSwerveDrivetrain m_driveSub;
+    
+    // Control everything with a CANdle
     private static final CANdle m_candle = new CANdle(Constants.CanConstants.LED_CANDLE);
+
+    /*
+     * Robot LED States
+     */
+    private static enum LEDState {
+        DISABLED, AUTONOMOUS, ENABLED, INTAKING, HAVENOTE, MANUAL_AIMING, AUTO_AIMING, ARM_LOCKED, AIM_LOCKED
+    }
+    LEDState m_currentState = LEDState.DISABLED;
 
     /*
      * Colors
@@ -44,12 +64,6 @@ public class LEDSubsystem extends SubsystemBase {
     Color yellow = new Color(255, 255, 0);
     Color cyan = new Color(0, 255, 255);
     Color magenta = new Color(255, 0, 255);
-//    Color green = new Color(50, 168, 82); // Green
-//    Color red = new Color(171, 41, 43); // Red
-//    Color yellow = new Color(107, 107, 199); // Yellow
-//    Color blue = new Color(8, 32, 255); // Blue
-//    Color purple = new Color(184, 0, 185); // Purple
-
 
     /*
      * LED Segments
@@ -69,13 +83,13 @@ public class LEDSubsystem extends SubsystemBase {
         public void setColor(Color color) {
             m_candle.clearAnimation(animationSlot);
             m_candle.setLEDs(color.r, color.g, color.b, 0, startIndex, segmentSize);
-            m_candle.modulateVBatOutput(0.9);
+            m_candle.modulateVBatOutput(0.95);
         }
 
         private void setAnimation(Animation animation) {
             m_candle.clearAnimation(animationSlot);
             m_candle.animate(animation, animationSlot);
-            m_candle.modulateVBatOutput(0.9);
+            m_candle.modulateVBatOutput(0.95);
         }
 
         public void setOff() {
@@ -89,9 +103,20 @@ public class LEDSubsystem extends SubsystemBase {
     
     /*
      * Constructor
+     * Creates a new LEDSubsystem
      */
-    public LEDSubsystem() {
+    public LEDSubsystem(StageSubsystem stageSub,
+                        IntakeSubsystem intakeSub,
+                        ArmSubsystem armSub,
+                        ShooterSubsystem shootSub,
+                        CommandSwerveDrivetrain driveSub) {
         
+        m_stageSub = stageSub;
+        m_intakeSub = intakeSub;
+        m_armSub = armSub;
+        m_shooterSub = shootSub;
+        m_driveSub = driveSub;
+
         m_candle.configFactoryDefault();
         
         CANdleConfiguration candleConfiguration = new CANdleConfiguration();
@@ -116,6 +141,138 @@ public class LEDSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        LEDState newState = LEDState.DISABLED;
+
+        if (DriverStation.isDisabled()) {
+            newState = LEDState.DISABLED;
+
+        } else if (DriverStation.isAutonomousEnabled()) {
+            newState = LEDState.AUTONOMOUS;
+
+        } else {
+            // If not Disabled or in Auto, run MatchTimer
+            runMatchTimerPattern();
+
+            // If Note in Stage
+            if (m_stageSub.isNoteInStage()) {
+
+                if (newState == LEDState.AUTO_AIMING) {
+                    // Auo-aiming: look for proper alignment + arm & shooter on target
+                    if (m_armSub.isArmAtSetpoint() && m_shooterSub.isShooterAtSpeed()) {
+                        newState = LEDState.AIM_LOCKED;
+                    }
+
+                } else if (newState == LEDState.MANUAL_AIMING) {
+                    // Manual aiming: only look for proper arm position and shooter speed
+                    if (m_armSub.isArmAtSetpoint() && m_shooterSub.isShooterAtSpeed()) {
+                        newState = LEDState.ARM_LOCKED;
+                    }
+
+                } else if (m_armSub.isArmMoving()) {
+                    // Is arm moving?
+
+                    // Is it moving manually or automatically?
+                    if (m_armSub.isArmMovingManually()) {
+                        newState = LEDState.MANUAL_AIMING;
+                    } else {
+                        newState = LEDState.AUTO_AIMING;
+                    }   
+
+                } else {
+                    // Just holding Note
+                    newState = LEDState.HAVENOTE;
+                }
+                
+            } else if (m_stageSub.isStageRunning() && m_intakeSub.isIntakeRunning()) {
+                // If Intake & Stage Running
+                newState = LEDState.INTAKING; 
+
+            } else {
+                // Just Enabled
+                newState = LEDState.ENABLED;
+            }
+        }
+
+        // If State has changed, run the state machine to change LED patterns
+        if (newState != m_currentState) {
+            LEDStateMachine(newState);
+            m_currentState = newState;
+        }
+
+    }
+    
+    private void LEDStateMachine(LEDState newState) {
+        
+        switch (newState) {
+        case DISABLED:
+            m_Matrix.setOff();
+            m_VerticalLeft.setAnimation(a_LeftRainbow);
+            m_VerticalRight.setAnimation(a_RightRainbow);
+            m_Intake.setAnimation(a_IntakeRainbow);
+            this.timerDisabled();
+            break;
+
+        case AUTONOMOUS:
+            m_Matrix.setOff();
+            m_VerticalLeft.setAnimation(a_LeftFlame);
+            m_VerticalRight.setAnimation(a_RightFlame);
+            m_Intake.setAnimation(a_IntakePingPong);
+            m_Timer.setAnimation(a_InAutonomous);
+            break;
+
+        case ENABLED:
+            m_Matrix.setOff();
+            m_VerticalLeft.setColor(white);
+            m_VerticalRight.setColor(white);
+            m_Intake.setColor(white);
+            break;
+
+        case INTAKING:
+            m_Matrix.setOff();
+            m_VerticalLeft.setAnimation(a_LeftStrobe);
+            m_VerticalRight.setAnimation(a_RightStrobe);
+            m_Intake.setAnimation(a_IntakeStrobe);;
+            break;
+
+        case HAVENOTE:
+            m_Matrix.setAnimation(a_MatrixStrobe);
+            m_VerticalLeft.setColor(green);
+            m_VerticalRight.setColor(green);
+            m_Intake.setColor(green);
+            break;
+
+        case MANUAL_AIMING:
+            m_Matrix.setOff();
+            m_VerticalLeft.setColor(red);
+            m_VerticalRight.setColor(red);
+            m_Intake.setColor(red);
+            break;
+
+        case AUTO_AIMING:
+            m_Matrix.setOff();
+            m_VerticalLeft.setColor(blue);
+            m_VerticalRight.setColor(blue);
+            m_Intake.setColor(blue);
+            break;
+
+        case ARM_LOCKED:
+            m_Matrix.setOff();
+            m_VerticalLeft.setColor(green);
+            m_VerticalRight.setColor(green);
+            m_Intake.setColor(white);
+            break;
+
+        case AIM_LOCKED:
+            m_Matrix.setOff();
+            m_VerticalLeft.setAnimation(a_LeftFlame);
+            m_VerticalRight.setAnimation(a_RightFlame);
+            m_Intake.setColor(green);
+            break;
+
+        default:
+            break;
+        }
     }
 
     public void setBrightness(double percent) {
@@ -132,127 +289,42 @@ public class LEDSubsystem extends SubsystemBase {
     public void clearAnimations() {
         m_candle.clearAnimation(m_Matrix.animationSlot);
         m_candle.clearAnimation(m_Timer.animationSlot);
-        m_candle.clearAnimation(m_Shooter.animationSlot);
-        m_candle.clearAnimation(m_Arm.animationSlot);
+        m_candle.clearAnimation(m_VerticalRight.animationSlot);
+        m_candle.clearAnimation(m_VerticalLeft.animationSlot);
         m_candle.clearAnimation(m_Intake.animationSlot);
     }
 
     public void disableLEDs() {
         m_Matrix.setOff();
         m_Timer.setOff();
-        m_Shooter.setOff();
-        m_Arm.setOff();
+        m_VerticalRight.setOff();
+        m_VerticalLeft.setOff();
         m_Intake.setOff();
     }
     
-    /* 
-     * CANdle Matrix
-     * Aim is locked onto Speaker: Flashing Yellow
-     * Otherwise: Off
-     */
     LEDSegment m_Matrix = new LEDSegment(0, 8, 0);
-    Animation a_SpeakerLock = new StrobeAnimation(yellow.r, yellow.g, yellow.b, 0, 0.09, m_Matrix.segmentSize, m_Matrix.startIndex);
-    
-    public void lockedOnSpeaker() {
-        m_Matrix.setAnimation(a_SpeakerLock);
-    }
-
-    public void noSpeakerLock() {
-        m_Matrix.setOff();
-    }
-
-    public void CANdleDisabled() {
-        m_Matrix.setOff();
-    }
-
-    /* 
-     * Arm Strip
-     * Arm Stowed: Off
-     * Arm Moving: Animated Red
-     * Arm At Setpoint: Solid Green
-     * Disabled: Rainbow
-     */
-    LEDSegment m_Arm = new LEDSegment(8, 48, 1);
-    Animation a_ArmNotReady = new StrobeAnimation(red.r, red.g, red.b, 0, 0.09, m_Arm.segmentSize, m_Arm.startIndex); // Flash
-    Animation a_ArmDisabled = new RainbowAnimation(0.7, 0.5, m_Arm.segmentSize, true, m_Arm.startIndex);
-    
-    public void armStowed() {
-        m_Arm.setOff();
-    }
-
-    public void armNotAtPos() {
-        m_Arm.setAnimation(a_ArmNotReady);
-    }
-
-    public void armAtPos() {
-        m_Arm.setColor(green);
-    }
-
-    public void armDisabled() {
-        m_Arm.setAnimation(a_ArmDisabled);
-    }
-
-     /* 
-     * Shooter Strip
-     * Shooter Off or Idling: Off
-     * Shooter Ramping Up: Animated Red
-     * Shooter At Speed: Solid Green
-     * Disabled: Rainbow
-    */
-    LEDSegment m_Shooter = new LEDSegment(56, 44, 2);
-    Animation a_ShooterSpoolUp = new StrobeAnimation(red.r, red.g, red.b, 0, .5, m_Shooter.segmentSize, m_Shooter.startIndex);
-    Animation a_ShooterIdle = new LarsonAnimation(green.r, green.g, green.b, 0, 0.4, m_Shooter.segmentSize, BounceMode.Back, 3,m_Shooter.startIndex);
-    Animation a_ShooterDisabled = new RainbowAnimation(0.7, 0.5, m_Shooter.segmentSize, false, m_Shooter.startIndex);
-
-    public void ready2Shoot() {
-        m_Shooter.setColor(green);
-    }
-
-    public void shooterSpoolUp() {
-        m_Shooter.setAnimation(a_ShooterSpoolUp);
-    }
-
-    public void shooterIdle() {
-        m_Shooter.setAnimation(a_ShooterIdle);
-    }
-
-    public void shooterOff() {
-        m_Shooter.setOff();
-    }
-
-    public void shooterDisabled() {
-        m_Shooter.setAnimation(a_ShooterDisabled);
-    }
-
-    /* 
-     * Intake Strip
-     * Intake & Stage Off: Off
-     * Intake and Stage Running: Animated Red
-     * Note In Stage: Solid Green
-     * Disabled: Rainbow
-     */
+    LEDSegment m_VerticalLeft = new LEDSegment(8, 47, 1);
+    LEDSegment m_VerticalRight = new LEDSegment(55, 46, 2);
+    LEDSegment m_Timer = new LEDSegment(101, 27, 3);
     LEDSegment m_Intake = new LEDSegment(128, 86, 4);
-    Animation a_noNote = new StrobeAnimation(red.r, red.g, red.b, 0, 0.09, m_Intake.segmentSize, m_Intake.startIndex);
-    Animation a_IntakeDisabled = new RainbowAnimation(0.7, 0.5, m_Intake.segmentSize, false, m_Intake.startIndex);
 
-    public void lookingForNote() {
-        m_Intake.setAnimation(a_noNote);
-    }
+    Animation a_MatrixStrobe = new StrobeAnimation(white.r, white.g, white.b, 0, 0.2, m_Matrix.segmentSize, m_Matrix.startIndex);
+   
+    Animation a_LeftStrobe = new StrobeAnimation(red.r, red.g, red.b, 0, 0.5, m_VerticalLeft.segmentSize, m_VerticalLeft.startIndex); // Flash
+    Animation a_RightStrobe = new StrobeAnimation(red.r, red.g, red.b, 0, 0.5, m_VerticalRight.segmentSize, m_VerticalRight.startIndex);
+    Animation a_LeftRainbow = new RainbowAnimation(0.7, 0.5, m_VerticalLeft.segmentSize, true, m_VerticalLeft.startIndex);
+    Animation a_RightRainbow = new RainbowAnimation(0.7, 0.5, m_VerticalRight.segmentSize, false, m_VerticalRight.startIndex);
+    Animation a_LeftFlame = new FireAnimation(0.9, 0.75, m_VerticalLeft.segmentSize, 1.0, 0.3, true, m_VerticalLeft.startIndex);
+    Animation a_RightFlame = new FireAnimation(0.9, 0.75, m_VerticalRight.segmentSize, 1.0, 0.3, false, m_VerticalRight.startIndex);
 
-    public void yesNoteInStage() {
-        m_Intake.setColor(green);
-    }
+    Animation a_IntakeStrobe = new StrobeAnimation(red.r, red.g, red.b, 0, 0.09, m_Intake.segmentSize, m_Intake.startIndex);
+    Animation a_IntakeRainbow = new RainbowAnimation(0.7, 0.5, m_Intake.segmentSize, false, m_Intake.startIndex);
+    Animation a_IntakePingPong = new LarsonAnimation(green.r, green.g, green.b, 0, 0.4, m_Intake.segmentSize, BounceMode.Back, 3,m_Intake.startIndex);
 
-    public void intakeStopped() {
-        m_Intake.setOff();
-    }
+    Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.7, m_Timer.segmentSize, BounceMode.Back, 3, m_VerticalRight.startIndex);
+    Animation a_TimeExpiring = new StrobeAnimation(red.r, red.g, red.b, 0, 0.5, m_Timer.segmentSize, m_Timer.startIndex);
 
-    public void intakeDisabled() {
-        m_Intake.setAnimation(a_IntakeDisabled);
-    }
-
-
-    /* Match Timer Strip
+   /* Match Timer Strip
     * Autonomous (15 sec): Yellow Ping-pong
     * 2:15 -> 1:00: Solid Green
     * 1:00 -> 0:20: Solid Yellow
@@ -260,12 +332,9 @@ public class LEDSubsystem extends SubsystemBase {
     * 0:10 -> 0:00: Strobing Red
     * Non-auto periods & Disabled: Off
     */
-    LEDSegment m_Timer = new LEDSegment(100, 28, 3);
-    Animation a_TimeExpiring = new StrobeAnimation(red.r, red.g, red.b, 0, 0.5, m_Timer.segmentSize, m_Timer.startIndex);
-    Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.7, m_Timer.segmentSize, BounceMode.Back, 3, m_Shooter.startIndex);
     Timer m_pseudoTimer = new Timer();
 
-    public void runMatchTimerPattern() {
+    private void runMatchTimerPattern() {
 
         double matchTime = DriverStation.getMatchTime();
         
@@ -287,38 +356,10 @@ public class LEDSubsystem extends SubsystemBase {
         }
     }
 
-    public void runTimerAuto() {
-        m_Timer.setAnimation(a_InAutonomous);
-    }
-
     public void timerDisabled() {
         m_Timer.setColor(white);
         m_pseudoTimer.stop();
         m_pseudoTimer.reset();
-    }
-
-    public void runDisabledPatterns() {
-        this.CANdleDisabled();
-        this.timerDisabled();;
-        this.shooterDisabled();
-        this.armDisabled();
-        this.intakeDisabled();
-    }
-
-    public void runAutonomousPatterns() {
-        this.CANdleDisabled();;
-        this.runTimerAuto();
-        this.shooterDisabled();
-        this.armDisabled();
-        this.intakeDisabled();
-    }
-
-    public void startTeleopPatterns() {
-        this.noSpeakerLock();
-        this.runMatchTimerPattern();
-        this.shooterIdle();
-        this.armStowed();
-        this.intakeStopped();
     }
 
 }
