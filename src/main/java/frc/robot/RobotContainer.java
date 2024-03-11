@@ -97,6 +97,8 @@ public class RobotContainer {
     SwerveRequest.FieldCentricFacingAngle m_head = new SwerveRequest.FieldCentricFacingAngle()
             .withDriveRequestType(DriveRequestType.Velocity);
             //.withSteerRequestType(SteerRequestType.MotionMagic);
+    SwerveRequest.FieldCentricFacingAngle m_cardinal = new SwerveRequest.FieldCentricFacingAngle()
+            .withDriveRequestType(DriveRequestType.Velocity);
 
    
     // Set up Drivetrain Telemetry
@@ -128,11 +130,18 @@ public class RobotContainer {
         m_drive.ForwardReference = ForwardReference.RedAlliance;
         // Creates PID for heading controller for aiming at angle
         m_head.ForwardReference = ForwardReference.RedAlliance;
-        m_head.HeadingController.setP(10); //14
+        m_head.HeadingController.setP(8);
         m_head.HeadingController.setI(0);
-        m_head.HeadingController.setD(0); //3
+        m_head.HeadingController.setD(0);
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
-        //m_head.HeadingController.setTolerance(Units.degreesToRadians(0.5));
+        m_head.HeadingController.setTolerance(Units.degreesToRadians(0.5));
+
+        m_cardinal.ForwardReference = ForwardReference.RedAlliance;
+        m_cardinal.HeadingController.setP(14);
+        m_cardinal.HeadingController.setI(0);
+        m_cardinal.HeadingController.setD(3);
+        m_cardinal.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
+        m_cardinal.HeadingController.setTolerance(Units.degreesToRadians(0.5));
 
         configureSmartDashboard();
 
@@ -275,7 +284,7 @@ public class RobotContainer {
         // Driver: While Y button is pressed, rotate to North
 
          m_driverCtrl.y().whileTrue(m_drivetrain.applyRequest(
-                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
+                () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
                         .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(0.0  + addForAlliance()))
                         .withDeadband(Constants.maxSpeed * 0.1)
@@ -283,7 +292,7 @@ public class RobotContainer {
 
         // Driver: While B button is pressed, rotate to East
         m_driverCtrl.b().whileTrue(m_drivetrain.applyRequest(
-                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
+                () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
                         .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(-90.0 + addForAlliance()))
                         .withDeadband(Constants.maxSpeed * 0.1)
@@ -291,7 +300,7 @@ public class RobotContainer {
 
         // Driver: While A button is pressed, rotate to South
         m_driverCtrl.a().whileTrue(m_drivetrain.applyRequest(
-                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
+                () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
                         .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(180.0  + addForAlliance()))
                         .withDeadband(Constants.maxSpeed * 0.1)
@@ -299,7 +308,7 @@ public class RobotContainer {
 
         // Driver: While X button is pressed, rotate to West
         m_driverCtrl.x().whileTrue(m_drivetrain.applyRequest(
-                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
+                () -> m_cardinal.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
                         .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
                         .withTargetDirection(Rotation2d.fromDegrees(90.0 + addForAlliance()))
                         .withDeadband(Constants.maxSpeed * 0.1)
