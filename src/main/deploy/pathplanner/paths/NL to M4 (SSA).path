@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.8438663100604122,
-        "y": 2.057198983756638
+        "x": 3.7095363079615047,
+        "y": 1.5904050041718334
       },
       "isLocked": false,
-      "linkedName": "ShootM5 (SSA)"
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.281950694955519,
+        "y": 1.3682160697654737
+      },
+      "prevControl": {
+        "x": 8.317344706711385,
+        "y": 0.21791068769979982
+      },
+      "nextControl": {
+        "x": 8.27887522737682,
+        "y": 1.468168766073139
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,12 +36,12 @@
         "y": 2.4440782784699477
       },
       "prevControl": {
-        "x": 7.238726565751917,
-        "y": 1.66409762112146
+        "x": 8.31703315828284,
+        "y": 0.9706148187225148
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "M4 (SSA)"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,7 +55,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": -91.24536426676812,
     "rotateFast": true
   },
   "reversed": false,
