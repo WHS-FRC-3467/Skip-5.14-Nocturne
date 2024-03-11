@@ -39,7 +39,7 @@ public final class Constants {
         public static final boolean kIsStageTuningMode = false;
         public static final boolean kIsShooterTuningMode = true;
         public static final boolean kIsAutoAimTuningMode = true;
-
+    
         // Shooter and Arm Setpoints
         public static final Setpoints STOWED =    new Setpoints(1.0, 0.4, 0.0, 0.0, GameState.STOWED);
         public static final Setpoints INTAKE =    new Setpoints(1.0, 2.0, 0.0, 0.0, GameState.INTAKE);

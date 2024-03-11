@@ -1,42 +1,38 @@
 package frc.robot.Subsystems.Drivetrain;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 
-import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.ForwardReference;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Util.FieldCentricAiming;
-import frc.robot.Vision.PhotonVision;
 import frc.robot.generated.TunerConstants;
 
-import static edu.wpi.first.units.Units.*;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements
@@ -50,14 +46,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private Double correctedDist = 0.0;
     private FieldCentricAiming m_FieldCentricAiming = new FieldCentricAiming();
 
-    private final Rotation2d BlueAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
-    /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
-    private final Rotation2d RedAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
-    /* Keep track if we've ever applied the operator perspective before or not */
-    private boolean hasAppliedOperatorPerspective = false;
-
-    private Translation2d transT = new Translation2d();
-    private Rotation2d rotR = new Rotation2d();
+    private Optional<Rotation2d> noteAngle = Optional.empty();
+    
     
 
 
@@ -79,6 +69,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     private void configurePathPlanner() {
+        
 
         /*
          * Calculate drivebase radius (in meters). For swerve drive, this is the
@@ -125,6 +116,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                         return false;
                 },
                 this); // Subsystem for requirements
+
+                //PathPlannerLogging.setLogActivePathCallback((poses) -> _field.getObject("path").setPoses(poses)); //Uncomment to see currently followed path
+                
+
     }
 
     //Start
@@ -212,17 +207,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return correctedDist;
     }
 
-    public void setAutoDrive(Translation2d trans, Rotation2d rot) {
-        transT = trans;
-        rotR = rot;
-    }
-
-    public Translation2d getTrans() {
-        return transT;
-    }
-
-    public Rotation2d getRot() {
-        return rotR;
+    public void setNoteAngle(Rotation2d angle) {
+        noteAngle = Optional.ofNullable(getState().Pose.getRotation().plus(angle));
     }
 
 }
