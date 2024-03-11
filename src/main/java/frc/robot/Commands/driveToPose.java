@@ -56,8 +56,6 @@ public class driveToPose extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-/*         targetTranslation = m_drivetrain.getTrans();
-        targetAngle = m_drivetrain.getRot(); */
         robotPose = m_drivetrain.getState().Pose;
         omegaController.reset(robotPose.getRotation().getRadians());
         xController.reset(robotPose.getX());

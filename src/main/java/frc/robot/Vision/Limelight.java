@@ -6,6 +6,7 @@ package frc.robot.Vision;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import frc.robot.Util.RectanglePoseArea;
 import static frc.robot.Constants.LimelightConstants.*;
@@ -39,10 +41,16 @@ public class Limelight extends SubsystemBase {
                 LimelightHelpers.Results result = LimelightHelpers.getLatestResults(ll).targetingResults;
                 if (result.valid && LimelightHelpers.getNeuralClassID(kCameraName) == 0) {
                     hasTarget = true;
+                    m_drivetrain.setNoteAngle(new Rotation2d(tx));
                 } else {
                     hasTarget = false;
+                    m_drivetrain.setNoteAngle(null);
                 }
             }
+            if (RobotConstants.kIsTuningMode) {
+                SmartDashboard.putBoolean("Limelight has note detected", hasTarget);
+            }
+
         }
     }
 
