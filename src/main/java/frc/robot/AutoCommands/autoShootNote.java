@@ -33,7 +33,7 @@ public class autoShootNote extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_arm.isArmJointAtSetpoint() && m_shooter.areWheelsAtSpeed()) {
+    if(m_arm.isArmAtSetpoint() && m_shooter.isShooterAtSpeed()) {
         m_stage.ejectFront(1.0);
         m_isDone = true;
     }
