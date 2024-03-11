@@ -61,6 +61,7 @@
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
       "/SmartDashboard/Move Arm To Setpoint": "Command",
+      "/SmartDashboard/ProfiledPIDController[1]": "ProfiledPIDController",
       "/SmartDashboard/Robot Pose Field Map": "Field2d",
       "/SmartDashboard/Run Shooter": "Command",
       "/SmartDashboard/Speed Limit": "String Chooser",
