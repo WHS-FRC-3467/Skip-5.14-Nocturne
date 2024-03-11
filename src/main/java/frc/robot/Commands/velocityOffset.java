@@ -101,8 +101,10 @@ public class velocityOffset extends Command {
         futureAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(futureRobotTranslation);
 
         //The amount to add to the current angle to speaker to aim for the future
-        correctedRotation = futureAngleToSpeaker;
-
+        //correctedRotation = futureAngleToSpeaker;
+        correctedRotation = currentAngleToSpeaker.minus(futureAngleToSpeaker);
+        correctedRotation = (correctedRotation.times(-1)).plus(currentAngleToSpeaker);
+        //correctedRotation = currentAngleToSpeaker;
         // Get the future distance to speaker
         correctedDistance = m_FieldCentricAiming.getDistToSpeaker(futureRobotTranslation);
         m_drivetrain.setVelocityOffset(correctedRotation,correctedDistance); //Pass the offsets to the drivetrain
@@ -117,6 +119,11 @@ public class velocityOffset extends Command {
             SmartDashboard.putNumber("Correction Angle", correctedRotation.getDegrees());
             SmartDashboard.putNumber("timeUntilShot", timeUntilShot);
             SmartDashboard.putNumber("Angle to ADD", futureAngleToSpeaker.minus(currentAngleToSpeaker).getDegrees());
+            SmartDashboard.putNumber("Angle error", currentAngleToSpeaker.minus(m_drivetrain.getState().Pose.getRotation()).getDegrees());
+            if (timeUntilShot< 0.02 && timeUntilShot > 0) {
+                SmartDashboard.putNumber("Angle error at t=0", currentAngleToSpeaker.minus(m_drivetrain.getState().Pose.getRotation()).getDegrees());
+            }
+            
         }
 
               

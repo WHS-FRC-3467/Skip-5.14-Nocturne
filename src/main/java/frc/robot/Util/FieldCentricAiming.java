@@ -12,7 +12,8 @@ import frc.robot.Constants;
 
 
 public class FieldCentricAiming {
-    private Pose2d speakerPosition;
+    private Pose2d defaultPosition = new Pose2d(new Translation2d(0,0), new Rotation2d(0));
+    private Pose2d speakerPosition = defaultPosition;
     
     public FieldCentricAiming() {
         try {
@@ -25,7 +26,7 @@ public class FieldCentricAiming {
     }
 
     public Pose2d getSpeakerPos() {
-        if (speakerPosition == null) {
+        if (speakerPosition == defaultPosition) {
             if (DriverStation.getAlliance() != null && !DriverStation.getAlliance().isEmpty()) {
                 speakerPosition = (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) ? Constants.FieldConstants.BLUE_SPEAKER : Constants.FieldConstants.RED_SPEAKER;
             }

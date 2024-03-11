@@ -61,6 +61,7 @@
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
       "/SmartDashboard/Move Arm To Setpoint": "Command",
+      "/SmartDashboard/ProfiledPIDController[1]": "ProfiledPIDController",
       "/SmartDashboard/Robot Pose Field Map": "Field2d",
       "/SmartDashboard/Run Shooter": "Command",
       "/SmartDashboard/Speed Limit": "String Chooser",
@@ -81,6 +82,22 @@
         }
       },
       "/SmartDashboard/Auto Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Auto Path Preview": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Auto Turning PID": {
         "window": {
           "visible": true
         }
@@ -146,9 +163,6 @@
           "double[]##v_/SmartDashboard/Robot Pose Field Map/Robot": {
             "open": true
           }
-        },
-        "TunableNumbers": {
-          "open": true
         },
         "open": true
       },

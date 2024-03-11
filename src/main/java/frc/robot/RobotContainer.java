@@ -128,11 +128,11 @@ public class RobotContainer {
         m_drive.ForwardReference = ForwardReference.RedAlliance;
         // Creates PID for heading controller for aiming at angle
         m_head.ForwardReference = ForwardReference.RedAlliance;
-        m_head.HeadingController.setP(14);
+        m_head.HeadingController.setP(10); //14
         m_head.HeadingController.setI(0);
-        m_head.HeadingController.setD(3);
+        m_head.HeadingController.setD(0); //3
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
-        m_head.HeadingController.setTolerance(Units.degreesToRadians(0.5));
+        //m_head.HeadingController.setTolerance(Units.degreesToRadians(0.5));
 
         configureSmartDashboard();
 
