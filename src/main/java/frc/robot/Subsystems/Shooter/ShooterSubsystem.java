@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CanConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.Subsystems.LED.LEDSubsystem;
 import frc.robot.Util.Setpoints;
 import frc.robot.Util.TunableNumber;
 import frc.robot.sim.PhysicsSim;
@@ -29,7 +28,6 @@ public class ShooterSubsystem extends SubsystemBase {
     /* Hardware */
     TalonFX m_motorLeft = new TalonFX(CanConstants.ID_ShooterLeft);
     TalonFX m_motorRight = new TalonFX(CanConstants.ID_ShooterRight);
-    LEDSubsystem m_blinker;
 
     /*
      * Gains for shooter tuning
@@ -77,9 +75,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     double m_idleSpeed = ShooterConstants.kShooterIdleSpeed;
 
-    public ShooterSubsystem(LEDSubsystem blinker) {
+    public ShooterSubsystem() {
         SmartDashboard.putData("POWER", new PowerDistribution());
-        m_blinker = blinker;
 
         /* Configure the motors */
         var leadConfiguration = new TalonFXConfiguration();
@@ -145,21 +142,13 @@ public class ShooterSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Shooter Velocity R", getShooterVelocity(kShooterSide.kRIGHT));
         }
 
-        // If Shooter is off or idling, just return
-        if (m_state == kShooterState.kOFF || m_state == kShooterState.kIDLE)
-            return;
+        if (m_state == kShooterState.kSPOOLING && wheelsAtSpeed) {
+            // If Shooter is spooling up, signal when it's at speed 
+            m_state = kShooterState.kREADY;
 
-        // Otherwise, check for Ready state and set LEDs
-        if (wheelsAtSpeed) {
-            if (m_state == kShooterState.kSPOOLING) {
-                m_blinker.ready2Shoot();
-                m_state = kShooterState.kREADY;
-            } 
-        } else {
-            if (m_state != kShooterState.kSPOOLING) {
-                m_blinker.shooterSpoolUp();
-                m_state = kShooterState.kSPOOLING;
-            } 
+        } else if (m_state == kShooterState.kREADY && !wheelsAtSpeed) {
+            // If Shooter is ready, signal if it falls off the target speed 
+            m_state = kShooterState.kSPOOLING;
         }
     }
 
@@ -194,9 +183,8 @@ public class ShooterSubsystem extends SubsystemBase {
         m_ShooterSetpointR.set(targetVelocityR);
         m_motorLeft.setControl(m_voltageVelocityLeft.withVelocity(targetVelocityL));
         m_motorRight.setControl(m_voltageVelocityRight.withVelocity(targetVelocityR));
-        if (m_state == kShooterState.kOFF) {
+        if (m_state != kShooterState.kREADY) {
             m_state = kShooterState.kSPOOLING;
-            m_blinker.shooterSpoolUp();
         }
     }
 
@@ -204,19 +192,15 @@ public class ShooterSubsystem extends SubsystemBase {
         // Get Velocity setpoint from TunableNumber
         m_motorLeft.setControl(m_voltageVelocityLeft.withVelocity(m_ShooterSetpointL.get()));
         m_motorRight.setControl(m_voltageVelocityRight.withVelocity(m_ShooterSetpointR.get()));
-        if (m_state == kShooterState.kOFF) {
+        if (m_state != kShooterState.kREADY) {
             m_state = kShooterState.kSPOOLING;
-            m_blinker.shooterSpoolUp();
         }
     }
 
     public void stopShooter() {
         m_motorLeft.setControl(m_brake);
         m_motorRight.setControl(m_brake);
-        if (m_state != kShooterState.kOFF) {
-            m_state = kShooterState.kOFF;
-            m_blinker.shooterOff();
-        }
+        m_state = kShooterState.kOFF;
     }
 
     public void runIdle() {
@@ -224,10 +208,7 @@ public class ShooterSubsystem extends SubsystemBase {
         m_ShooterSetpointR.set(m_idleSpeed);
         m_motorLeft.setControl(m_voltageVelocityLeft.withVelocity(m_idleSpeed));
         m_motorRight.setControl(m_voltageVelocityRight.withVelocity(m_idleSpeed));
-        if (m_state != kShooterState.kIDLE) {
-            m_state = kShooterState.kIDLE;
-            m_blinker.shooterIdle();
-        }
+        m_state = kShooterState.kIDLE;
     }
 
     public void setIdleShooterSpeed(double speed) {
@@ -261,13 +242,22 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     /**
+     * Private method for subsystem use only. Outside callers should use isShooterAtSpeed().
      * @return true if the error of the shooter is within the tolerance
      */
-    public boolean areWheelsAtSpeed() {
+    private boolean areWheelsAtSpeed() {
         double leftErr = Math.abs(m_ShooterSetpointL.get() - getShooterVelocity(kShooterSide.kLEFT));
         double rightErr = Math.abs(m_ShooterSetpointR.get() - getShooterVelocity(kShooterSide.kRIGHT));
         return (leftErr + rightErr / 2.0) < ShooterConstants.kShooterTolerance;
 
+    }
+
+    /**
+     * Quicker method for outside callers (i.e. LEDSubsystem)
+     * @return true if the error of the shooter is within the tolerance
+     */
+    public boolean isShooterAtSpeed () {
+        return (m_state == kShooterState.kREADY);
     }
 
     /*

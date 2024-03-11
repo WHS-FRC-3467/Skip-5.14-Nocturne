@@ -22,7 +22,6 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.CanConstants;
 import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.Subsystems.LED.LEDSubsystem;
 import frc.robot.Util.Setpoints;
 import frc.robot.Util.TunableNumber;
 import frc.robot.Util.Setpoints.GameState;
@@ -71,17 +70,17 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     /* Working (current) tolerance */
     private double m_tolerance;
 
-    /* Working (current) arm state */
+    /* Working (currently requested) arm game state */
     private GameState m_armState;
 
-    /* LED Subsystem */
-    private LEDSubsystem m_blinker;
-    private enum ledState {
+    /* Current Arm Action */
+    private enum armAction {
         kSTOWED,
-        kMOVING,
+        kMANUAL_MOVING,
+        kAUTO_MOVING,
         kONPOINT
     }
-    private ledState m_ledState = ledState.kSTOWED;
+    private armAction m_armAction = armAction.kSTOWED;
 
     TunableNumber tempDegree = new TunableNumber("Set Arm To Degrees", 0.0);
     
@@ -90,7 +89,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     /*
      * Constructor
      */
-    public ArmSubsystem(LEDSubsystem blinker) {
+    public ArmSubsystem() {
 
         /* Create the Trapezoidal motion profile controller */
         super(
@@ -106,14 +105,10 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         // Config Duty Cycle Range for the encoders
         m_encoder.setDutyCycleRange(ArmConstants.kDuty_Cycle_Min, ArmConstants.kDuty_Cycle_Max);
 
-        // LED Subsystem reference
-        m_blinker = blinker;
-        
         // Config Motors
         var leadConfiguration = new TalonFXConfiguration();
         var followerConfiguration = new TalonFXConfiguration();
         
-
         // Set the output mode to brake
         leadConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         followerConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -175,21 +170,12 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         boolean atSetpoint = isArmJointAtSetpoint();
         SmartDashboard.putBoolean("Arm Joint at Setpoint?", atSetpoint);
         
-        // LED control logic
+        // Arm Action logic
         if (m_armState == GameState.STOWED) {
-            // Arm being stowed - just turn off LEDs
-            if (m_ledState != ledState.kSTOWED) {
-                m_ledState = ledState.kSTOWED;
-                m_blinker.armStowed();
-            }
-        } else if ((m_ledState == ledState.kSTOWED) || !atSetpoint) {
-            // Arm state has changed - update LEDs
-            m_ledState = ledState.kMOVING;
-            m_blinker.armNotAtPos();
+            m_armAction = armAction.kSTOWED;
 
-        } else if (atSetpoint && m_ledState != ledState.kONPOINT) {
-            m_ledState = ledState.kONPOINT;
-            m_blinker.armAtPos();
+        } else if (atSetpoint) {
+            m_armAction = armAction.kONPOINT;
         }
 
         if (Constants.RobotConstants.kIsTuningMode) {
@@ -255,6 +241,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         m_armSetpoint = setpoints.arm;
         m_tolerance = setpoints.tolerance;
         m_armState = setpoints.state;
+        m_armAction = armAction.kAUTO_MOVING;
 
         // Arm setpoint must be passed  in radians
         m_tpState.position = degreesToRadians(setpoints.arm);
@@ -262,6 +249,18 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
         // Display requested Arm State to dashboard
         Setpoints.displayArmState(m_armState);
+    }
+
+    public void updateArmSetpointManual(Setpoints setpoints) {
+        updateArmSetpoint(setpoints);
+        m_armAction = armAction.kMANUAL_MOVING;
+    }
+
+    public boolean isArmMoving() {
+        return ((m_armAction == armAction.kMANUAL_MOVING) || (m_armAction == armAction.kAUTO_MOVING));
+    }
+    public boolean isArmMovingManually() {
+        return (m_armAction == armAction.kMANUAL_MOVING);
     }
 
     /**
@@ -301,9 +300,14 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         return Math.abs(m_armSetpoint - getArmJointDegrees());
     }
 
-    // Check if Arm is at the setpoint (or within tolerance)
-    public boolean isArmJointAtSetpoint() {
+    // Check if Arm is at the setpoint (or within tolerance) - private method
+    private boolean isArmJointAtSetpoint() {
         return getArmJointError() < m_tolerance;
+    }
+
+    // Public method to just check if arm is at setpoint
+    public boolean isArmAtSetpoint() {
+        return (m_armAction == armAction.kONPOINT);
     }
 
     // Drive the Arm directly by providing a supply voltage value

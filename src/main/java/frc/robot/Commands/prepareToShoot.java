@@ -54,11 +54,11 @@ public class prepareToShoot extends Command {
         // After we have a Note in the Stage, bring Arm to requested position
         // Don't require a Note if we are trying to STOW the arm
         if (m_haveNote.getAsBoolean() || m_setpoints.state == GameState.STOWED || m_setpoints.state == GameState.CLIMB) {
-            m_armSubsystem.updateArmSetpoint(m_setpoints);
+            m_armSubsystem.updateArmSetpointManual(m_setpoints);
         }
 
         // Exit once Arm is at setpoint and Shooter setpoint is != 0 and Shooter is up to speed 
-        if (m_armSubsystem.isArmJointAtSetpoint() && (m_runShooter && m_shooterSubsystem.areWheelsAtSpeed())) {
+        if (m_armSubsystem.isArmAtSetpoint() && (m_runShooter && m_shooterSubsystem.isShooterAtSpeed())) {
             //m_isDone = true;
         }
     }

@@ -55,7 +55,7 @@ public class autoShoot extends Command {
         m_shooterSubsystem.runShooter();
         // Check Shooter Speed
         //System.out.println(m_shooterSubsystem.areWheelsAtSpeed());
-        if (m_shooterSubsystem.areWheelsAtSpeed() && m_armSubsystem.isArmJointAtSetpoint()) {
+        if (m_shooterSubsystem.isShooterAtSpeed() && m_armSubsystem.isArmAtSetpoint()) {
             // Feed Note to Shooter
             System.out.println("SHOOTING");
             m_stageSubsystem.ejectFront(1);

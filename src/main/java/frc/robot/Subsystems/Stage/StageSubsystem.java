@@ -15,7 +15,6 @@ import frc.robot.Constants.CanConstants;
 import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.StageConstants;
-import frc.robot.Subsystems.LED.LEDSubsystem;
 import frc.robot.sim.PhysicsSim;
 
 public class StageSubsystem extends SubsystemBase {
@@ -24,12 +23,10 @@ public class StageSubsystem extends SubsystemBase {
     TalonSRX m_stageMotor = new WPI_TalonSRX(CanConstants.ID_StageMotor);
     DigitalInput m_stageBeamBreak = new DigitalInput(DIOConstants.kStageBeamBreak);
     boolean m_noteInStage = false;
-    LEDSubsystem m_blinker;
+    boolean m_stageRunning = false;
 
     /** Creates a new StageSubsystem. */
-    public StageSubsystem(LEDSubsystem blinker) {
-
-        m_blinker = blinker;
+    public StageSubsystem() {
 
         // Set motor to factory defaults
         m_stageMotor.configFactoryDefault();
@@ -64,15 +61,8 @@ public class StageSubsystem extends SubsystemBase {
     public void periodic() {
 
         // Check for change in beam break
-        boolean beam = m_stageBeamBreak.get();
-        // Sensor returns true when beam NOT broken,
-        // so we have to use the inverse of the signal
-        if (beam == m_noteInStage) {
-            m_noteInStage = !beam; 
-            if (m_noteInStage) {
-                m_blinker.yesNoteInStage();
-            }
-        }
+        // Sensor returns true when beam NOT broken
+        m_noteInStage = m_stageBeamBreak.get() ? false : true;
 
         SmartDashboard.putBoolean("Note In Stage?", m_noteInStage);
 
@@ -92,17 +82,17 @@ public class StageSubsystem extends SubsystemBase {
      */
     public void runStage(double speed) {
         m_stageMotor.set(ControlMode.PercentOutput, speed);
-        m_blinker.lookingForNote();
+        m_stageRunning = true;
     }
 
     public void runStage() {
         m_stageMotor.set(ControlMode.PercentOutput, StageConstants.kIntakeSpeed);
-        m_blinker.lookingForNote();
+        m_stageRunning = true;
     }
 
     public void stopStage() {
         m_stageMotor.set(ControlMode.PercentOutput, 0.0);
-        m_blinker.intakeStopped();
+        m_stageRunning = false;
     }
 
     // Do not use if the shooter's target velocity is zero.
@@ -118,6 +108,10 @@ public class StageSubsystem extends SubsystemBase {
 
     public boolean isNoteInStage() {
         return m_noteInStage;
+    }
+
+    public boolean isStageRunning() {
+        return m_stageRunning;
     }
 
     /*

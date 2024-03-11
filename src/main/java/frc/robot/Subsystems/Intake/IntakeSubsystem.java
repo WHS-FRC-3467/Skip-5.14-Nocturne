@@ -40,6 +40,9 @@ public class IntakeSubsystem extends SubsystemBase {
     /* Neutral output control for stopping the Intake motor */
     private final NeutralOut m_brake = new NeutralOut();
 
+    /* Flag to tell if intake is running */
+    private boolean m_intakeRunning = false;
+
     /** Creates a new IntakeSubsystem. */
     public IntakeSubsystem() {
 
@@ -124,12 +127,18 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public void runIntake(double speed) {
         m_intakeMotor.setControl(m_speed.withOutput(speed));
+        m_intakeRunning = true;
     }
 
     public void stopIntake() {
         m_intakeMotor.setControl(m_brake);
+        m_intakeRunning = false;
     }
 
+    public boolean isIntakeRunning() {
+        return m_intakeRunning;
+    }
+    
     /*
      * Command Factories
      */

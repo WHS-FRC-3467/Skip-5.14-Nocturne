@@ -12,7 +12,6 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.ForwardReference;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.SteerRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -28,12 +27,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.AutoCommands.AutoLookUpShot;
 import frc.robot.AutoCommands.autoIntakeNote;
-import frc.robot.AutoCommands.autoIntakeNote;
-import frc.robot.AutoCommands.AutoLookUpShot;
 import frc.robot.Commands.LookUpShot;
-import frc.robot.Commands.autoCollectNote;
 import frc.robot.Commands.calibrateLookupTable;
-import frc.robot.Commands.driveToPose;
 import frc.robot.Commands.intakeNote;
 import frc.robot.Commands.prepareToShoot;
 import frc.robot.Commands.velocityOffset;
@@ -65,8 +60,6 @@ public class RobotContainer {
     private double m_MaxSpeed =  Constants.maxSpeed;;
     // Track current AngularRate
     private double m_AngularRate = Constants.maxAngularRate;
-    // Save last Speed Limit so we know if it needs updating
-    private Double m_lastSpeed = 1.0;
 
     /*
      * Driver/Operator controllers
@@ -106,13 +99,13 @@ public class RobotContainer {
     Pose2d m_odomStart = new Pose2d(0, 0, new Rotation2d(0, 0));
 
     // Instantiate other Subsystems
-    LEDSubsystem m_ledSubsystem = new LEDSubsystem();
-    ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(m_ledSubsystem);
+    ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
     IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
-    StageSubsystem m_stageSubsystem = new StageSubsystem(m_ledSubsystem);
-    ArmSubsystem m_armSubsystem = new ArmSubsystem(m_ledSubsystem);
+    StageSubsystem m_stageSubsystem = new StageSubsystem();
+    ArmSubsystem m_armSubsystem = new ArmSubsystem();
     PhotonVision m_photonVision = new PhotonVision(m_drivetrain);
     Limelight m_limelightVision = new Limelight(m_drivetrain);
+    LEDSubsystem m_ledSubsystem = new LEDSubsystem(m_stageSubsystem, m_intakeSubsystem, m_armSubsystem, m_shooterSubsystem, m_drivetrain);
 
     FieldCentricAiming m_fieldCentricAiming = new FieldCentricAiming();
 
@@ -325,8 +318,9 @@ public class RobotContainer {
                                 .withTargetDirection(m_drivetrain.getVelocityOffset())
                                 .withDeadband(Constants.maxSpeed * 0.1)
                                 .withRotationalDeadband(0)),
-                new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance(),
-                        m_ledSubsystem)));
+                new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance())
+            )
+        );
 
         // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X') (while pressed)
         m_driverCtrl.povLeft().whileTrue(m_drivetrain.applyRequest(() -> m_brake));
@@ -335,13 +329,13 @@ public class RobotContainer {
         m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
 
         // Driver: While Left Bumper is held, reduce speed by 25%
-         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * Constants.quarterSpeed)
+         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = Constants.maxSpeed * Constants.quarterSpeed)
                 .andThen(() -> m_AngularRate = Constants.quarterAngularRate));
         m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = Constants.maxSpeed)
                 .andThen(() -> m_AngularRate = Constants.maxAngularRate));
 
         // Driver: While Right Bumper is held, reduce speed by 50%
-         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * Constants.halfSpeed)
+         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = Constants.maxSpeed * Constants.halfSpeed)
                 .andThen(() -> m_AngularRate = Constants.halfAngularRate));
         m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = Constants.maxSpeed)
                 .andThen(() -> m_AngularRate = Constants.maxAngularRate));
@@ -419,28 +413,13 @@ public class RobotContainer {
     }
 
     private void newControlStyle() {
-        m_controlStyle = () -> m_drive.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance()) // Drive forward -Y
-                .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance()) // Drive left with negative X (left)
-                .withRotationalRate(-m_driverCtrl.getRightX() * m_AngularRate); // Drive counterclockwise with
-                                                                                // negative X (left)
+        m_controlStyle = () -> m_drive.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * invertForAlliance()) // Drive forward -Y
+                .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * invertForAlliance()) // Drive left with negative X (left)
+                .withRotationalRate(-m_driverCtrl.getRightX() * m_AngularRate); // Drive counterclockwise with negative X (left)
         // Specify the desired Control Style as the Drivetrain's default command
         // Drivetrain will execute this command periodically
         m_drivetrain.setDefaultCommand(m_drivetrain.applyRequest(m_controlStyle).ignoringDisable(true));
     } 
 
-    public void autoLEDs() {
-        m_ledSubsystem.runAutonomousPatterns();
-    }
-
-    public void disabledLEDs() {
-        m_ledSubsystem.runDisabledPatterns();
-    }
-
-    public void teleopLEDs() {
-        m_ledSubsystem.runMatchTimerPattern();
-    }
-
-    public void teleopInitLEDs() {
-        m_ledSubsystem.startTeleopPatterns();
-    }
+ 
 }
