@@ -101,10 +101,8 @@ public class velocityOffset extends Command {
         futureAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(futureRobotTranslation);
 
         //The amount to add to the current angle to speaker to aim for the future
-        //correctedRotation = futureAngleToSpeaker;
-        correctedRotation = currentAngleToSpeaker.minus(futureAngleToSpeaker);
-        correctedRotation = (correctedRotation.times(-1)).plus(currentAngleToSpeaker);
-        //correctedRotation = currentAngleToSpeaker;
+        correctedRotation = futureAngleToSpeaker;
+        //correctedRotation = currentAngleToSpeaker; //Uncomment to disable future pose aiming
         // Get the future distance to speaker
         correctedDistance = m_FieldCentricAiming.getDistToSpeaker(futureRobotTranslation);
         m_drivetrain.setVelocityOffset(correctedRotation,correctedDistance); //Pass the offsets to the drivetrain
