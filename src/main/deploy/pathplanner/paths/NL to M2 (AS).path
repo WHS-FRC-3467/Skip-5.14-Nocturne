@@ -12,20 +12,20 @@
         "y": 6.51871865341955
       },
       "isLocked": false,
-      "linkedName": "PodiumRange (AS)"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.279435515585794,
-        "y": 5.775221672529917
+        "x": 8.270256540513081,
+        "y": 5.776912294565331
       },
       "prevControl": {
-        "x": 7.3557372873404,
-        "y": 6.274251134607443
+        "x": 7.346558312267687,
+        "y": 6.275941756642856
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "M2 (AS)"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

@@ -24,14 +24,14 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.5
+                  "waitTime": 0.45
                 }
               }
             ]
           }
         },
         {
-          "type": "race",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -66,7 +66,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SW to R2 (AS)"
+                        "pathName": "SW to R2 (S4)"
                       }
                     },
                     {
@@ -86,15 +86,9 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "LookUpShot"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.9
+                  "pathName": "R2 to SW (S4)"
                 }
               }
             ]
@@ -123,89 +117,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "R2 to M1 (AS)"
+                        "pathName": "SW to R3 (S4)"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "LookUpShot"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "M1 to NL (AS)"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.1
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNote"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntake"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "NL to M2 (AS)"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 1.0
+                        "waitTime": 0.5
                       }
                     }
                   ]
@@ -221,32 +139,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "M2 to NL (AS)"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "LookUpShot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "LookUpShot"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.5
+                  "pathName": "R3 to SW (S4)"
                 }
               }
             ]
@@ -275,13 +168,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "NL to R1 (AS)"
+                        "pathName": "SW to R1 (S4)"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.1
+                        "waitTime": 0.5
                       }
                     }
                   ]
@@ -295,15 +188,9 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "LookUpShot"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.7
+                  "pathName": "R1 to SW (S4)"
                 }
               }
             ]
@@ -316,9 +203,47 @@
           }
         },
         {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "SW to M2 (Mid)"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M2 to SW (Mid)"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "StopShooter"
+            "name": "ShootNote"
           }
         }
       ]
