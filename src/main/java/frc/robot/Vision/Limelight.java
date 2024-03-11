@@ -41,10 +41,10 @@ public class Limelight extends SubsystemBase {
                 LimelightHelpers.Results result = LimelightHelpers.getLatestResults(ll).targetingResults;
                 if (result.valid && LimelightHelpers.getNeuralClassID(kCameraName) == 0) {
                     hasTarget = true;
-                    m_drivetrain.setNoteAngle(new Rotation2d(tx));
+                    //m_drivetrain.setNoteAngle(new Rotation2d(tx));
                 } else {
                     hasTarget = false;
-                    m_drivetrain.setNoteAngle(null);
+                    //m_drivetrain.setNoteAngle(null);
                 }
             }
             if (RobotConstants.kIsTuningMode) {
