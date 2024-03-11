@@ -6,8 +6,12 @@ package frc.robot.Commands;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -26,6 +30,9 @@ public class calibrateLookupTable extends Command {
     driveToPose m_driveToPose;
     FieldCentricAiming m_fieldCentricAiming = new FieldCentricAiming();
     Command driveCommand;
+
+    Pose2d speakerPos;
+    double calibrateAngleToSpeaker = Units.degreesToRadians(20); 
 
     Translation2d currentTarget;
     Rotation2d currentAngle;
@@ -58,28 +65,15 @@ public class calibrateLookupTable extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 1.5,
-                m_fieldCentricAiming.getSpeakerPos().getY()));
-        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 2,
-                m_fieldCentricAiming.getSpeakerPos().getY()));
-        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 3,
-                m_fieldCentricAiming.getSpeakerPos().getY()));
-        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 4,
-                m_fieldCentricAiming.getSpeakerPos().getY()));
-        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 5,
-                m_fieldCentricAiming.getSpeakerPos().getY()));
-        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 6,
-                m_fieldCentricAiming.getSpeakerPos().getY()));
-        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 7,
-                m_fieldCentricAiming.getSpeakerPos().getY()));
-
-
-        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 3,
-                m_fieldCentricAiming.getSpeakerPos().getY()));
-        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 3,
-                m_fieldCentricAiming.getSpeakerPos().getY() + 1.45));
-        aimingPositions.add(new Translation2d(m_fieldCentricAiming.getSpeakerPos().getX() - 3,
-                m_fieldCentricAiming.getSpeakerPos().getY() - 1.45));
+        speakerPos = m_fieldCentricAiming.getSpeakerPos();
+        int allianceInvert = 1;
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+            allianceInvert *= -1;
+        }
+        for (double dist = 2; dist <= 5; dist = dist + .5) {
+            aimingPositions.add(new Translation2d(speakerPos.getX() - Math.cos(calibrateAngleToSpeaker)*dist*allianceInvert,
+                                                  speakerPos.getY() + Math.sin(calibrateAngleToSpeaker)*dist));
+        }
         
         driveCommand = new driveToPose(m_drivetrain,getTranslationTarget(),getRotationTarget());
         driveCommand.schedule();
