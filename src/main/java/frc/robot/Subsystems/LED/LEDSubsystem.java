@@ -41,9 +41,9 @@ public class LEDSubsystem extends SubsystemBase {
      * Robot LED States
      */
     private static enum LEDState {
-        DISABLED, AUTONOMOUS, ENABLED, INTAKING, HAVENOTE, MANUAL_AIMING, AUTO_AIMING, ARM_LOCKED, AIM_LOCKED
+        START, DISABLED, AUTONOMOUS, ENABLED, INTAKING, HAVENOTE, MANUAL_AIMING, AUTO_AIMING, ARM_LOCKED, AIM_LOCKED
     }
-    LEDState m_currentState = LEDState.DISABLED;
+    LEDState m_currentState = LEDState.START;
 
     /*
      * Colors
@@ -159,6 +159,7 @@ public class LEDSubsystem extends SubsystemBase {
 
                 if (newState == LEDState.AUTO_AIMING) {
                     // Auo-aiming: look for proper alignment + arm & shooter on target
+                    // TODO: Use drivetrain Speaker alignment query to determine AIM_LOCKED status 
                     if (m_armSub.isArmAtSetpoint() && m_shooterSub.isShooterAtSpeed()) {
                         newState = LEDState.AIM_LOCKED;
                     }
@@ -321,7 +322,7 @@ public class LEDSubsystem extends SubsystemBase {
     Animation a_IntakeRainbow = new RainbowAnimation(0.7, 0.5, m_Intake.segmentSize, false, m_Intake.startIndex);
     Animation a_IntakePingPong = new LarsonAnimation(green.r, green.g, green.b, 0, 0.4, m_Intake.segmentSize, BounceMode.Back, 3,m_Intake.startIndex);
 
-    Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.7, m_Timer.segmentSize, BounceMode.Back, 3, m_VerticalRight.startIndex);
+    Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.7, m_Timer.segmentSize, BounceMode.Back, 3, m_Timer.startIndex);
     Animation a_TimeExpiring = new StrobeAnimation(red.r, red.g, red.b, 0, 0.5, m_Timer.segmentSize, m_Timer.startIndex);
 
    /* Match Timer Strip
