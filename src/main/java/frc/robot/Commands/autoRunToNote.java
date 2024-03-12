@@ -11,6 +11,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
@@ -38,6 +39,7 @@ public class autoRunToNote extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        SmartDashboard.putData("Note Detect PID",m_head.HeadingController);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -47,13 +49,14 @@ public class autoRunToNote extends Command {
         ty = LimelightHelpers.getTY(kCameraName);
 
         if (m_limelight.hasTarget()) {
-            if (Math.abs(tx) > 3) {
+            if ((Math.abs(tx) > 5.5 && Math.abs(ty) > 10.00) || Math.abs(tx) > 15) {
                 m_drivetrain.setControl(m_head
                         .withVelocityX(0)
                         .withVelocityY(0)
                         .withTargetDirection(m_drivetrain.getRotation().plus(Rotation2d.fromDegrees(-tx)))
-                        .withDeadband(Constants.maxSpeed * 0.1)
-                        .withRotationalDeadband(Units.degreesToRadians(2)));
+                        //.withDeadband(Constants.maxSpeed * 0.1)
+                        //.withRotationalDeadband(Units.degreesToRadians(0)));
+                );
 
             } else {
                 m_drivetrain.setControl(m_forwardStraight

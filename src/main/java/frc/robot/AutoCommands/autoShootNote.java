@@ -16,7 +16,7 @@ public class autoShootNote extends Command {
   ArmSubsystem m_arm;
   ShooterSubsystem m_shooter;
   StageSubsystem m_stage;
-  boolean m_isDone = false;
+  boolean m_isDone;
 
   public autoShootNote(ArmSubsystem armSub, ShooterSubsystem shootSub, StageSubsystem stageSub) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -28,13 +28,15 @@ public class autoShootNote extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_isDone = false;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_arm.isArmAtSetpoint() && m_shooter.isShooterAtSpeed()) {
-        m_stage.ejectFront(1.0);
+    if(m_arm.isArmJointAtSetpoint() && m_shooter.areWheelsAtSpeed()) {
+        m_stage.feedNote2ShooterCommand().schedule();
         m_isDone = true;
     }
   }
@@ -46,6 +48,8 @@ public class autoShootNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("DONE");
+    System.out.println(m_isDone);
     return m_isDone;
   }
 }

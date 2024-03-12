@@ -305,8 +305,8 @@ public class LEDSubsystem extends SubsystemBase {
     LEDSegment m_Matrix = new LEDSegment(0, 8, 0);
     LEDSegment m_VerticalLeft = new LEDSegment(8, 47, 1);
     LEDSegment m_VerticalRight = new LEDSegment(55, 46, 2);
-    LEDSegment m_Timer = new LEDSegment(101, 27, 3);
-    LEDSegment m_Intake = new LEDSegment(128, 86, 4);
+    LEDSegment m_Timer = new LEDSegment(101, 26, 3);
+    LEDSegment m_Intake = new LEDSegment(127, 86, 4);
 
     Animation a_MatrixStrobe = new StrobeAnimation(white.r, white.g, white.b, 0, 0.2, m_Matrix.segmentSize, m_Matrix.startIndex);
    

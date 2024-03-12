@@ -245,7 +245,7 @@ public class ShooterSubsystem extends SubsystemBase {
      * Private method for subsystem use only. Outside callers should use isShooterAtSpeed().
      * @return true if the error of the shooter is within the tolerance
      */
-    private boolean areWheelsAtSpeed() {
+    public boolean areWheelsAtSpeed() {
         double leftErr = Math.abs(m_ShooterSetpointL.get() - getShooterVelocity(kShooterSide.kLEFT));
         double rightErr = Math.abs(m_ShooterSetpointR.get() - getShooterVelocity(kShooterSide.kRIGHT));
         return (leftErr + rightErr / 2.0) < ShooterConstants.kShooterTolerance;

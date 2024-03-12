@@ -35,6 +35,7 @@ import frc.robot.AutoCommands.AutoLookUpShot;
 import frc.robot.AutoCommands.LookAndShoot;
 import frc.robot.AutoCommands.autoIntakeNote;
 import frc.robot.Commands.LookUpShot;
+import frc.robot.Commands.autoCollectNote;
 import frc.robot.Commands.calibrateLookupTable;
 import frc.robot.Commands.intakeNote;
 import frc.robot.Commands.prepareToShoot;
@@ -135,7 +136,7 @@ public class RobotContainer {
         m_drive.ForwardReference = ForwardReference.RedAlliance;
         // Creates PID for heading controller for aiming at angle
         m_head.ForwardReference = ForwardReference.RedAlliance;
-        m_head.HeadingController.setP(10);
+        m_head.HeadingController.setP(14);
         m_head.HeadingController.setI(0);
         m_head.HeadingController.setD(0);
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -143,7 +144,7 @@ public class RobotContainer {
 
         /* Game Piece Detection PID */
         m_note.ForwardReference = ForwardReference.RedAlliance;
-        m_note.HeadingController.setP(12);
+        m_note.HeadingController.setP(14);
         m_note.HeadingController.setI(0);
         m_note.HeadingController.setD(0);
         m_note.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -188,13 +189,15 @@ public class RobotContainer {
         NamedCommands.registerCommand("StopShooter", m_shooterSubsystem.stopShooterCommand());
         NamedCommands.registerCommand("ShootNote",
                 m_stageSubsystem.feedNote2ShooterCommand());
-        NamedCommands.registerCommand("getThatNote", new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
+        NamedCommands.registerCommand("GetThatNote", m_armSubsystem.prepareForIntakeCommand().andThen(new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note)));
 /*         NamedCommands.registerCommand("WingShot",
                 new prepareToShoot(RobotConstants.WING, () -> m_stageSubsystem.isNoteInStage(),
                         m_armSubsystem, m_shooterSubsystem)); */
          NamedCommands.registerCommand("LookUpShot",
                 new AutoLookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())));
-         NamedCommands.registerCommand("LookAndShoot", new LookAndShoot(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, m_photonVision, () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())));
+         NamedCommands.registerCommand("LookAndShoot", new LookAndShoot(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, 
+                                                                                m_photonVision, () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),
+                                                                                m_head, invertForAlliance()));
     }
 
     /**

@@ -39,7 +39,7 @@ public class Limelight extends SubsystemBase {
         if (enable) {
             if (LimelightHelpers.getTV(kCameraName)) {
                 LimelightHelpers.Results result = LimelightHelpers.getLatestResults(ll).targetingResults;
-                if (result.valid && LimelightHelpers.getNeuralClassID(kCameraName) == 0) {
+                if (result.valid && LimelightHelpers.getTA(kCameraName) > 0) {
                     hasTarget = true;
                     //m_drivetrain.setNoteAngle(new Rotation2d(tx));
                 } else {

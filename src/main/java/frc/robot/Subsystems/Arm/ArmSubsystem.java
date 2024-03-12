@@ -301,7 +301,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     }
 
     // Check if Arm is at the setpoint (or within tolerance) - private method
-    private boolean isArmJointAtSetpoint() {
+    public boolean isArmJointAtSetpoint() {
         return getArmJointError() < m_tolerance;
     }
 

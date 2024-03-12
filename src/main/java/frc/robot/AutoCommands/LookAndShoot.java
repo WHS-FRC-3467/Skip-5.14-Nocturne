@@ -6,7 +6,10 @@ package frc.robot.AutoCommands;
 
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import frc.robot.Constants;
 import frc.robot.Commands.velocityOffset;
 import frc.robot.Subsystems.Arm.ArmSubsystem;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
@@ -27,9 +30,12 @@ public class LookAndShoot extends ParallelRaceGroup {
   ShooterSubsystem m_shooter;
   PhotonVision m_photonVision;
   DoubleSupplier m_distance;
+  SwerveRequest.FieldCentricFacingAngle m_head;
+  double m_alliance;
 
   public LookAndShoot(CommandSwerveDrivetrain drivetrain, IntakeSubsystem intake, StageSubsystem stage
-                        , ArmSubsystem arm, ShooterSubsystem shooter, PhotonVision photonVision, DoubleSupplier distance) {
+                        , ArmSubsystem arm, ShooterSubsystem shooter, PhotonVision photonVision, DoubleSupplier distance,
+                            SwerveRequest.FieldCentricFacingAngle head, double alliance) {
     m_drivetrain = drivetrain;
     m_intake = intake;
     m_stage = stage;
@@ -37,8 +43,15 @@ public class LookAndShoot extends ParallelRaceGroup {
     m_shooter = shooter;
     m_photonVision = photonVision;
     m_distance = distance;
+    m_head = head;
     addCommands(new AutoLookUpShot(m_arm, m_shooter, m_distance));
     addCommands(new velocityOffset(m_drivetrain, () -> 0.0));
+    addCommands(m_drivetrain.applyRequest(
+        () -> m_head.withVelocityX(0.0 * Constants.maxSpeed * m_alliance)
+                .withVelocityY(0.0 * Constants.maxSpeed * m_alliance)
+                .withTargetDirection(m_drivetrain.getVelocityOffset())
+                .withDeadband(Constants.maxSpeed * 0.1)
+                .withRotationalDeadband(0)));
     addCommands(new autoShootNote(m_arm, m_shooter, m_stage));
   }
 }
