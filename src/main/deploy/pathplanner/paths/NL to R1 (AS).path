@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8638402226859956,
-        "y": 5.903727323547877
+        "x": 2.493344245947751,
+        "y": 6.572114796651245
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.753184238887901,
-        "y": 5.8211165478934745
+        "x": 2.5167325548326307,
+        "y": 6.583808951093687
       },
       "isLocked": false,
       "linkedName": "NL (AS)"
     },
     {
       "anchor": {
-        "x": 2.7272273347965497,
-        "y": 6.9346335843668845
+        "x": 2.63367409925703,
+        "y": 6.689056341075646
       },
       "prevControl": {
-        "x": 2.0250993019594135,
-        "y": 6.55109420339646
+        "x": 2.446567628177991,
+        "y": 6.490255715554168
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -154.2376392748868,
+    "rotation": -133.9583733239901,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "PSW-R2NL-M1WL-M2NL-R1NL (AS)",
   "previewStartingState": {
-    "rotation": -153.68460205564696,
+    "rotation": -127.99873244250475,
     "velocity": 0
   },
   "useDefaultConstraints": true

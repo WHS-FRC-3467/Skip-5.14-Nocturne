@@ -17,6 +17,8 @@ import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Subsystems.Arm.ArmSubsystem;
@@ -24,6 +26,7 @@ import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Stage.StageSubsystem;
+import frc.robot.Vision.PhotonVision;
 
 public class LEDSubsystem extends SubsystemBase {
 
@@ -33,6 +36,7 @@ public class LEDSubsystem extends SubsystemBase {
     ArmSubsystem m_armSub;
     ShooterSubsystem m_shooterSub;
     CommandSwerveDrivetrain m_driveSub;
+    PhotonVision m_photonVision;
     
     // Control everything with a CANdle
     private static final CANdle m_candle = new CANdle(Constants.CanConstants.LED_CANDLE);
@@ -41,9 +45,9 @@ public class LEDSubsystem extends SubsystemBase {
      * Robot LED States
      */
     private static enum LEDState {
-        DISABLED, AUTONOMOUS, ENABLED, INTAKING, HAVENOTE, MANUAL_AIMING, AUTO_AIMING, ARM_LOCKED, AIM_LOCKED
+        START, DISABLED, AUTONOMOUS, ENABLED, INTAKING, HAVENOTE, MANUAL_AIMING, AUTO_AIMING, ARM_LOCKED, AIM_LOCKED, DISABLED_TARGET
     }
-    LEDState m_currentState = LEDState.DISABLED;
+    LEDState m_currentState = LEDState.START;
 
     /*
      * Colors
@@ -109,13 +113,15 @@ public class LEDSubsystem extends SubsystemBase {
                         IntakeSubsystem intakeSub,
                         ArmSubsystem armSub,
                         ShooterSubsystem shootSub,
-                        CommandSwerveDrivetrain driveSub) {
+                        CommandSwerveDrivetrain driveSub,
+                        PhotonVision photonsub) {
         
         m_stageSub = stageSub;
         m_intakeSub = intakeSub;
         m_armSub = armSub;
         m_shooterSub = shootSub;
         m_driveSub = driveSub;
+        m_photonVision = photonsub;
 
         m_candle.configFactoryDefault();
         
@@ -145,7 +151,13 @@ public class LEDSubsystem extends SubsystemBase {
         LEDState newState = LEDState.DISABLED;
 
         if (DriverStation.isDisabled()) {
-            newState = LEDState.DISABLED;
+            if (SmartDashboard.getBoolean("photonvision/front_left/hasTarget", false)) {
+                newState = LEDState.DISABLED_TARGET;
+            } else {
+                newState = LEDState.DISABLED;
+
+            }
+            
 
         } else if (DriverStation.isAutonomousEnabled()) {
             newState = LEDState.AUTONOMOUS;
@@ -206,6 +218,24 @@ public class LEDSubsystem extends SubsystemBase {
         
         switch (newState) {
         case DISABLED:
+            m_Matrix.setOff();
+            if (DriverStation.getAlliance().get() == Alliance.Blue) {
+                m_VerticalLeft.setColor(blue);
+                m_VerticalRight.setColor(blue);
+                m_Intake.setColor(blue);
+
+            } else {
+                m_VerticalLeft.setColor(red);
+                m_VerticalRight.setColor(red);
+                m_Intake.setColor(red);
+
+            }
+            
+            
+            this.timerDisabled();
+            break;
+
+        case DISABLED_TARGET:
             m_Matrix.setOff();
             m_VerticalLeft.setAnimation(a_LeftRainbow);
             m_VerticalRight.setAnimation(a_RightRainbow);
@@ -305,8 +335,8 @@ public class LEDSubsystem extends SubsystemBase {
     LEDSegment m_Matrix = new LEDSegment(0, 8, 0);
     LEDSegment m_VerticalLeft = new LEDSegment(8, 47, 1);
     LEDSegment m_VerticalRight = new LEDSegment(55, 46, 2);
-    LEDSegment m_Timer = new LEDSegment(101, 26, 3);
-    LEDSegment m_Intake = new LEDSegment(127, 86, 4);
+    LEDSegment m_Timer = new LEDSegment(101, 27, 3);
+    LEDSegment m_Intake = new LEDSegment(128, 89, 4);
 
     Animation a_MatrixStrobe = new StrobeAnimation(white.r, white.g, white.b, 0, 0.2, m_Matrix.segmentSize, m_Matrix.startIndex);
    
@@ -321,7 +351,7 @@ public class LEDSubsystem extends SubsystemBase {
     Animation a_IntakeRainbow = new RainbowAnimation(0.7, 0.5, m_Intake.segmentSize, false, m_Intake.startIndex);
     Animation a_IntakePingPong = new LarsonAnimation(green.r, green.g, green.b, 0, 0.4, m_Intake.segmentSize, BounceMode.Back, 3,m_Intake.startIndex);
 
-    Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.7, m_Timer.segmentSize, BounceMode.Back, 3, m_VerticalRight.startIndex);
+    Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.7, m_Timer.segmentSize, BounceMode.Back, 3, m_Timer.startIndex);
     Animation a_TimeExpiring = new StrobeAnimation(red.r, red.g, red.b, 0, 0.5, m_Timer.segmentSize, m_Timer.startIndex);
 
    /* Match Timer Strip

@@ -8,6 +8,7 @@ import java.lang.module.ModuleDescriptor.Requires;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.Arm.ArmSubsystem;
+import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Stage.StageSubsystem;
 
@@ -16,13 +17,15 @@ public class autoShootNote extends Command {
   ArmSubsystem m_arm;
   ShooterSubsystem m_shooter;
   StageSubsystem m_stage;
+  CommandSwerveDrivetrain m_drivetrain;
   boolean m_isDone;
 
-  public autoShootNote(ArmSubsystem armSub, ShooterSubsystem shootSub, StageSubsystem stageSub) {
+  public autoShootNote(ArmSubsystem armSub, ShooterSubsystem shootSub, StageSubsystem stageSub, CommandSwerveDrivetrain drivesub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_arm = armSub;
     m_shooter = shootSub;
     m_stage = stageSub;
+    m_drivetrain = drivesub;
     addRequirements(stageSub);
   }
 
@@ -35,7 +38,7 @@ public class autoShootNote extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_arm.isArmJointAtSetpoint() && m_shooter.areWheelsAtSpeed()) {
+    if(m_arm.isArmJointAtSetpoint() && m_shooter.areWheelsAtSpeed() && m_drivetrain.isAtAngle()) {
         m_stage.feedNote2ShooterCommand().schedule();
         m_isDone = true;
     }
@@ -48,8 +51,6 @@ public class autoShootNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("DONE");
-    System.out.println(m_isDone);
     return m_isDone;
   }
 }

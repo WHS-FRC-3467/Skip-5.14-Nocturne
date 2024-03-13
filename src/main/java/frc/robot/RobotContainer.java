@@ -119,7 +119,7 @@ public class RobotContainer {
     PhotonVision m_photonVision = new PhotonVision(m_drivetrain);
     Limelight m_limelightVision = new Limelight(m_drivetrain);
     LEDSubsystem m_ledSubsystem = new LEDSubsystem(m_stageSubsystem, m_intakeSubsystem, m_armSubsystem,
-            m_shooterSubsystem, m_drivetrain);
+            m_shooterSubsystem, m_drivetrain, m_photonVision);
 
     FieldCentricAiming m_fieldCentricAiming = new FieldCentricAiming();
 
@@ -136,7 +136,7 @@ public class RobotContainer {
         m_drive.ForwardReference = ForwardReference.RedAlliance;
         // Creates PID for heading controller for aiming at angle
         m_head.ForwardReference = ForwardReference.RedAlliance;
-        m_head.HeadingController.setP(14);
+        m_head.HeadingController.setP(16);
         m_head.HeadingController.setI(0);
         m_head.HeadingController.setD(0);
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -144,7 +144,7 @@ public class RobotContainer {
 
         /* Game Piece Detection PID */
         m_note.ForwardReference = ForwardReference.RedAlliance;
-        m_note.HeadingController.setP(14);
+        m_note.HeadingController.setP(12);
         m_note.HeadingController.setI(0);
         m_note.HeadingController.setD(0);
         m_note.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -185,7 +185,7 @@ public class RobotContainer {
                 .andThen(new autoIntakeNote(m_intakeSubsystem, m_stageSubsystem)));
         NamedCommands.registerCommand("DownIntake", m_armSubsystem.prepareForIntakeCommand());
         NamedCommands.registerCommand("StopIntake", m_intakeSubsystem.stopIntakeCommand());
-        NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(30, 35));
+        NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(70, 40));
         NamedCommands.registerCommand("StopShooter", m_shooterSubsystem.stopShooterCommand());
         NamedCommands.registerCommand("ShootNote",
                 m_stageSubsystem.feedNote2ShooterCommand());
@@ -466,5 +466,11 @@ public class RobotContainer {
 
     public void stopRumbleDriverCtrl() {
         m_driveRmbl.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+    }
+
+    public void setTeleopHeadPID() {
+        m_head.HeadingController.setP(22);
+        m_head.HeadingController.setI(100);
+        m_head.HeadingController.setD(0);
     }
 }

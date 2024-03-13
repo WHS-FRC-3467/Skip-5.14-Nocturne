@@ -1,0 +1,179 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3479282065452507,
+      "y": 5.55472336015897
+    },
+    "rotation": 178.95837332399006
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunShooter"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.4
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNote"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "SW to R2 (AS)"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R2 to SW (S4)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R2 to M1 (AS)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GetThatNote"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "M1 to NL (AS)"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LookAndShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NL to M2 (AS)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GetThatNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M2 to NL (AS)"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LookAndShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NL to R1 (AS)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GetThatNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LookAndShoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Week3",
+  "choreoAuto": false
+}

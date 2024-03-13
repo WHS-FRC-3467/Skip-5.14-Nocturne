@@ -47,6 +47,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private FieldCentricAiming m_FieldCentricAiming = new FieldCentricAiming();
 
     private Optional<Rotation2d> noteAngle = Optional.empty();
+    private boolean atAngle;
     
     
 
@@ -169,8 +170,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             SmartDashboard.putNumber("Distance to Speaker", m_FieldCentricAiming.getDistToSpeaker(getState().Pose.getTranslation()));            
         }
         if (RobotConstants.kIsAutoAimTuningMode) {
+            SmartDashboard.putBoolean("Is within 3 deg of speaker", atAngle);
             SmartDashboard.putNumber("vel Offset drivertrain", getVelocityOffset().getDegrees());
         }
+
+        atAngle = (Math.abs(m_FieldCentricAiming.getAngleToSpeaker(getState().Pose.getTranslation()).minus(getState().Pose.getRotation()).getDegrees())<3);
                
         
     }
@@ -209,6 +213,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public void setNoteAngle(Rotation2d angle) {
         noteAngle = Optional.ofNullable(getState().Pose.getRotation().plus(angle));
+    }
+
+    public boolean isAtAngle() {
+        return atAngle;
     }
 
 }

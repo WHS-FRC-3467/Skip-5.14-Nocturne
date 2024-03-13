@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Commands.velocityOffset;
 import frc.robot.Subsystems.Arm.ArmSubsystem;
@@ -44,7 +45,10 @@ public class LookAndShoot extends ParallelRaceGroup {
     m_photonVision = photonVision;
     m_distance = distance;
     m_head = head;
-    addCommands(new AutoLookUpShot(m_arm, m_shooter, m_distance));
+    head.HeadingController.setP(20);
+    head.HeadingController.setI(75);
+    head.HeadingController.setD(6);
+    addCommands(new AutoLookUpShot(m_arm, m_shooter, m_distance).andThen(new WaitCommand(0.0)).andThen(m_stage.feedNote2ShooterCommand()).andThen(m_arm.prepareForIntakeCommand()));
     addCommands(new velocityOffset(m_drivetrain, () -> 0.0));
     addCommands(m_drivetrain.applyRequest(
         () -> m_head.withVelocityX(0.0 * Constants.maxSpeed * m_alliance)
@@ -52,6 +56,6 @@ public class LookAndShoot extends ParallelRaceGroup {
                 .withTargetDirection(m_drivetrain.getVelocityOffset())
                 .withDeadband(Constants.maxSpeed * 0.1)
                 .withRotationalDeadband(0)));
-    addCommands(new autoShootNote(m_arm, m_shooter, m_stage));
+    //addCommands(until(()->m_arm.isArmJointAtSetpoint() && m_shooter.areWheelsAtSpeed()).andThen(m_stage.feedNote2ShooterCommand()));
   }
 }

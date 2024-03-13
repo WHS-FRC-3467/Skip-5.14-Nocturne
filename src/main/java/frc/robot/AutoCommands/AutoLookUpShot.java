@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Subsystems.Arm.ArmSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
@@ -23,6 +24,7 @@ public class AutoLookUpShot extends Command {
     ShooterPreset m_shotInfo;
     VisionLookUpTable m_VisionLookUpTable;
     DoubleSupplier m_distance;
+    boolean m_isDone;
     
 
     /** Constructor - Creates a new prepareToShoot. */
@@ -41,6 +43,7 @@ public class AutoLookUpShot extends Command {
     @Override
     public void initialize() {
         if (!m_armSubsystem.isEnabled()) m_armSubsystem.enable();
+        m_isDone = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -64,6 +67,10 @@ public class AutoLookUpShot extends Command {
         // Bring Shooter to requested speed
         m_shooterSubsystem.runShooter(m_setpoints.shooterLeft, m_setpoints.shooterRight);
 
+        if(m_armSubsystem.isArmJointAtSetpoint() && m_shooterSubsystem.areWheelsAtSpeed()) {
+            m_isDone = true;
+        }
+
     }
 
     // Called once the command ends or is interrupted.
@@ -78,6 +85,6 @@ public class AutoLookUpShot extends Command {
     // Command never ends on its own - it has to be interrupted.
     @Override
     public boolean isFinished() {
-        return false;
+        return m_isDone;
     }
 }
