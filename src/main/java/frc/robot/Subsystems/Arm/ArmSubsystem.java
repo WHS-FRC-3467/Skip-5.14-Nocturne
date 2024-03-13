@@ -159,13 +159,14 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         super.periodic();
 
         // Validate current encoder reading; stop motors if out of range
-        /*
-         * double armPos = getArmJointDegrees();
-         * if (!m_encoder.isConnected() || ( armPos < 0.0 || armPos >= 360.0)) {
-         * System.out.println("Arm Encoder error reported in periodic().");
-         * neutralOutput();
-         * }
-         */
+        double armPos = getJointPosAbsolute();
+        if (!m_encoder.isConnected() || ( armPos < 0.1 || armPos >= 1.0)) {
+            System.out.println("Arm Encoder error reported in periodic().");
+            // Stop the arm and disable the PID
+            neutralOutput();
+            this.disable();
+        }
+        
         // Display useful info on the SmartDashboard
         boolean atSetpoint = isArmJointAtSetpoint();
         SmartDashboard.putBoolean("Arm Joint at Setpoint?", atSetpoint);
