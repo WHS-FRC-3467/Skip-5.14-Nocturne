@@ -37,16 +37,16 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
         if (enable) {
-            if (LimelightHelpers.getTV(kCameraName)) {
+            //if (LimelightHelpers.getTV(kCameraName)) {
                 LimelightHelpers.Results result = LimelightHelpers.getLatestResults(ll).targetingResults;
-                if (result.valid && LimelightHelpers.getTA(kCameraName) > 0) {
+                if (result.valid && LimelightHelpers.getTA(kCameraName) > .25) {
                     hasTarget = true;
                     //m_drivetrain.setNoteAngle(new Rotation2d(tx));
                 } else {
                     hasTarget = false;
                     //m_drivetrain.setNoteAngle(null);
                 }
-            }
+            //}
             if (RobotConstants.kIsTuningMode) {
                 SmartDashboard.putBoolean("Limelight has note detected", hasTarget);
             }

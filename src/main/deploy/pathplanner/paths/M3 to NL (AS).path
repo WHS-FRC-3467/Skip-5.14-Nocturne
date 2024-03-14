@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.281950694955519,
-        "y": 3.85907096600518
+        "x": 8.305339003846877,
+        "y": 4.092954054851785
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.188397459416,
-        "y": 7.414093916506922
+        "x": 8.188397459422477,
+        "y": 5.543029205714331
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.8638402226859956,
-        "y": 5.903727323547877
+        "x": 5.72093087206765,
+        "y": 6.9931043565768904
       },
       "prevControl": {
-        "x": 3.955113551252743,
-        "y": 7.063269283233724
+        "x": 6.782310154963211,
+        "y": 7.080102658453576
+      },
+      "nextControl": {
+        "x": 4.2942440300899785,
+        "y": 6.876162812152491
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.0138839138077134,
+        "y": 6.501949869996606
+      },
+      "prevControl": {
+        "x": 2.63367409925703,
+        "y": 5.402699352407253
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -175.0502419631346,
+    "rotation": -146.3099324740202,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "PSW-R2NL-M1WL-M2NL-R1NL (AS)",
   "previewStartingState": {
-    "rotation": 88.31531568210363,
+    "rotation": 90.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
