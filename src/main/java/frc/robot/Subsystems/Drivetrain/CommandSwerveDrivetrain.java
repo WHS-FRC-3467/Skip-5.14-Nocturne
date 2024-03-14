@@ -50,8 +50,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private boolean atAngle;
     
     
-    
-    
 
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
@@ -59,18 +57,14 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         configNeutralMode(NeutralModeValue.Brake);
         setSwerveDriveCustomCurrentLimits();        // Setup the current Limits
-        PPHolonomicDriveController.setRotationTargetOverride(() -> noteAngle);
         configurePathPlanner();
-        
     }
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         configNeutralMode(NeutralModeValue.Brake);
         setSwerveDriveCustomCurrentLimits();        // Setup the current Limits
-        PPHolonomicDriveController.setRotationTargetOverride(() -> noteAngle);
         configurePathPlanner();
-        
 
         
     }
@@ -123,8 +117,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                         return false;
                 },
                 this); // Subsystem for requirements
-
-                
 
                 //PathPlannerLogging.setLogActivePathCallback((poses) -> _field.getObject("path").setPoses(poses)); //Uncomment to see currently followed path
                 
