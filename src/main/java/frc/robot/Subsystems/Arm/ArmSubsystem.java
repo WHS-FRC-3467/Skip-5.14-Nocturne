@@ -86,6 +86,9 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     
     private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
+    private int scansAtPos = 0;
+    private boolean armSteadyAtSetpoint = false;
+
     /*
      * Constructor
      */
@@ -170,6 +173,9 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         // Display useful info on the SmartDashboard
         boolean atSetpoint = isArmJointAtSetpoint();
         SmartDashboard.putBoolean("Arm Joint at Setpoint?", atSetpoint);
+        SmartDashboard.putBoolean("Arm at Setpoint?", isArmAtSetpoint());
+        SmartDashboard.putBoolean("Arm Steady?", armSteadyAtSetpoint);
+        SmartDashboard.putNumber("Count", scansAtPos);
         
         // Arm Action logic
         if (m_armState == GameState.STOWED) {
@@ -177,6 +183,19 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
         } else if (atSetpoint) {
             m_armAction = armAction.kONPOINT;
+
+            
+        }
+
+        if (atSetpoint) {
+            if (scansAtPos < 6) {
+                scansAtPos += 1;
+            } else {
+                armSteadyAtSetpoint = true;
+            }
+        } else {
+            scansAtPos = 0;
+            armSteadyAtSetpoint = false;
         }
 
         if (Constants.RobotConstants.kIsTuningMode) {
@@ -359,6 +378,10 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     // cosine function
     public double correctArmJointRadiansForFeedFwd(double position) {
         return position - degreesToRadians(ArmConstants.kARM_HORIZONTAL_OFFSET - ArmConstants.kARM_STARTING_OFFSET);
+    }
+
+    public boolean isArmSteady() {
+        return armSteadyAtSetpoint;
     }
 
     /*

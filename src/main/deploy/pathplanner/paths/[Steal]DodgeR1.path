@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.194993512494147,
-        "y": 5.55472336015897
+        "x": 0.7343180058136094,
+        "y": 6.739014055168343
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.568959439669558,
-        "y": 6.035100336233927
+        "x": 1.7343180058136123,
+        "y": 6.739014055168343
       },
       "isLocked": false,
-      "linkedName": "Safe Sub 4 R2"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.060061350891932,
-        "y": 6.9346335843668845
+        "x": 2.832474724777463,
+        "y": 7.694753623119806
       },
       "prevControl": {
-        "x": 3.759118411713893,
-        "y": 6.954133100800597
+        "x": 1.8324747247774629,
+        "y": 7.694753623119806
       },
       "nextControl": null,
-      "isLocked": false,
-      "linkedName": "M1 (AS)"
+      "isLocked": true,
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 167.09259132873416,
-    "rotateFast": false
+    "rotation": 180.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "PSW-R2NL-M1WL-M2NL-R1NL (AS)",
+  "folder": "Steal",
   "previewStartingState": {
-    "rotation": 179.5147070060353,
+    "rotation": -119.51149855709039,
     "velocity": 0
   },
   "useDefaultConstraints": true

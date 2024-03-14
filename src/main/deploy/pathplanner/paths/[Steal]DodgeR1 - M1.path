@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.194993512494147,
-        "y": 5.55472336015897
+        "x": 2.832474724777463,
+        "y": 7.694753623119806
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.568959439669558,
-        "y": 6.035100336233927
+        "x": 3.8324747247774638,
+        "y": 7.694753623119806
       },
-      "isLocked": false,
-      "linkedName": "Safe Sub 4 R2"
+      "isLocked": true,
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.060061350891932,
-        "y": 6.9346335843668845
+        "x": 7.860961135027683,
+        "y": 7.402399762064483
       },
       "prevControl": {
-        "x": 3.759118411713893,
-        "y": 6.954133100800597
+        "x": 6.860961135027683,
+        "y": 7.402399762064483
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "M1 (AS)"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 167.09259132873416,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "PSW-R2NL-M1WL-M2NL-R1NL (AS)",
+  "folder": "Steal",
   "previewStartingState": {
-    "rotation": 179.5147070060353,
+    "rotation": 180.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

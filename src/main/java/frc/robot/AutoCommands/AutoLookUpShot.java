@@ -68,7 +68,9 @@ public class AutoLookUpShot extends Command {
         m_shooterSubsystem.runShooter(m_setpoints.shooterLeft, m_setpoints.shooterRight);
 
         if(m_armSubsystem.isArmJointAtSetpoint() && m_shooterSubsystem.areWheelsAtSpeed()) {
-            m_isDone = true;
+            if(m_armSubsystem.isArmSteady()) {
+                m_isDone = true;
+            }
         }
 
     }

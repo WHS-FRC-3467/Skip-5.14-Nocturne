@@ -171,7 +171,7 @@ public final class Constants {
         // Feedforward Gains
         public static final double kS = .5;  // The Static Gain, in volts
         public static final double kG = .4;  // The Gravity Gain, in volts //.25
-        public static final double kV = 3.45;  // The Velocity Gain, in volt seconds per radian
+        public static final double kV = 2.5;  // The Velocity Gain, in volt seconds per radian
         public static final double kA = .01;  // The acceleration gain, in volt seconds^2 per radian
 
         // PID Control Gains
@@ -230,8 +230,8 @@ public final class Constants {
     }
 
     public static class FieldConstants {
-        public static final Pose2d BLUE_SPEAKER = new Pose2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), new Rotation2d(0));
-        public static final Pose2d RED_SPEAKER = new Pose2d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42), new Rotation2d(Math.PI));
+        public static final Pose2d BLUE_SPEAKER = new Pose2d(Units.inchesToMeters(-1.5+12), Units.inchesToMeters(218.42), new Rotation2d(0));
+        public static final Pose2d RED_SPEAKER = new Pose2d(Units.inchesToMeters(652.73-12), Units.inchesToMeters(218.42), new Rotation2d(Math.PI));
 
         public static final double NOTE_DIAMETER = 14; // Outer diameter of note
 

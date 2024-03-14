@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3479282065452507,
-      "y": 5.55472336015897
+      "x": 0.7159600556714989,
+      "y": 6.76655098038276
     },
-    "rotation": 178.95837332399006
+    "rotation": -120.01836742760904
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.4
+                  "waitTime": 0.55
                 }
               }
             ]
@@ -37,21 +37,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LookAndShoot"
+            "pathName": "[Steal]DodgeR1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R2 to M1 (AS)"
+            "pathName": "[RUSH]DodgeR1-M1"
           }
         },
         {
@@ -61,22 +55,9 @@
           }
         },
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "M1 to NL (AS)"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
-                }
-              }
-            ]
+            "pathName": "M1 to NL (AS)"
           }
         },
         {
@@ -100,25 +81,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M2 to NL (AS)"
+            "pathName": "M2 to NL (RUSH)"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "LookAndShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NL to M3 (RUSH)"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LookAndShoot"
           }
         }
       ]

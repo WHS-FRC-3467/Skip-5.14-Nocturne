@@ -186,10 +186,11 @@ public class RobotContainer {
         NamedCommands.registerCommand("DownIntake", m_armSubsystem.prepareForIntakeCommand());
         NamedCommands.registerCommand("StopIntake", m_intakeSubsystem.stopIntakeCommand());
         NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(70, 40));
+        NamedCommands.registerCommand("Passthrough", m_shooterSubsystem.runShooterCommand(8,8));
         NamedCommands.registerCommand("StopShooter", m_shooterSubsystem.stopShooterCommand());
         NamedCommands.registerCommand("ShootNote",
                 m_stageSubsystem.feedNote2ShooterCommand());
-        NamedCommands.registerCommand("GetThatNote", m_armSubsystem.prepareForIntakeCommand().andThen(new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note)));
+        NamedCommands.registerCommand("GetThatNote", (new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note)));
 /*         NamedCommands.registerCommand("WingShot",
                 new prepareToShoot(RobotConstants.WING, () -> m_stageSubsystem.isNoteInStage(),
                         m_armSubsystem, m_shooterSubsystem)); */
@@ -353,6 +354,10 @@ public class RobotContainer {
 
         // Driver: DPad Up: Reset the field-centric heading (when pressed)
         m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
+
+        m_driverCtrl.povDown().whileTrue(new LookAndShoot(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, 
+                                                                                m_photonVision, () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),
+                                                                                m_head, invertForAlliance()));
 
         // Driver: While Left Bumper is held, reduce speed by 25%
         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = Constants.maxSpeed * Constants.quarterSpeed)
