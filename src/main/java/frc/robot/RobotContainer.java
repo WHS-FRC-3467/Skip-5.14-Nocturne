@@ -395,10 +395,12 @@ public class RobotContainer {
             
         /*
          * OPERATOR Controls
+         * 
+         * 
          */
         // Operator: When A button is pressed, run Shooter
 
-        m_operatorCtrl.a().whileTrue(m_shooterSubsystem.runShooterCommand(50, 40)
+        m_operatorCtrl.a().whileTrue(m_shooterSubsystem.runShooterCommand(70, 40)
                 .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf));
         // Operator: X Button: Arm to Stowed Position (when pressed)
         m_operatorCtrl.x().onTrue(new prepareToShoot(RobotConstants.STOWED, () -> m_stageSubsystem.isNoteInStage(),
@@ -434,6 +436,10 @@ public class RobotContainer {
 
         m_operatorCtrl.start().onTrue(new prepareToShoot(RobotConstants.FEED, () -> m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
+
+        m_operatorCtrl.back().onTrue(new InstantCommand(()->m_armSubsystem.disable()).andThen(new InstantCommand(()->m_armSubsystem.enable())));
+        m_operatorCtrl.rightBumper().whileTrue(m_stageSubsystem.runStageCommand());
+        m_operatorCtrl.leftBumper().onTrue(m_shooterSubsystem.stopShooterCommand());
 
         // Operator: Use Left and Right Triggers to run Intake at variable speed (left =
         // in, right = out)
@@ -474,8 +480,8 @@ public class RobotContainer {
     }
 
     public void setTeleopHeadPID() {
-        m_head.HeadingController.setP(22);
-        m_head.HeadingController.setI(100);
+        m_head.HeadingController.setP(15);
+        m_head.HeadingController.setI(80);
         m_head.HeadingController.setD(0);
     }
 }

@@ -158,9 +158,11 @@ public class StageSubsystem extends SubsystemBase {
     public Command stopStageCommand() {
         return new InstantCommand(() -> this.stopStage());
     }
-
-    public Command runStageCommand() {
-        return new RunCommand(() -> this.runStage(0.9));
-    }
 */
+    public Command runStageCommand() {
+        return new RunCommand(() -> this.ejectFront(.8), this)
+            .until(()->isNoteInStage())  // run until there is NOT a Note in the Stage
+            .andThen(()->this.stopStage());
+    }
+
 }

@@ -24,28 +24,67 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.45
+                  "waitTime": 0.4
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "ShootNote"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNote"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "GetThatNote"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "SW to R2 (S4)"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "R2 to SW (S4)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNote"
           }
         },
         {
@@ -97,27 +136,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "SW to M3 (Mid)"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M3 to SW (Mid)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNote"
+            "name": "StopShooter"
           }
         }
       ]

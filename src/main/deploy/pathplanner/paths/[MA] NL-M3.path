@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.9020404707476075,
-        "y": 6.116042773396089
+        "x": 4.060360941234703,
+        "y": 5.426087661292132
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.738621898896219,
-        "y": 8.267767190805037
+        "x": 4.057328421444135,
+        "y": 5.422486544040833
+      },
+      "isLocked": true,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.843869288878178,
+        "y": 4.303448834817898
+      },
+      "prevControl": {
+        "x": 4.32910971562892,
+        "y": 4.515010919598743
+      },
+      "nextControl": {
+        "x": 5.358628862127436,
+        "y": 4.091886750037053
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.8000956801025705,
-        "y": 6.116042773396089
+        "x": 7.124229405153967,
+        "y": 4.303448834817898
       },
       "prevControl": {
-        "x": 4.44327417443677,
-        "y": 6.291455090032687
+        "x": 5.697542563176294,
+        "y": 4.268366371490578
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -171.1132885062122,
-    "rotateFast": true
+    "rotation": 168.1113419603721,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Steal",
+  "folder": "MA Help",
   "previewStartingState": {
-    "rotation": 155.89776549883908,
+    "rotation": 160.42687416958984,
     "velocity": 0
   },
   "useDefaultConstraints": true

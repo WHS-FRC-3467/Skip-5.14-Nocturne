@@ -37,6 +37,30 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "SW to R1 (S4)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GetThatNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LookAndShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NL to M2 (AS)"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "GetThatNote"
@@ -45,7 +69,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "R2 to SW (S4)"
+            "pathName": "M2 to SW (Mid)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNote"
           }
         },
         {
@@ -61,63 +91,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "R3 to SW (S4)"
+            "name": "LookAndShoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "SW to R1 (S4)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "R1 to SW (S4)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "SW to M3 (Mid)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M3 to SW (Mid)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNote"
+            "name": "StopShooter"
           }
         }
       ]

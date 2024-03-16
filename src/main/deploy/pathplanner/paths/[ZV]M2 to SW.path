@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3479282065452507,
-        "y": 5.55472336015897
+        "x": 7.989596833894521,
+        "y": 5.87046553010485
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.615499612797228,
-        "y": 6.142380675438377
+        "x": 6.141920431989063,
+        "y": 7.495952997606435
       },
       "isLocked": false,
-      "linkedName": "SubCenter"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.2126845393291923,
-        "y": 6.653973877748326
+        "x": 1.4408703461281565,
+        "y": 5.461170124619452
       },
       "prevControl": {
-        "x": 1.7098358983042754,
-        "y": 6.244678472262928
+        "x": 2.9494162692029073,
+        "y": 5.999101228971687
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "R1 (Safe Sub 4)"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -156.37062226934313,
-    "rotateFast": false
+    "rotation": 178.63607246811316,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "PSW-R2SW-R3SW-R1SW (Mid)",
+  "folder": "Zero Vision",
   "previewStartingState": {
-    "rotation": 179.7784667509369,
+    "rotation": 158.19859051364818,
     "velocity": 0
   },
   "useDefaultConstraints": true

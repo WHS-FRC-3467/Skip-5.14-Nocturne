@@ -31,26 +31,26 @@ public final class Constants {
 
     public static final class RobotConstants {
 
-        public static final boolean kIsTuningMode = true;
+        public static final boolean kIsTuningMode = false;
         public static final boolean kIsDriveTuningMode = false;
-        public static final boolean kIsArmTuningMode = true;
+        public static final boolean kIsArmTuningMode = false;
         public static final boolean kIsIntakeTuningMode = false;
         public static final boolean kIsStageTuningMode = false;
-        public static final boolean kIsShooterTuningMode = true;
-        public static final boolean kIsAutoAimTuningMode = true;
+        public static final boolean kIsShooterTuningMode = false;
+        public static final boolean kIsAutoAimTuningMode = false;
     
         // Shooter and Arm Setpoints
         public static final Setpoints STOWED =    new Setpoints(1.0, 0.4, 0.0, 0.0, GameState.STOWED);
         public static final Setpoints INTAKE =    new Setpoints(1.0, 2.0, 0.0, 0.0, GameState.INTAKE);
-        public static final Setpoints SUBWOOFER = new Setpoints(1.0, 1.0, 60.0,40.0,  GameState.SUBWOOFER);
-        public static final Setpoints AMP =       new Setpoints(88.0, 0.4, 30.0,30.0,  GameState.AMP);
+        public static final Setpoints SUBWOOFER = new Setpoints(1.0, 1.0, 40.0,35.0,  GameState.SUBWOOFER);
+        public static final Setpoints AMP =       new Setpoints(89.0, 0.4, 40.0,40.0,  GameState.AMP);
         public static final Setpoints PODIUM =    new Setpoints(23.0, 0.4, 50.0,50.0,  GameState.PODIUM);
         public static final Setpoints WING =      new Setpoints(30.0, 0.4, 70.0,60.0,  GameState.WING);
         public static final Setpoints PREPCLIMB = new Setpoints(0.0, 0.4, 0.0,0.0,  GameState.PREPCLIMB);
         public static final Setpoints CLIMB =     new Setpoints(88.0, 0.4, 0.0,0.0,  GameState.CLIMB);
         public static final Setpoints TRAP =      new Setpoints(0.0, 0.4, 20.0,20.0,  GameState.TRAP);
         public static final Setpoints LOOKUP =    new Setpoints(0.0, 0.4, 20.0,25.0,  GameState.LOOKUP);
-        public static final Setpoints FEED =      new Setpoints(10.0, 2, 20,20.0,  GameState.FEED);
+        public static final Setpoints FEED =      new Setpoints(7.0, 2, 25,25.0,  GameState.FEED);
     }
     
     public static final class CanConstants {

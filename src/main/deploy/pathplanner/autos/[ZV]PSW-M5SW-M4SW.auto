@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3479282065452507,
-      "y": 5.55472336015897
+      "x": 0.7392210795817603,
+      "y": 4.3385312981452175
     },
-    "rotation": 178.95837332399006
+    "rotation": 119.98163937036335
   },
   "command": {
     "type": "sequential",
@@ -53,7 +53,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SW to R2 (AS)"
+                        "pathName": "[ZV]SW to M5"
                       }
                     },
                     {
@@ -69,69 +69,59 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "[ZV]M5 to SW"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "LookAndShoot"
+            "name": "ShootNote"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "[ZV]SW to M4"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R2 to M1 (AS)"
+            "pathName": "[ZV]M4 to SW"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M1 to NL (AS)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LookAndShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "NL to M2 (AS)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M2 to NL (AS)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LookAndShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LookAndShoot"
+            "name": "ShootNote"
           }
         },
         {
@@ -143,6 +133,6 @@
       ]
     }
   },
-  "folder": "Week3",
+  "folder": "Backup",
   "choreoAuto": false
 }

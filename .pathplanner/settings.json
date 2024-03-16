@@ -4,6 +4,8 @@
   "holonomicMode": true,
   "pathFolders": [
     "(Rush)",
+    "MA Help",
+    "Zero Vision",
     "PID",
     "PSW-R2NL-M1WL-M2NL-R1NL (AS)",
     "PSW-R2SW-R3SW-R1SW (Mid)",
@@ -12,6 +14,8 @@
     "Steal"
   ],
   "autoFolders": [
+    "Advantage Autos",
+    "Backup",
     "PID",
     "Week3"
   ],

@@ -12,10 +12,12 @@ import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
+import com.ctre.phoenix.led.TwinkleAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdle.VBatOutputMode;
 import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
+import com.ctre.phoenix.led.TwinkleAnimation.TwinklePercent;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -129,7 +131,7 @@ public class LEDSubsystem extends SubsystemBase {
         
         CANdleConfiguration candleConfiguration = new CANdleConfiguration();
         m_candle.getAllConfigs(candleConfiguration);
-        System.out.println(candleConfiguration.toString());
+        //System.out.println(candleConfiguration.toString());
 
         candleConfiguration.statusLedOffWhenActive = true;
         candleConfiguration.disableWhenLOS = false;
@@ -139,12 +141,12 @@ public class LEDSubsystem extends SubsystemBase {
         m_candle.configAllSettings(candleConfiguration, 100);
 
         m_candle.getAllConfigs(candleConfiguration);
-        System.out.println(candleConfiguration.toString());
+        //System.out.println(candleConfiguration.toString());
 
         m_candle.configLEDType(LEDStripType.RGB, 300);
 
         m_candle.getAllConfigs(candleConfiguration);
-        System.out.println(candleConfiguration.toString());
+        //System.out.println(candleConfiguration.toString());
     }
 
     @Override
@@ -153,11 +155,9 @@ public class LEDSubsystem extends SubsystemBase {
         LEDState newState = LEDState.DISABLED;
 
         if (DriverStation.isDisabled()) {
-            if (SmartDashboard.getBoolean("photonvision/front_left/hasTarget", false)) {
-                newState = LEDState.DISABLED_TARGET;
-            } else {
+            
                 newState = LEDState.DISABLED;
-            }
+            
 
         } else if (DriverStation.isAutonomousEnabled()) {
             newState = LEDState.AUTONOMOUS;
@@ -286,10 +286,14 @@ public class LEDSubsystem extends SubsystemBase {
             break;
 
         case ARM_LOCKED:
+            //System.out.println("MAN__________");
             m_Matrix.setOff();
-            m_VerticalLeft.setColor(green);
-            m_VerticalRight.setColor(green);
-            m_Intake.setColor(white);
+            /* m_VerticalLeft.setAnimation(a_LeftGreenTwinkle);
+            m_VerticalRight.setAnimation(a_RightGreenTwinkle);
+            m_Intake.setAnimation(a_IntakeGreenTwinkle); */
+            m_VerticalLeft.setColor(yellow);
+            m_VerticalRight.setColor(yellow);
+            m_Intake.setColor(yellow);
             break;
 
         case AIM_LOCKED:
@@ -350,11 +354,15 @@ public class LEDSubsystem extends SubsystemBase {
     Animation a_LeftBlueFlow = new ColorFlowAnimation(blue.r, blue.g, blue.b, 0, 0.7, m_VerticalLeft.segmentSize, Direction.Backward, m_VerticalLeft.startIndex);
     Animation a_RightBlueFlow = new ColorFlowAnimation(blue.r, blue.g, blue.b, 0, 0.7, m_VerticalRight.segmentSize, Direction.Forward, m_VerticalRight.startIndex);
 
+    Animation a_LeftGreenTwinkle = new ColorFlowAnimation(green.r, green.g, green.b, 0, 0.2, m_VerticalLeft.segmentSize, Direction.Backward, m_VerticalLeft.startIndex);
+    Animation a_RightGreenTwinkle = new ColorFlowAnimation(green.r, green.g, green.b, 0, 0.2, m_VerticalRight.segmentSize, Direction.Forward, m_VerticalRight.startIndex);
+
     Animation a_IntakeStrobe = new StrobeAnimation(red.r, red.g, red.b, 0, 0.09, m_Intake.segmentSize, m_Intake.startIndex);
     Animation a_IntakeRainbow = new RainbowAnimation(0.7, 0.5, m_Intake.segmentSize, false, m_Intake.startIndex);
     Animation a_IntakePingPong = new LarsonAnimation(green.r, green.g, green.b, 0, 0.8, m_Intake.segmentSize, BounceMode.Back, 6, m_Intake.startIndex);
     Animation a_IntakeRedFlow = new ColorFlowAnimation(red.r, red.g, red.b, 0, 0.7, m_Intake.segmentSize, Direction.Forward, m_Intake.startIndex);
     Animation a_IntakeBlueFlow = new ColorFlowAnimation(blue.r, blue.g, blue.b, 0, 0.7, m_Intake.segmentSize, Direction.Forward, m_Intake.startIndex);
+    Animation a_IntakeGreenTwinkle = new ColorFlowAnimation(green.r, green.g, green.b, 0, 0.2, m_Intake.segmentSize, Direction.Forward, m_Intake.startIndex);
 
     Animation a_InAutonomous = new LarsonAnimation(yellow.r, yellow.g, yellow.b, 0, 0.8, m_Timer.segmentSize, BounceMode.Back, 3, m_Timer.startIndex);
     Animation a_TimeExpiring = new StrobeAnimation(red.r, red.g, red.b, 0, 0.5, m_Timer.segmentSize, m_Timer.startIndex);
@@ -396,7 +404,7 @@ public class LEDSubsystem extends SubsystemBase {
             if (newColor == magenta) {
                 m_Timer.setAnimation(a_TimeExpiring);
             } else {
-                m_Timer.setColor(red);
+                m_Timer.setColor(newColor);
             }
             currentColor = newColor;
         }

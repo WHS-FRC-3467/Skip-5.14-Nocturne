@@ -2,50 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3479282065452507,
-      "y": 5.55472336015897
+      "x": 0.7392210795817603,
+      "y": 6.770915422172725
     },
-    "rotation": 178.95837332399006
+    "rotation": -118.12373538328879
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.5
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LookAndShoot"
+            "pathName": "[Steal]DodgeR1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R2 to M2 (AS)"
+            "pathName": "[RUSH]DodgeR1-M1"
           }
         },
         {
@@ -57,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M2 to NL (AS)"
+            "pathName": "[MA] M1-NL"
           }
         },
         {
@@ -69,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NL to M3 (RUSH)"
+            "pathName": "[MA] NL-M2"
           }
         },
         {
@@ -81,18 +56,30 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M3 to NL (AS)"
+            "pathName": "[MA] M2-NL"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "LookAndShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[MA] NL-M3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GetThatNote"
           }
         }
       ]
     }
   },
-  "folder": "Week3",
+  "folder": "Advantage Autos",
   "choreoAuto": false
 }

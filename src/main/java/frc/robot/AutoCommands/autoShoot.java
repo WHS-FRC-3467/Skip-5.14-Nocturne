@@ -57,7 +57,7 @@ public class autoShoot extends Command {
         //System.out.println(m_shooterSubsystem.areWheelsAtSpeed());
         if (m_shooterSubsystem.isShooterAtSpeed() && m_armSubsystem.isArmAtSetpoint()) {
             // Feed Note to Shooter
-            System.out.println("SHOOTING");
+            //System.out.println("SHOOTING");
             m_stageSubsystem.ejectFront(1);
             //m_isDone = true;
         }

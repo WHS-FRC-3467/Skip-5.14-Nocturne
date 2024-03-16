@@ -49,6 +49,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ShootNote"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "SW to R3 (S4)"
@@ -99,25 +105,44 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SW to M3 (Mid)"
+            "pathName": "SW to M2 (Mid)"
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "GetThatNote"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "GetThatNote"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "M3 to SW (Mid)"
+            "pathName": "M2 to SW (Far)"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootNote"
+            "name": "LookAndShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
           }
         }
       ]

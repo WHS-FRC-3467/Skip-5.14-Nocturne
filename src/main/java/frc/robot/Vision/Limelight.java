@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -31,6 +32,13 @@ public class Limelight extends SubsystemBase {
     /** Creates a new Limelight. */
     public Limelight(CommandSwerveDrivetrain drivetrain) {
         m_drivetrain = drivetrain;
+        PortForwarder.add(5800, "10.34.67.12", 5800); // Forward the photon vision page for tethered connection to RIO
+        PortForwarder.add(1181, "10.34.67.12", 1181);
+        PortForwarder.add(1182, "10.34.67.12", 1182);
+        PortForwarder.add(1183, "10.34.67.12", 1183);
+        PortForwarder.add(1184, "10.34.67.12", 1184);
+        PortForwarder.add(1185, "10.34.67.12", 1185);
+        PortForwarder.add(1186, "10.34.67.12", 1186);
 
     }
 
