@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SW(Amp Side) to M5 (SSA)"
+            "pathName": "NL to M4 (SSA)"
           }
         },
         {
@@ -51,7 +51,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M5 to NL (SSA)"
+            "pathName": "M4 to NL (SSA)"
           }
         },
         {
@@ -63,7 +63,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NL to M4 (SSA)"
+            "pathName": "SW(Amp Side) to M5 (SSA)"
           }
         },
         {

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.498442347312044,
-        "y": 0.8185908109707958
+        "x": 8.281950694955519,
+        "y": 7.425788070949362
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.808786825550858,
-        "y": 0.2338830888487993
+        "x": 4.0720550956771415,
+        "y": 7.893554248646959
       },
       "isLocked": false,
-      "linkedName": "M5 (SSA)"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3647085470809115,
-        "y": 3.344528170537823
+        "x": 1.4642586550130365,
+        "y": 5.566417514601411
       },
       "prevControl": {
-        "x": 2.446567628177991,
-        "y": 1.6137933130567113
+        "x": 3.1365227402819467,
+        "y": 6.139431082280968
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ShootM5 (SSA)"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 131.86033985217975,
-    "rotateFast": true
+    "rotation": 180.0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "PSW-R5NL-R4NL (SSA)",
+  "folder": "Zero Vision",
   "previewStartingState": {
-    "rotation": 177.33699923393272,
+    "rotation": -177.4362297885351,
     "velocity": 0
   },
   "useDefaultConstraints": true

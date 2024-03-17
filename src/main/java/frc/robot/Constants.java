@@ -43,7 +43,7 @@ public final class Constants {
         public static final Setpoints STOWED =    new Setpoints(1.0, 0.4, 0.0, 0.0, GameState.STOWED);
         public static final Setpoints INTAKE =    new Setpoints(1.0, 2.0, 0.0, 0.0, GameState.INTAKE);
         public static final Setpoints SUBWOOFER = new Setpoints(1.0, 1.0, 40.0,35.0,  GameState.SUBWOOFER);
-        public static final Setpoints AMP =       new Setpoints(89.0, 0.4, 40.0,40.0,  GameState.AMP);
+        public static final Setpoints AMP =       new Setpoints(95.0, 0.4, 40.0,40.0,  GameState.AMP);
         public static final Setpoints PODIUM =    new Setpoints(23.0, 0.4, 50.0,50.0,  GameState.PODIUM);
         public static final Setpoints WING =      new Setpoints(30.0, 0.4, 70.0,60.0,  GameState.WING);
         public static final Setpoints PREPCLIMB = new Setpoints(0.0, 0.4, 0.0,0.0,  GameState.PREPCLIMB);

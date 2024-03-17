@@ -381,7 +381,7 @@ public class RobotContainer {
 
         // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
         m_driverCtrl.rightTrigger(Constants.ControllerConstants.triggerThreashold)
-                .onTrue(m_stageSubsystem.feedNote2ShooterCommand());
+                .onTrue(m_stageSubsystem.feedNote2ShooterCommand());    
         // .withTimeout(2)
         // .andThen(m_armSubsystem.prepareForIntakeCommand()));
 
@@ -422,7 +422,7 @@ public class RobotContainer {
                         m_armSubsystem, m_shooterSubsystem));
 
         // Operator: DPad Up: Shooter/Arm to AMP Position & Speed (when pressed)
-        m_operatorCtrl.povUp().onTrue(new prepareToShoot(RobotConstants.AMP, () -> m_stageSubsystem.isNoteInStage(),
+        m_operatorCtrl.povUp().onTrue(new prepareToShoot(RobotConstants.AMP, () -> true,
                 m_armSubsystem, m_shooterSubsystem));
 
         // Operator: DPad Right: Arm to Wing Position (when pressed)
