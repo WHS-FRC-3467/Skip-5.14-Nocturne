@@ -38,7 +38,8 @@ public class StageSubsystem extends SubsystemBase {
         m_stageMotor.setNeutralMode(NeutralMode.Brake);
 
         // Config current limit
-        //m_stageMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 15, 20, 0.10));
+        // m_stageMotor.configSupplyCurrentLimit(new
+        // SupplyCurrentLimitConfiguration(true, 15, 20, 0.10));
 
         /* Config the peak and nominal outputs */
         m_stageMotor.configNominalOutputForward(0.0, 30);
@@ -52,6 +53,7 @@ public class StageSubsystem extends SubsystemBase {
         m_stageMotor.setStatusFramePeriod(StatusFrame.Status_9_MotProfBuffer, 255);
 
     }
+
     public void simulationInit() {
         /* If running in Simulation, setup simulated Falcons */
         PhysicsSim.getInstance().addTalonSRX(m_stageMotor, 1.0, 89975.0);
@@ -101,9 +103,7 @@ public class StageSubsystem extends SubsystemBase {
     }
 
     public void ejectBack(double speed) {
-        if (m_noteInStage) {
-            this.runStage((-1.0) * speed);
-        }
+        this.runStage((-1.0) * speed);
     }
 
     public boolean isNoteInStage() {
@@ -119,50 +119,16 @@ public class StageSubsystem extends SubsystemBase {
      */
 
     // Pass the Note to the Shooter
-    public Command feedNote2ShooterCommand() {        
+    public Command feedNote2ShooterCommand() {
         return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
-            .until(()->!isNoteInStage())  // run until there is NOT a Note in the Stage
-            .andThen(()->this.stopStage());
+                .until(() -> !isNoteInStage()) // run until there is NOT a Note in the Stage
+                .andThen(() -> this.stopStage());
     }
 
-/*
-    // To Intake a Note, drive the Stage until the sensor says we have a Note
-    public Command intakeNoteCommand() {
-        return new RunCommand(()-> this.runStage(StageConstants.kIntakeSpeed), this)
-            .until(()->this.isNoteInStage())
-            .andThen(()->this.stopStage());
-    }
-    
-    // Feed the Note to the Amp
-    public Command feedNote2AmpCommand() {
-        return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToAmpSpeed), this)
-            .withTimeout(StageConstants.kFeedToAmpTime)
-            .andThen(()->this.stopStage());
-    }
-
-    // Feed the Note backwards to the Amp
-    public Command ejectNote2AmpCommand() {
-        return new RunCommand(() -> this.ejectBack(StageConstants.kFeedToAmpSpeed), this)
-            .withTimeout(StageConstants.kFeedToAmpTime)
-            .andThen(()->this.stopStage());
-    }
-
-    // Feed the Note to the Trap
-    public Command feedNote2TrapCommand() {
-        return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToTrapSpeed), this)
-            .withTimeout(StageConstants.kFeedToTrapTime)
-            .andThen(()->this.stopStage());
-    }
-
-    // Command to just stop the Stage
-    public Command stopStageCommand() {
-        return new InstantCommand(() -> this.stopStage());
-    }
-*/
-    public Command runStageCommand() {
+    public Command feedStageCommand() {
         return new RunCommand(() -> this.ejectFront(.8), this)
-            .until(()->isNoteInStage())  // run until there is NOT a Note in the Stage
-            .andThen(()->this.stopStage());
+                .until(() -> isNoteInStage()) // run until there is NOT a Note in the Stage
+                .andThen(() -> this.stopStage());
     }
 
 }

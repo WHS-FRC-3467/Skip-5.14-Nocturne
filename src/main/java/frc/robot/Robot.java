@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -37,6 +38,8 @@ public class Robot extends TimedRobot {
         // https://v6.docs.ctr-electronics.com/en/stable/docs/api-reference/api-usage/signal-logging.html
         // Don't use it for now
          SignalLogger.start();
+
+         FollowPathCommand.warmupCommand().schedule(); //Added to warmup pathplanner class load
     }
 
     @Override

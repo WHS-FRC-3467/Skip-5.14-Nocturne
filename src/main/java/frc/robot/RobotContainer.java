@@ -438,7 +438,7 @@ public class RobotContainer {
                 m_armSubsystem, m_shooterSubsystem));
 
         m_operatorCtrl.back().onTrue(new InstantCommand(()->m_armSubsystem.disable()).andThen(new InstantCommand(()->m_armSubsystem.enable())));
-        m_operatorCtrl.rightBumper().whileTrue(m_stageSubsystem.runStageCommand());
+        m_operatorCtrl.rightBumper().whileTrue(m_stageSubsystem.feedStageCommand());
         m_operatorCtrl.leftBumper().onTrue(m_shooterSubsystem.stopShooterCommand());
 
         // Operator: Use Left and Right Triggers to run Intake at variable speed (left =
