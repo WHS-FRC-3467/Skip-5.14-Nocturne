@@ -11,10 +11,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Constants;
 import frc.robot.Subsystems.Arm.ArmSubsystem;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
@@ -51,12 +51,10 @@ public class calibrateLookupTable extends Command {
         m_fieldCentricAiming = new FieldCentricAiming();
         currentSetpoint = new Setpoints(0, 0.4, 0, 0, GameState.LOOKUP);
        
-        
-
-        SmartDashboard.putData("Lookup Table: Next Index", new InstantCommand(() -> incIndex()));
-        SmartDashboard.putData("Lookup Table: Print Setpoint", new InstantCommand(() -> printSetpoints()));
-
-        
+        if (Constants.RobotConstants.kIsAutoAimTuningMode) {
+            SmartDashboard.putData("Lookup Table: Next Index", new InstantCommand(() -> incIndex()));
+            SmartDashboard.putData("Lookup Table: Print Setpoint", new InstantCommand(() -> printSetpoints()));
+        }     
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(arm);
@@ -67,9 +65,10 @@ public class calibrateLookupTable extends Command {
     public void initialize() {
         speakerPos = m_fieldCentricAiming.getSpeakerPos();
         int allianceInvert = 1;
-        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) { //Want the robot to move position from blue and negative from red
             allianceInvert *= -1;
         }
+        // Creates positions to calibrate from every .5 meters
         for (double dist = 2; dist <= 5; dist = dist + .5) {
             aimingPositions.add(new Translation2d(speakerPos.getX() - Math.cos(calibrateAngleToSpeaker)*dist*allianceInvert,
                                                   speakerPos.getY() + Math.sin(calibrateAngleToSpeaker)*dist));

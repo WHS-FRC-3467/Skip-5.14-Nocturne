@@ -4,8 +4,6 @@
 
 package frc.robot.AutoCommands;
 
-import java.lang.module.ModuleDescriptor.Requires;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.Arm.ArmSubsystem;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;

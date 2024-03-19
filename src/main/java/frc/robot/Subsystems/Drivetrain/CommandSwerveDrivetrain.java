@@ -15,11 +15,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
@@ -33,8 +31,6 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.Util.FieldCentricAiming;
 import frc.robot.generated.TunerConstants;
 
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements
  * subsystem so it can be used in command-based projects easily.
@@ -42,7 +38,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem {
     private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();    
     public Field2d _field = new Field2d();
-    //public PhotonVision _vision = new PhotonVision();
     private Rotation2d velocityOffset = new Rotation2d(0);
     private Double correctedDist = 0.0;
     private FieldCentricAiming m_FieldCentricAiming = new FieldCentricAiming();
@@ -52,24 +47,19 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     
     
 
-
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
             SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         configNeutralMode(NeutralModeValue.Brake);
-        setSwerveDriveCustomCurrentLimits();        // Setup the current Limits
+        setSwerveDriveCustomCurrentLimits(); // Setup the current Limits
         configurePathPlanner();
-        
-
     }
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         configNeutralMode(NeutralModeValue.Brake);
-        setSwerveDriveCustomCurrentLimits();        // Setup the current Limits
+        setSwerveDriveCustomCurrentLimits(); // Setup the current Limits
         configurePathPlanner();
-
-        
     }
 
     private void configurePathPlanner() {
@@ -219,7 +209,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public void setOverrideAngle(Rotation2d angle) {
         overrideAngle = Optional.ofNullable(angle);
     }
-
+    /**
+     * Checks if the drivetrain rotation is within tolerance to the speaker
+     * @return whether rotation is within angle tolerance
+     * @see Constants
+     */
     public boolean isAtAngle() {
         return atAngle;
     }

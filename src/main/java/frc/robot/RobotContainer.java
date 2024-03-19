@@ -6,10 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 
-import java.io.CharArrayReader;
 import java.util.function.Supplier;
-
-import org.ejml.data.CMatrixRMaj;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
@@ -34,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.AutoCommands.AutoLookUpShot;
 import frc.robot.AutoCommands.LookAndShoot;
 import frc.robot.AutoCommands.autoIntakeNote;
+import frc.robot.AutoCommands.overrideAngleToNote;
 import frc.robot.Commands.LookUpShot;
 import frc.robot.Commands.autoCollectNote;
 import frc.robot.Commands.calibrateLookupTable;
@@ -186,19 +184,21 @@ public class RobotContainer {
         NamedCommands.registerCommand("DownIntake", m_armSubsystem.prepareForIntakeCommand());
         NamedCommands.registerCommand("StopIntake", m_intakeSubsystem.stopIntakeCommand());
         NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(70, 40));
-        NamedCommands.registerCommand("Passthrough", m_shooterSubsystem.runShooterCommand(8,8));
+        NamedCommands.registerCommand("Passthrough", m_shooterSubsystem.runShooterCommand(8, 8));
         NamedCommands.registerCommand("StopShooter", m_shooterSubsystem.stopShooterCommand());
         NamedCommands.registerCommand("ShootNote",
                 m_stageSubsystem.feedNote2ShooterCommand());
-        NamedCommands.registerCommand("GetThatNote", (new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note)));
-/*         NamedCommands.registerCommand("WingShot",
-                new prepareToShoot(RobotConstants.WING, () -> m_stageSubsystem.isNoteInStage(),
-                        m_armSubsystem, m_shooterSubsystem)); */
-         NamedCommands.registerCommand("LookUpShot",
-                new AutoLookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())));
-         NamedCommands.registerCommand("LookAndShoot", new LookAndShoot(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, 
-                                                                                m_photonVision, () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),
-                                                                                m_head, invertForAlliance()));
+        NamedCommands.registerCommand("GetThatNote",
+                new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
+        NamedCommands.registerCommand("LookUpShot",
+                new AutoLookUpShot(m_armSubsystem, m_shooterSubsystem,
+                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())));
+        NamedCommands.registerCommand("LookAndShoot",
+                new LookAndShoot(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem,
+                        m_photonVision,
+                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),
+                        m_head, invertForAlliance()));
+        NamedCommands.registerCommand("OverrideToNote", new overrideAngleToNote(m_drivetrain, m_limelightVision));
     }
 
     /**
