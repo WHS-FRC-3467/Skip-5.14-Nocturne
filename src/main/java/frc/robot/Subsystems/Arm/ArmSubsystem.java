@@ -27,6 +27,7 @@ import frc.robot.Util.TunableNumber;
 import frc.robot.Util.Setpoints.GameState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
@@ -40,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 public class ArmSubsystem extends ProfiledPIDSubsystem {
 
     private static TunableNumber tuneArmSetpoint = new TunableNumber("Tunable Arm Setpoint", 0.0);
+    
 
     /* Creates a new ArmSubsystem */
     private TalonFX m_armLeader = new TalonFX(CanConstants.ID_ArmLeader);
@@ -93,6 +95,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
      * Constructor
      */
     public ArmSubsystem() {
+        
 
         /* Create the Trapezoidal motion profile controller */
         super(
@@ -150,7 +153,9 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
 
         // Put controls for the PID controller on the dashboard
-        if (RobotConstants.kIsArmTuningMode) SmartDashboard.putData(this.m_controller);        
+        if (RobotConstants.kIsArmTuningMode) SmartDashboard.putData(this.m_controller);    
+        SmartDashboard.putData("Arm Coast Command", armCoastCommand());    
+        SmartDashboard.putData("Arm Brake Command", armBrakeCommand());    
     }
 
     @Override
@@ -161,8 +166,11 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         // Make sure the parent controller gets to do its own updates
         super.periodic();
 
+        boolean atSetpoint = isArmJointAtSetpoint();
         // Validate current encoder reading; stop motors if out of range
         double armPos = getJointPosAbsolute();
+
+        //TODO: Test if encoder disconnect code works
         if (!m_encoder.isConnected() || ( armPos < 0.1 || armPos >= 1.0)) {
             System.out.println("Arm Encoder error reported in periodic().");
             // Stop the arm and disable the PID
@@ -170,21 +178,12 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
             this.disable();
         }
         
-        // Display useful info on the SmartDashboard
-        boolean atSetpoint = isArmJointAtSetpoint();
-        SmartDashboard.putBoolean("Arm Joint at Setpoint?", atSetpoint);
-        SmartDashboard.putBoolean("Arm at Setpoint?", isArmAtSetpoint());
-        SmartDashboard.putBoolean("Arm Steady?", armSteadyAtSetpoint);
-        SmartDashboard.putNumber("Count", scansAtPos);
-        
         // Arm Action logic
         if (m_armState == GameState.STOWED) {
             m_armAction = armAction.kSTOWED;
 
         } else if (atSetpoint) {
-            m_armAction = armAction.kONPOINT;
-
-            
+            m_armAction = armAction.kONPOINT;            
         }
 
         if (atSetpoint) {
@@ -197,8 +196,12 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
             scansAtPos = 0;
             armSteadyAtSetpoint = false;
         }
-
+        // Display useful info on the SmartDashboard
         if (Constants.RobotConstants.kIsTuningMode) {
+            SmartDashboard.putBoolean("Arm Joint at Setpoint?", atSetpoint);
+            SmartDashboard.putBoolean("Arm at Setpoint?", isArmAtSetpoint());
+            SmartDashboard.putBoolean("Arm Steady?", armSteadyAtSetpoint);
+            SmartDashboard.putNumber("Count", scansAtPos);
             SmartDashboard.putNumber("Arm Joint Setpoint", m_armSetpoint);
             SmartDashboard.putNumber("Raw Arm Encoder ", getJointPosAbsolute());
             SmartDashboard.putNumber("Arm Angle Uncorrected", dutyCycleToDegrees(getJointPosAbsolute()));
@@ -384,6 +387,20 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         return armSteadyAtSetpoint;
     }
 
+    public void armCoastMode() {
+        m_armLeader.setNeutralMode(NeutralModeValue.Coast);
+        m_armFollower.setNeutralMode(NeutralModeValue.Coast);
+        //m_armFollower.setControl(new Follower(m_armLeader.getDeviceID(), true));
+    } 
+
+    public void armBrakeMode() {
+        m_armLeader.setNeutralMode(NeutralModeValue.Brake);
+        m_armFollower.setNeutralMode(NeutralModeValue.Brake);
+        //m_armFollower.setControl(new Follower(m_armLeader.getDeviceID(), true));
+    }
+
+
+
     /*
      * Command Factories
      */
@@ -400,6 +417,14 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     }
 
     public Command moveToDegreeCommand() {
-        return new RunCommand(()-> this.updateArmInDegrees(this.getDegrees()));
+        return new RunCommand(() -> this.updateArmInDegrees(this.getDegrees()));
+    }
+
+    public Command armCoastCommand() {
+        return new InstantCommand(() -> armCoastMode());
+    }
+
+    public Command armBrakeCommand() {
+        return new InstantCommand(() -> armBrakeMode());
     }
 }
