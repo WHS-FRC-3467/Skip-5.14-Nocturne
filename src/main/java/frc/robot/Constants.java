@@ -253,4 +253,6 @@ public final class Constants {
     // speed.
     public static final double quarterAngularRate = Math.PI * 0.5;
 
+    public static final double robotAtAngleTolerance = 2;
+
 }

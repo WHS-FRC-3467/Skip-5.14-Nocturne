@@ -94,7 +94,7 @@ public class velocityOffset extends Command {
 
         //futureRobotPose is the position the robot will be at timeUntilShot in the future
         futureRobotTranslation = currentRobotTranslation.plus(moveDelta);
-        //Angle to the speaker at future position
+        // Angle to the speaker at future position
         futureAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(futureRobotTranslation);
 
         //The amount to add to the current angle to speaker to aim for the future
@@ -103,6 +103,8 @@ public class velocityOffset extends Command {
         // Get the future distance to speaker
         correctedDistance = m_FieldCentricAiming.getDistToSpeaker(futureRobotTranslation);
         m_drivetrain.setVelocityOffset(correctedRotation,correctedDistance); //Pass the offsets to the drivetrain
+        // Pass angle as an override for path planner rotation to do shoot on the move during path execution
+        m_drivetrain.setOverrideAngle(correctedRotation); 
     
         if (Constants.RobotConstants.kIsAutoAimTuningMode) {
             SmartDashboard.putNumber("Robot Angle To Speaker",currentAngleToSpeaker.getDegrees());
@@ -132,6 +134,7 @@ public class velocityOffset extends Command {
         shotTimer.reset();
         ranOnce = false;
         //m_isDone = true;
+        m_drivetrain.setOverrideAngle(null);
     }
 
     // Returns true when the command should end.

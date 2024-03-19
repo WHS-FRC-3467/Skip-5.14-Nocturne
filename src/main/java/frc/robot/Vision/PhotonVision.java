@@ -54,6 +54,7 @@ public class PhotonVision extends SubsystemBase{
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimator;
     private double lastEstTimestamp = 0;
+    private boolean hasTarget;
 
     // Simulation
     private PhotonCameraSim cameraSim;
@@ -171,6 +172,8 @@ public class PhotonVision extends SubsystemBase{
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 });
 
+        hasTarget = getLatestResult().hasTargets();
+
 
     }
 
@@ -191,8 +194,11 @@ public class PhotonVision extends SubsystemBase{
         return visionSim.getDebugField();
     }
 
+    /**
+     * Checks if the latest results from photonvision camera has a target
+     * @return whether a target is found
+     */
     public boolean hasTarget() {
-        //NetworkTableInstance.getDefault().getTable()
-        return false;
+        return hasTarget;
     }
 }

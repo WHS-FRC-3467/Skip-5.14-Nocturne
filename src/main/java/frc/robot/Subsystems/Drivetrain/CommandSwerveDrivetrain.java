@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Util.FieldCentricAiming;
@@ -46,7 +47,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private Double correctedDist = 0.0;
     private FieldCentricAiming m_FieldCentricAiming = new FieldCentricAiming();
 
-    private Optional<Rotation2d> noteAngle = Optional.empty();
+    private Optional<Rotation2d> overrideAngle = Optional.empty();
     private boolean atAngle;
     
     
@@ -58,6 +59,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         configNeutralMode(NeutralModeValue.Brake);
         setSwerveDriveCustomCurrentLimits();        // Setup the current Limits
         configurePathPlanner();
+        
+
     }
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
@@ -70,8 +73,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     private void configurePathPlanner() {
+        PPHolonomicDriveController.setRotationTargetOverride(() -> overrideAngle);
         
-
         /*
          * Calculate drivebase radius (in meters). For swerve drive, this is the
          * distance from the center of the robot to the furthest
@@ -174,7 +177,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             SmartDashboard.putNumber("vel Offset drivertrain", getVelocityOffset().getDegrees());
         }
 
-        atAngle = (Math.abs(m_FieldCentricAiming.getAngleToSpeaker(getState().Pose.getTranslation()).minus(getState().Pose.getRotation()).getDegrees())<3);
+        atAngle = (Math.abs(m_FieldCentricAiming.getAngleToSpeaker(getState().Pose.getTranslation())
+                                                            .minus(getState().Pose.getRotation()).getDegrees())
+                                                            < Constants.robotAtAngleTolerance);
                
         
     }
@@ -211,8 +216,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return correctedDist;
     }
 
-    public void setNoteAngle(Rotation2d angle) {
-        noteAngle = Optional.ofNullable(getState().Pose.getRotation().plus(angle));
+    public void setOverrideAngle(Rotation2d angle) {
+        overrideAngle = Optional.ofNullable(angle);
     }
 
     public boolean isAtAngle() {

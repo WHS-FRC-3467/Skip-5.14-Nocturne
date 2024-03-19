@@ -155,9 +155,11 @@ public class LEDSubsystem extends SubsystemBase {
         LEDState newState = LEDState.DISABLED;
 
         if (DriverStation.isDisabled()) {
-            
+            if (m_photonVision.hasTarget()) {
+                newState = LEDState.DISABLED_TARGET;
+            } else {
                 newState = LEDState.DISABLED;
-            
+            }            
 
         } else if (DriverStation.isAutonomousEnabled()) {
             newState = LEDState.AUTONOMOUS;
@@ -171,8 +173,7 @@ public class LEDSubsystem extends SubsystemBase {
 
                 if (newState == LEDState.AUTO_AIMING) {
                     // Auo-aiming: look for proper alignment + arm & shooter on target
-                    // TODO: Use drivetrain Speaker alignment query to determine AIM_LOCKED status 
-                    if (m_armSub.isArmAtSetpoint() && m_shooterSub.isShooterAtSpeed()) {
+                    if (m_armSub.isArmAtSetpoint() && m_shooterSub.isShooterAtSpeed() && m_driveSub.isAtAngle()) {
                         newState = LEDState.AIM_LOCKED;
                     }
 
