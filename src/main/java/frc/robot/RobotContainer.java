@@ -339,7 +339,7 @@ public class RobotContainer {
         // AND adjusting Arm angle AND running Shooter
 
         m_driverCtrl.rightStick().whileTrue(Commands.parallel(
-                new velocityOffset(m_drivetrain, () -> m_driverCtrl.getRightTriggerAxis()),
+                new velocityOffset(m_drivetrain, () -> (m_driverCtrl.getRightTriggerAxis() >= Constants.ControllerConstants.triggerThreashold)),
                 m_drivetrain.applyRequest(
                         () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
                                 .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())

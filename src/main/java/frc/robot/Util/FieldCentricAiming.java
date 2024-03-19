@@ -18,9 +18,8 @@ public class FieldCentricAiming {
     public FieldCentricAiming() {
         try {
             getSpeakerPos();
-            
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println(e);
         }
         
     }

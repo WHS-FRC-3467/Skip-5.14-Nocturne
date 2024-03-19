@@ -4,6 +4,7 @@
 
 package frc.robot.Commands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -42,19 +43,19 @@ public class velocityOffset extends Command {
 
     /**The calculated the time until the note leaves based on the constant and time since button press */
     Double timeUntilShot; 
-    DoubleSupplier m_trigger; 
+    BooleanSupplier m_isShooting; 
 
     Double correctedDistance;
     Rotation2d correctedRotation;
 
     /** Calculates the velocity compensated target to shoot at 
      * @param drivetrain CommandSwerveDrivetrain instance
-     * @param triggerAxis The trigger axis on which shoot is bound
+     * @param isShooting Whether the shot has started
      * @see FieldCentricAiming
     */
-    public velocityOffset(CommandSwerveDrivetrain drivetrain, DoubleSupplier triggerAxis) {
+    public velocityOffset(CommandSwerveDrivetrain drivetrain, BooleanSupplier isShooting) {
         m_drivetrain = drivetrain;
-        m_trigger = triggerAxis;
+        m_isShooting = isShooting;
         shotTimer = new Timer();
         ranOnce = false;
         m_FieldCentricAiming = new FieldCentricAiming();
@@ -71,7 +72,7 @@ public class velocityOffset extends Command {
     public void execute() {
 
         //Starts shot timer after trigger press
-        if (m_trigger.getAsDouble() > Constants.ControllerConstants.triggerThreashold) {
+        if (m_isShooting.getAsBoolean()) {
             if (!ranOnce) {
                 shotTimer.start();
                 ranOnce = true;

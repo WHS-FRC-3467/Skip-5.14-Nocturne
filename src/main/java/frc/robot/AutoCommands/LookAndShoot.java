@@ -49,13 +49,16 @@ public class LookAndShoot extends ParallelRaceGroup {
     head.HeadingController.setI(75);
     head.HeadingController.setD(6);
     addCommands(new AutoLookUpShot(m_arm, m_shooter, m_distance).andThen(new WaitCommand(0.05)).andThen(m_stage.feedNote2ShooterCommand()).andThen(m_arm.prepareForIntakeCommand()));
-    addCommands(new velocityOffset(m_drivetrain, () -> 0.0));
-    addCommands(m_drivetrain.applyRequest(
+    addCommands(new velocityOffset(m_drivetrain, () -> m_stage.isStageRunning()));
+    if (m_drivetrain.getState().speeds.vxMetersPerSecond < 0.01 || m_drivetrain.getState().speeds.vyMetersPerSecond < 0.01) {
+        addCommands(m_drivetrain.applyRequest(
         () -> m_head.withVelocityX(0.0 * Constants.maxSpeed * m_alliance)
                 .withVelocityY(0.0 * Constants.maxSpeed * m_alliance)
                 .withTargetDirection(m_drivetrain.getVelocityOffset())
                 .withDeadband(Constants.maxSpeed * 0.1)
                 .withRotationalDeadband(0)));
+    }
+    
     //addCommands(until(()->m_arm.isArmJointAtSetpoint() && m_shooter.areWheelsAtSpeed()).andThen(m_stage.feedNote2ShooterCommand()));
   }
 }
