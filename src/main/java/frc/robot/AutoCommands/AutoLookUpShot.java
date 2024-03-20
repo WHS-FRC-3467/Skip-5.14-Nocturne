@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Subsystems.Arm.ArmSubsystem;
+import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Util.Setpoints;
 import frc.robot.Util.ShooterPreset;
@@ -18,6 +19,7 @@ import frc.robot.Util.VisionLookUpTable;
 public class AutoLookUpShot extends Command {
 
     Setpoints m_setpoints;
+    CommandSwerveDrivetrain m_drivetrain;
     ArmSubsystem m_armSubsystem;
     ShooterSubsystem m_shooterSubsystem;
     ShooterPreset m_shotInfo;
@@ -27,8 +29,8 @@ public class AutoLookUpShot extends Command {
     
 
     /** Constructor - Creates a new prepareToShoot. */
-    public AutoLookUpShot(ArmSubsystem armSub, ShooterSubsystem shootSub, DoubleSupplier distance) {
-        
+    public AutoLookUpShot(CommandSwerveDrivetrain drivetrain, ArmSubsystem armSub, ShooterSubsystem shootSub, DoubleSupplier distance) {
+        m_drivetrain = drivetrain;
         m_armSubsystem = armSub;
         m_shooterSubsystem = shootSub;
         m_VisionLookUpTable = new VisionLookUpTable();
@@ -66,7 +68,7 @@ public class AutoLookUpShot extends Command {
         // Bring Shooter to requested speed
         m_shooterSubsystem.runShooter(m_setpoints.shooterLeft, m_setpoints.shooterRight);
 
-        if(m_armSubsystem.isArmJointAtSetpoint() && m_shooterSubsystem.areWheelsAtSpeed()) {
+        if(m_armSubsystem.isArmJointAtSetpoint() && m_shooterSubsystem.areWheelsAtSpeed() && m_drivetrain.isAtFutureAngle()) {
             if(m_armSubsystem.isArmSteady()) {
                 m_isDone = true;
             }

@@ -43,7 +43,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private FieldCentricAiming m_FieldCentricAiming = new FieldCentricAiming();
 
     private Optional<Rotation2d> overrideAngle = Optional.empty();
-    private boolean atAngle;
+    private boolean atAngle = false;
+    private boolean atFutureAngle = false;
     
     
 
@@ -168,10 +169,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
 
         atAngle = (Math.abs(m_FieldCentricAiming.getAngleToSpeaker(getState().Pose.getTranslation())
-                                                            .minus(getState().Pose.getRotation()).getDegrees())
-                                                            < Constants.robotAtAngleTolerance);
-               
-        
+                .minus(getState().Pose.getRotation()).getDegrees()) < Constants.robotAtAngleTolerance);
+
+        atFutureAngle = (Math.abs(velocityOffset
+                .minus(getState().Pose.getRotation()).getDegrees()) < 5);
+
     }
 
     @Override
@@ -216,6 +218,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
      */
     public boolean isAtAngle() {
         return atAngle;
+    }
+
+    public boolean isAtFutureAngle() {
+        return atFutureAngle;
     }
 
 }

@@ -17,6 +17,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -31,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.AutoCommands.AutoLookUpShot;
 import frc.robot.AutoCommands.LookAndShoot;
 import frc.robot.AutoCommands.autoIntakeNote;
+import frc.robot.AutoCommands.autoShootNote;
 import frc.robot.AutoCommands.overrideAngleToNote;
 import frc.robot.Commands.LookUpShot;
 import frc.robot.Commands.autoCollectNote;
@@ -191,7 +193,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("GetThatNote",
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
         NamedCommands.registerCommand("LookUpShot",
-                new AutoLookUpShot(m_armSubsystem, m_shooterSubsystem,
+                new AutoLookUpShot(m_drivetrain, m_armSubsystem, m_shooterSubsystem,
                         () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())));
         NamedCommands.registerCommand("LookAndShoot",
                 new LookAndShoot(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem,
@@ -391,6 +393,17 @@ public class RobotContainer {
                     .withVelocityY(0)
                     .withRotationalRate(0))); */
         m_driverCtrl.start().whileTrue(new autoCollectNote(m_drivetrain,m_intakeSubsystem,m_stageSubsystem,m_limelightVision,m_note));
+
+        m_driverCtrl.rightBumper().whileTrue(Commands.parallel(
+                new velocityOffset(m_drivetrain, () -> (m_driverCtrl.getRightTriggerAxis() >= Constants.ControllerConstants.triggerThreashold)),
+                m_drivetrain.applyRequest(
+                        () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
+                                .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
+                                .withTargetDirection(m_drivetrain.getVelocityOffset())
+                                .withDeadband(Constants.maxSpeed * 0.1)
+                                .withRotationalDeadband(0)),
+                new AutoLookUpShot(m_drivetrain, m_armSubsystem, m_shooterSubsystem,() -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()))
+                .andThen(new WaitCommand(0.05)).andThen(m_stageSubsystem.feedNote2ShooterCommand()).andThen(m_armSubsystem.prepareForIntakeCommand())));
         
             
         /*

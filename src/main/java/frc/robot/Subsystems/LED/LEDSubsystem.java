@@ -167,13 +167,13 @@ public class LEDSubsystem extends SubsystemBase {
             // If Note in Stage
             if (m_stageSub.isNoteInStage()) {
 
-                if (newState == LEDState.AUTO_AIMING) {
+                if (m_currentState == LEDState.AUTO_AIMING) {
                     // Auo-aiming: look for proper alignment + arm & shooter on target
-                    if (m_armSub.isArmAtSetpoint() && m_shooterSub.isShooterAtSpeed() && m_driveSub.isAtAngle()) {
+                    if (m_armSub.isArmAtSetpoint() && m_shooterSub.isShooterAtSpeed() && m_driveSub.isAtFutureAngle()) {
                         newState = LEDState.AIM_LOCKED;
                     }
 
-                } else if (newState == LEDState.MANUAL_AIMING) {
+                } else if (m_currentState == LEDState.MANUAL_AIMING) {
                     // Manual aiming: only look for proper arm position and shooter speed
                     if (m_armSub.isArmAtSetpoint() && m_shooterSub.isShooterAtSpeed()) {
                         newState = LEDState.ARM_LOCKED;

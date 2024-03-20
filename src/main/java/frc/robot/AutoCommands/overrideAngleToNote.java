@@ -35,7 +35,7 @@ public class overrideAngleToNote extends Command {
   public void execute() {
     if (m_limelight.hasTarget()) {
         angleToNote = Rotation2d.fromDegrees(LimelightHelpers.getTX(Constants.LimelightConstants.kCameraName));
-        fieldRelRotation2d = m_drivetrain.getRotation().plus(angleToNote);
+        fieldRelRotation2d = m_drivetrain.getRotation().minus(angleToNote);
         m_drivetrain.setOverrideAngle(fieldRelRotation2d);
     } else {
         m_drivetrain.setOverrideAngle(null);
