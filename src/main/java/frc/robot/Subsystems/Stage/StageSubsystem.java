@@ -120,10 +120,18 @@ public class StageSubsystem extends SubsystemBase {
 
     // Pass the Note to the Shooter
     public Command feedNote2ShooterCommand() {
-        //TODO: Make if note isn't in, run with timeout
-        return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
+        if (isNoteInStage()) {
+            return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
                 .until(() -> !isNoteInStage()) // run until there is NOT a Note in the Stage
                 .andThen(() -> this.stopStage());
+
+        } else {
+            // If there's no note to start, run with timeout
+            return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
+                .withTimeout(1.5) // run for 1.5 seconds
+                .andThen(() -> this.stopStage());
+        }
+        
     }
 
     public Command feedStageCommand() {

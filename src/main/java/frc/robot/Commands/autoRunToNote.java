@@ -6,11 +6,14 @@ package frc.robot.Commands;
 
 import static frc.robot.Constants.LimelightConstants.*;
 
+import java.sql.Driver;
+
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -27,6 +30,8 @@ public class autoRunToNote extends Command {
     CommandXboxPS5Controller m_driverCtrl;
     double tx = 0;
     double omegaSpeed;
+
+    boolean m_isFinished = false;
 
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = new TrapezoidProfile.Constraints(.1, .01);
     private final ProfiledPIDController omegaController = new ProfiledPIDController(.1, 0, 0, OMEGA_CONSTRATINTS);
@@ -67,7 +72,17 @@ public class autoRunToNote extends Command {
                     .withRotationalRate(omegaSpeed)
                     .withDeadband(Constants.maxSpeed * 0.1));
         }
-
+        if (DriverStation.getAlliance().get() != null && DriverStation.isAutonomousEnabled()) {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+                if (m_drivetrain.getState().Pose.getX() > Constants.FieldConstants.BLUE_AUTO_PENALTY_LINE) {
+                    m_isFinished = true;
+                }
+            } else {
+                if (m_drivetrain.getState().Pose.getX() < Constants.FieldConstants.RED_AUTO_PENALTY_LINE) {
+                    m_isFinished = true;
+                }
+            }
+        }
     }
 
     // Called once the command ends or is interrupted.
@@ -78,6 +93,6 @@ public class autoRunToNote extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return m_isFinished;
     }
 }
