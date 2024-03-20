@@ -18,7 +18,6 @@ public class prepareToShoot extends Command {
     ArmSubsystem m_armSubsystem;
     ShooterSubsystem m_shooterSubsystem;
     BooleanSupplier m_haveNote;
-    boolean m_isDone;
     boolean m_runShooter;
 
     /** Constructor - Creates a new prepareToShoot. */
@@ -35,7 +34,6 @@ public class prepareToShoot extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_isDone = false;
         if (!m_armSubsystem.isEnabled()) m_armSubsystem.enable();
 
         // If Shooter setpoints are zero, don't bother to check if it is up to speed
@@ -52,15 +50,11 @@ public class prepareToShoot extends Command {
         m_shooterSubsystem.runShooter();
 
         // After we have a Note in the Stage, bring Arm to requested position
-        // Don't require a Note if we are trying to STOW the arm
+        // Don't require a Note if we are trying to STOW the arm or CLIMB
         if (m_haveNote.getAsBoolean() || m_setpoints.state == GameState.STOWED || m_setpoints.state == GameState.CLIMB) {
-            m_armSubsystem.updateArmSetpointManual(m_setpoints);
+            m_armSubsystem.updateArmSetpoint(m_setpoints);
         }
 
-        // Exit once Arm is at setpoint and Shooter setpoint is != 0 and Shooter is up to speed 
-        if (m_armSubsystem.isArmAtSetpoint() && (m_runShooter && m_shooterSubsystem.isShooterAtSpeed())) {
-            //m_isDone = true;
-        }
     }
 
     // Called once the command ends or is interrupted.
@@ -77,6 +71,6 @@ public class prepareToShoot extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return m_isDone;
+        return false;
     }
 }
