@@ -23,39 +23,40 @@ import frc.robot.Vision.PhotonVision;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class LookAndShoot extends ParallelRaceGroup {
-  /** Creates a new LookAndShoot. */
-  CommandSwerveDrivetrain m_drivetrain;
-  IntakeSubsystem m_intake;
-  StageSubsystem m_stage;
-  ArmSubsystem m_arm;
-  ShooterSubsystem m_shooter;
-  PhotonVision m_photonVision;
-  DoubleSupplier m_distance;
-  SwerveRequest.FieldCentricFacingAngle m_head;
-  double m_alliance;
+    /** Creates a new LookAndShoot. */
+    CommandSwerveDrivetrain m_drivetrain;
+    IntakeSubsystem m_intake;
+    StageSubsystem m_stage;
+    ArmSubsystem m_arm;
+    ShooterSubsystem m_shooter;
+    PhotonVision m_photonVision;
+    DoubleSupplier m_distance;
+    SwerveRequest.FieldCentricFacingAngle m_head;
+    double m_alliance;
 
-  public LookAndShoot(CommandSwerveDrivetrain drivetrain, IntakeSubsystem intake, StageSubsystem stage
-                        , ArmSubsystem arm, ShooterSubsystem shooter, PhotonVision photonVision, DoubleSupplier distance,
-                            SwerveRequest.FieldCentricFacingAngle head, double alliance) {
-    m_drivetrain = drivetrain;
-    m_intake = intake;
-    m_stage = stage;
-    m_arm = arm;
-    m_shooter = shooter;
-    m_photonVision = photonVision;
-    m_distance = distance;
-    m_head = head;
+    public LookAndShoot(CommandSwerveDrivetrain drivetrain, IntakeSubsystem intake, StageSubsystem stage,
+            ArmSubsystem arm, ShooterSubsystem shooter, PhotonVision photonVision, DoubleSupplier distance,
+            SwerveRequest.FieldCentricFacingAngle head, double alliance) {
+        m_drivetrain = drivetrain;
+        m_intake = intake;
+        m_stage = stage;
+        m_arm = arm;
+        m_shooter = shooter;
+        m_photonVision = photonVision;
+        m_distance = distance;
+        m_head = head;
 
-    addCommands(new AutoLookUpShot(m_drivetrain, m_arm, m_shooter, m_distance).andThen(new WaitCommand(0.05)).andThen(m_stage.feedNote2ShooterCommand()).andThen(m_arm.prepareForIntakeCommand()));
-    addCommands(new velocityOffset(m_drivetrain, () -> m_stage.isStageRunning()));
-    if (m_drivetrain.getState().speeds.vxMetersPerSecond < 0.01 || m_drivetrain.getState().speeds.vyMetersPerSecond < 0.01) {
+        addCommands(new AutoLookUpShot(m_drivetrain, m_arm, m_shooter, m_distance)
+                .andThen(new WaitCommand(0.05))
+                .andThen(m_stage.feedNote2ShooterCommand())
+                .andThen(m_arm.prepareForIntakeCommand()));
+        addCommands(new velocityOffset(m_drivetrain, () -> m_stage.isStageRunning()));
         addCommands(m_drivetrain.applyRequest(
-        () -> m_head.withVelocityX(0.0 * Constants.maxSpeed * m_alliance)
-                .withVelocityY(0.0 * Constants.maxSpeed * m_alliance)
-                .withTargetDirection(m_drivetrain.getVelocityOffset())
-                .withDeadband(Constants.maxSpeed * 0.1)
-                .withRotationalDeadband(0)));
+                () -> m_head.withVelocityX(0.0)
+                        .withVelocityY(0.0)
+                        .withTargetDirection(m_drivetrain.getVelocityOffset())
+                        .withDeadband(Constants.maxSpeed * 0.1)
+                        .withRotationalDeadband(0)));
+
     }
-    addCommands(until(()->m_arm.isArmJointAtSetpoint() && m_shooter.areWheelsAtSpeed()).andThen(m_stage.feedNote2ShooterCommand()));
-  }
 }

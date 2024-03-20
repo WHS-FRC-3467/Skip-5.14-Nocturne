@@ -7,7 +7,6 @@ package frc.robot.AutoCommands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commands.velocityOffset;
 import frc.robot.Subsystems.Arm.ArmSubsystem;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
@@ -26,13 +25,8 @@ public class MoveAndShoot extends ParallelRaceGroup {
   DoubleSupplier m_distance;
 
   /**
-   * Shoot on move with shooting when ready
+   * Shoot on move with shooting when robot is ready
    * 
-   * @param drivetrain
-   * @param stage
-   * @param arm
-   * @param shooter
-   * @param distance
    */
   public MoveAndShoot(CommandSwerveDrivetrain drivetrain, StageSubsystem stage,
           ArmSubsystem arm, ShooterSubsystem shooter, DoubleSupplier distance) {

@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.ForwardReference;
+import com.fasterxml.jackson.core.sym.Name;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -29,18 +30,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.AutoCommands.AutoLookUpShot;
-import frc.robot.AutoCommands.LookAndShoot;
-import frc.robot.AutoCommands.MoveAndShoot;
-import frc.robot.AutoCommands.autoIntakeNote;
-import frc.robot.AutoCommands.autoShootNote;
-import frc.robot.AutoCommands.overrideAngleToNote;
-import frc.robot.Commands.LookUpShot;
-import frc.robot.Commands.autoCollectNote;
-import frc.robot.Commands.calibrateLookupTable;
-import frc.robot.Commands.intakeNote;
-import frc.robot.Commands.prepareToShoot;
-import frc.robot.Commands.velocityOffset;
+import frc.robot.AutoCommands.*;
+import frc.robot.Commands.*;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.Subsystems.Arm.ArmDefault;
 import frc.robot.Subsystems.Arm.ArmSubsystem;
@@ -135,18 +126,25 @@ public class RobotContainer {
         m_limelightVision.useLimelight(true);
         // Sets forward reference for drive to always be towards red alliance
         m_drive.ForwardReference = ForwardReference.RedAlliance;
-        // Creates PID for heading controller for aiming at angle
+
+        /* Dynamic turning PID */
         m_head.ForwardReference = ForwardReference.RedAlliance;
-/*         m_head.HeadingController.setP(16);
-        m_head.HeadingController.setI(0);
-        m_head.HeadingController.setD(0); */
         m_head.HeadingController.setP(20);
         m_head.HeadingController.setI(75);
         m_head.HeadingController.setD(6);
+/*         m_head.HeadingController.setP(15);
+        m_head.HeadingController.setI(80);
+        m_head.HeadingController.setD(0); */
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         m_head.HeadingController.setTolerance(Units.degreesToRadians(0.5));
 
-
+                /* Static turning PID */
+        m_cardinal.ForwardReference = ForwardReference.RedAlliance;
+        m_cardinal.HeadingController.setP(14);
+        m_cardinal.HeadingController.setI(0);
+        m_cardinal.HeadingController.setD(3);
+        m_cardinal.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
+        m_cardinal.HeadingController.setTolerance(Units.degreesToRadians(0.1));
 
         /* Game Piece Detection PID */
         m_note.ForwardReference = ForwardReference.RedAlliance;
@@ -156,12 +154,7 @@ public class RobotContainer {
         m_note.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         m_note.HeadingController.setTolerance(Units.degreesToRadians(0.5));
 
-        m_cardinal.ForwardReference = ForwardReference.RedAlliance;
-        m_cardinal.HeadingController.setP(14);
-        m_cardinal.HeadingController.setI(0);
-        m_cardinal.HeadingController.setD(3);
-        m_cardinal.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
-        m_cardinal.HeadingController.setTolerance(Units.degreesToRadians(0.5));
+
 
         configureSmartDashboard();
 
@@ -185,12 +178,10 @@ public class RobotContainer {
     }
 
     private void registerNamedCommands() {
-
         // Register Named Commands for use in PathPlanner autos
+
         NamedCommands.registerCommand("RunIntake", m_armSubsystem.prepareForIntakeCommand()
                 .andThen(new autoIntakeNote(m_intakeSubsystem, m_stageSubsystem)));
-        NamedCommands.registerCommand("DownIntake", m_armSubsystem.prepareForIntakeCommand());
-        NamedCommands.registerCommand("StopIntake", m_intakeSubsystem.stopIntakeCommand());
         NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(70, 40));
         NamedCommands.registerCommand("Passthrough", m_shooterSubsystem.runShooterCommand(8, 8));
         NamedCommands.registerCommand("StopShooter", m_shooterSubsystem.stopShooterCommand());
@@ -198,14 +189,14 @@ public class RobotContainer {
                 m_stageSubsystem.feedNote2ShooterCommand());
         NamedCommands.registerCommand("GetThatNote",
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
-        NamedCommands.registerCommand("LookUpShot",
-                new AutoLookUpShot(m_drivetrain, m_armSubsystem, m_shooterSubsystem,
-                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())));
         NamedCommands.registerCommand("LookAndShoot",
                 new LookAndShoot(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem,
                         m_photonVision,
                         () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),
-                        m_head, invertForAlliance()));
+                        m_cardinal, invertForAlliance()));
+        NamedCommands.registerCommand("MoveAndShoot",
+                new MoveAndShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem,
+                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())));
         NamedCommands.registerCommand("OverrideToNote", new overrideAngleToNote(m_drivetrain, m_limelightVision));
     }
 
