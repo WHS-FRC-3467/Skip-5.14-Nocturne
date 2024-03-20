@@ -78,8 +78,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     /* Current Arm Action */
     private enum armAction {
         kSTOWED,
-        kMANUAL_MOVING,
-        kAUTO_MOVING,
+        kAIMING,
         kONPOINT
     }
     private armAction m_armAction = armAction.kSTOWED;
@@ -167,9 +166,9 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         super.periodic();
 
         boolean atSetpoint = isArmJointAtSetpoint();
+        
         // Validate current encoder reading; stop motors if out of range
         double armPos = getJointPosAbsolute();
-
         //TODO: Test if encoder disconnect code works
         if (!m_encoder.isConnected() || ( armPos < 0.1 || armPos >= 1.0)) {
             System.out.println("Arm Encoder error reported in periodic().");
@@ -264,7 +263,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         m_armSetpoint = setpoints.arm;
         m_tolerance = setpoints.tolerance;
         m_armState = setpoints.state;
-        m_armAction = armAction.kAUTO_MOVING;
+        m_armAction = armAction.kAIMING;
 
         // Arm setpoint must be passed  in radians
         m_tpState.position = degreesToRadians(setpoints.arm);
@@ -274,18 +273,27 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         Setpoints.displayArmState(m_armState);
     }
 
-    public void updateArmSetpointManual(Setpoints setpoints) {
-        updateArmSetpoint(setpoints);
-        m_armAction = armAction.kMANUAL_MOVING;
+    /**
+     * Indicate if arm is being setup to shoot in any way
+     */
+    public boolean preparing2Shoot() {
+        return ((m_armState != GameState.STOWED) && (m_armState != GameState.INTAKE) && (m_armState != GameState.CLIMB));
     }
-
-    public boolean isArmMoving() {
-        return ((m_armAction == armAction.kMANUAL_MOVING) || (m_armAction == armAction.kAUTO_MOVING));
+    
+    /**
+     * Indicate if arm is being prepared to CLIMB
+     */
+    public boolean preparing2Climb() {
+        return ((m_armState == GameState.CLIMB));
     }
-    public boolean isArmMovingManually() {
-        return (m_armAction == armAction.kMANUAL_MOVING);
+    
+    /**
+     * Indicate if arm is being prepared to FEED
+     */
+    public boolean preparing2Feed() {
+        return ((m_armState == GameState.FEED));
     }
-
+    
     /**
      * Update the PID controller's current Arm setpoint in degrees
      * 

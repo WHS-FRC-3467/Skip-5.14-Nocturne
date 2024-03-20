@@ -45,7 +45,7 @@ public class LEDSubsystem extends SubsystemBase {
      * Robot LED States
      */
     private static enum LEDState {
-        START, DISABLED, AUTONOMOUS, ENABLED, INTAKING, HAVENOTE, MANUAL_AIMING, AUTO_AIMING, ARM_LOCKED, AIM_LOCKED, DISABLED_TARGET
+        START, DISABLED, DISABLED_TARGET, AUTONOMOUS, ENABLED, INTAKING, FEEDING, CLIMBING, HAVENOTE, AIMING, ARM_LOCKED, AIM_LOCKED
     }
     LEDState m_currentState = LEDState.START;
 
@@ -167,27 +167,24 @@ public class LEDSubsystem extends SubsystemBase {
             // If Note in Stage
             if (m_stageSub.isNoteInStage()) {
 
-                if (m_currentState == LEDState.AUTO_AIMING) {
-                    // Auo-aiming: look for proper alignment + arm & shooter on target
-                    if (m_armSub.isArmAtSetpoint() && m_shooterSub.isShooterAtSpeed() && m_driveSub.isAtFutureAngle()) {
-                        newState = LEDState.AIM_LOCKED;
-                    }
-
-                } else if (m_currentState == LEDState.MANUAL_AIMING) {
-                    // Manual aiming: only look for proper arm position and shooter speed
+                if (m_armSub.preparing2Feed()) {
+                    // Special FEEDing pattern
+                    newState = LEDState.FEEDING;
+                    
+                } else if (m_currentState == LEDState.AIMING) {
+                    // Look for proper arm position and shooter speed
                     if (m_armSub.isArmAtSetpoint() && m_shooterSub.isShooterAtSpeed()) {
                         newState = LEDState.ARM_LOCKED;
+
+                        // Look for proper alignment
+                        if (m_driveSub.isAtFutureAngle()) {
+                            newState = LEDState.AIM_LOCKED;
+                        }
                     }
 
-                } else if (m_armSub.isArmMoving()) {
-                    // Is arm moving?
-
-                    // Is it moving manually or automatically?
-                    if (m_armSub.isArmMovingManually()) {
-                        newState = LEDState.MANUAL_AIMING;
-                    } else {
-                        newState = LEDState.AUTO_AIMING;
-                    }   
+                } else if (m_armSub.preparing2Shoot()) {
+                    // Is arm being setup to shoot?
+                        newState = LEDState.AIMING;
 
                 } else {
                     // Just holding Note
@@ -197,6 +194,10 @@ public class LEDSubsystem extends SubsystemBase {
             } else if (m_stageSub.isStageRunning() && m_intakeSub.isIntakeRunning()) {
                 // If Intake & Stage Running
                 newState = LEDState.INTAKING; 
+
+            } else if (m_armSub.preparing2Climb()) {
+                // If preparing to Climb
+                newState = LEDState.CLIMBING;
 
             } else {
                 // Just Enabled
@@ -261,6 +262,20 @@ public class LEDSubsystem extends SubsystemBase {
             m_Intake.setAnimation(a_IntakeStrobe);;
             break;
 
+        case FEEDING:
+            m_Matrix.setOff();
+            m_VerticalLeft.setAnimation(a_LeftPingPong);
+            m_VerticalRight.setAnimation(a_RightPingPong);
+            m_Intake.setAnimation(a_IntakePingPong);
+            break;
+
+        case CLIMBING:
+            m_Matrix.setOff();
+            m_VerticalLeft.setAnimation(a_LeftFlame);
+            m_VerticalRight.setAnimation(a_RightFlame);
+            m_Intake.setAnimation(a_IntakePingPong);
+            break;
+
         case HAVENOTE:
             m_Matrix.setAnimation(a_MatrixStrobe);
             m_VerticalLeft.setColor(green);
@@ -268,14 +283,7 @@ public class LEDSubsystem extends SubsystemBase {
             m_Intake.setColor(green);
             break;
 
-        case MANUAL_AIMING:
-            m_Matrix.setOff();
-            m_VerticalLeft.setColor(red);
-            m_VerticalRight.setColor(red);
-            m_Intake.setColor(red);
-            break;
-
-        case AUTO_AIMING:
+        case AIMING:
             m_Matrix.setOff();
             m_VerticalLeft.setColor(blue);
             m_VerticalRight.setColor(blue);
@@ -283,11 +291,7 @@ public class LEDSubsystem extends SubsystemBase {
             break;
 
         case ARM_LOCKED:
-            //System.out.println("MAN__________");
             m_Matrix.setOff();
-            /* m_VerticalLeft.setAnimation(a_LeftGreenTwinkle);
-            m_VerticalRight.setAnimation(a_RightGreenTwinkle);
-            m_Intake.setAnimation(a_IntakeGreenTwinkle); */
             m_VerticalLeft.setColor(yellow);
             m_VerticalRight.setColor(yellow);
             m_Intake.setColor(yellow);
@@ -346,6 +350,8 @@ public class LEDSubsystem extends SubsystemBase {
     Animation a_RightRainbow = new RainbowAnimation(0.7, 0.5, m_VerticalRight.segmentSize, false, m_VerticalRight.startIndex);
     Animation a_LeftFlame = new FireAnimation(0.9, 0.75, m_VerticalLeft.segmentSize, 1.0, 0.3, true, m_VerticalLeft.startIndex);
     Animation a_RightFlame = new FireAnimation(0.9, 0.75, m_VerticalRight.segmentSize, 1.0, 0.3, false, m_VerticalRight.startIndex);
+    Animation a_LeftPingPong = new LarsonAnimation(green.r, green.g, green.b, 0, 0.8, m_VerticalLeft.segmentSize, BounceMode.Back, 6, m_VerticalLeft.startIndex);
+    Animation a_RightPingPong = new LarsonAnimation(green.r, green.g, green.b, 0, 0.8, m_VerticalRight.segmentSize, BounceMode.Back, 6, m_VerticalRight.startIndex);
     Animation a_LeftRedFlow = new ColorFlowAnimation(red.r, red.g, red.b, 0, 0.7, m_VerticalLeft.segmentSize, Direction.Backward, m_VerticalLeft.startIndex);
     Animation a_RightRedFlow = new ColorFlowAnimation(red.r, red.g, red.b, 0, 0.7, m_VerticalRight.segmentSize, Direction.Forward, m_VerticalRight.startIndex);
     Animation a_LeftBlueFlow = new ColorFlowAnimation(blue.r, blue.g, blue.b, 0, 0.7, m_VerticalLeft.segmentSize, Direction.Backward, m_VerticalLeft.startIndex);
