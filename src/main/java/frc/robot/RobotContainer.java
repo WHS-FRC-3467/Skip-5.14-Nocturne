@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.AutoCommands.AutoLookUpShot;
 import frc.robot.AutoCommands.LookAndShoot;
+import frc.robot.AutoCommands.MoveAndShoot;
 import frc.robot.AutoCommands.autoIntakeNote;
 import frc.robot.AutoCommands.autoShootNote;
 import frc.robot.AutoCommands.overrideAngleToNote;
@@ -136,11 +137,16 @@ public class RobotContainer {
         m_drive.ForwardReference = ForwardReference.RedAlliance;
         // Creates PID for heading controller for aiming at angle
         m_head.ForwardReference = ForwardReference.RedAlliance;
-        m_head.HeadingController.setP(16);
+/*         m_head.HeadingController.setP(16);
         m_head.HeadingController.setI(0);
-        m_head.HeadingController.setD(0);
+        m_head.HeadingController.setD(0); */
+        m_head.HeadingController.setP(20);
+        m_head.HeadingController.setI(75);
+        m_head.HeadingController.setD(6);
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         m_head.HeadingController.setTolerance(Units.degreesToRadians(0.5));
+
+
 
         /* Game Piece Detection PID */
         m_note.ForwardReference = ForwardReference.RedAlliance;
@@ -357,10 +363,6 @@ public class RobotContainer {
         // Driver: DPad Up: Reset the field-centric heading (when pressed)
         m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
 
-        m_driverCtrl.povDown().whileTrue(new LookAndShoot(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, 
-                                                                                m_photonVision, () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),
-                                                                                m_head, invertForAlliance()));
-
         // Driver: While Left Bumper is held, reduce speed by 25%
         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = Constants.maxSpeed * Constants.quarterSpeed)
                 .andThen(() -> m_AngularRate = Constants.quarterAngularRate));
@@ -383,29 +385,24 @@ public class RobotContainer {
 
         // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
         m_driverCtrl.rightTrigger(Constants.ControllerConstants.triggerThreashold)
-                .onTrue(m_stageSubsystem.feedNote2ShooterCommand());    
-        // .withTimeout(2)
-        // .andThen(m_armSubsystem.prepareForIntakeCommand()));
+                .onTrue(m_stageSubsystem.feedNote2ShooterCommand()
+                        .withTimeout(2)
+                        .andThen(m_armSubsystem.prepareForIntakeCommand()));
 
         m_driverCtrl.back().whileTrue(new calibrateLookupTable(m_drivetrain,m_armSubsystem,m_shooterSubsystem));
-/*         m_driverCtrl.start().whileTrue(m_drivetrain.applyRequest(
-            () -> m_drive.withVelocityX(5)
-                    .withVelocityY(0)
-                    .withRotationalRate(0))); */
-        m_driverCtrl.start().whileTrue(new autoCollectNote(m_drivetrain,m_intakeSubsystem,m_stageSubsystem,m_limelightVision,m_note));
+
+        m_driverCtrl.start().whileTrue(
+                new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
 
         m_driverCtrl.rightBumper().whileTrue(Commands.parallel(
-                new velocityOffset(m_drivetrain, () -> (m_driverCtrl.getRightTriggerAxis() >= Constants.ControllerConstants.triggerThreashold)),
+                new MoveAndShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem,
+                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())),
                 m_drivetrain.applyRequest(
                         () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
                                 .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
                                 .withTargetDirection(m_drivetrain.getVelocityOffset())
-                                .withDeadband(Constants.maxSpeed * 0.1)
-                                .withRotationalDeadband(0)),
-                new AutoLookUpShot(m_drivetrain, m_armSubsystem, m_shooterSubsystem,() -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()))
-                .andThen(new WaitCommand(0.05)).andThen(m_stageSubsystem.feedNote2ShooterCommand()).andThen(m_armSubsystem.prepareForIntakeCommand())));
-        
-            
+                                .withDeadband(Constants.maxSpeed * 0.1))));
+
         /*
          * OPERATOR Controls
          * 

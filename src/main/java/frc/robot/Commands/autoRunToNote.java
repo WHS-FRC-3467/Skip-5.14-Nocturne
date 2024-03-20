@@ -6,8 +6,6 @@ package frc.robot.Commands;
 
 import static frc.robot.Constants.LimelightConstants.*;
 
-import java.sql.Driver;
-
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 

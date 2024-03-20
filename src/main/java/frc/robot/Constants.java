@@ -51,6 +51,8 @@ public final class Constants {
         public static final Setpoints TRAP =      new Setpoints(0.0, 0.4, 20.0,20.0,  GameState.TRAP);
         public static final Setpoints LOOKUP =    new Setpoints(0.0, 0.4, 20.0,25.0,  GameState.LOOKUP);
         public static final Setpoints FEED =      new Setpoints(7.0, 2, 25,25.0,  GameState.FEED);
+
+        public static final double autoShootMaxDist = 4.0;
     }
     
     public static final class CanConstants {

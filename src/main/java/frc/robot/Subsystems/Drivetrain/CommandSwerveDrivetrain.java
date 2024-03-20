@@ -223,5 +223,13 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public boolean isAtFutureAngle() {
         return atFutureAngle;
     }
+    
+    public boolean isMoving() {
+        if (getCurrentRobotChassisSpeeds().vxMetersPerSecond > .1 || getCurrentRobotChassisSpeeds().vyMetersPerSecond > .1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
