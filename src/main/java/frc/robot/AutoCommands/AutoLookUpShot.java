@@ -26,16 +26,21 @@ public class AutoLookUpShot extends Command {
     VisionLookUpTable m_VisionLookUpTable;
     DoubleSupplier m_distance;
     boolean m_isDone;
+    double m_maxShotDist;
+    boolean m_shootingOnTheMove;
     
 
     /** Constructor - Creates a new prepareToShoot. */
-    public AutoLookUpShot(CommandSwerveDrivetrain drivetrain, ArmSubsystem armSub, ShooterSubsystem shootSub, DoubleSupplier distance) {
+    public AutoLookUpShot(CommandSwerveDrivetrain drivetrain, ArmSubsystem armSub, ShooterSubsystem shootSub, 
+                            DoubleSupplier distance, double maxShotDist, boolean shootingOnTheMove) {
         m_drivetrain = drivetrain;
         m_armSubsystem = armSub;
         m_shooterSubsystem = shootSub;
         m_VisionLookUpTable = new VisionLookUpTable();
         m_distance = distance;
+        m_maxShotDist = maxShotDist;
         m_setpoints = RobotConstants.LOOKUP;
+        m_shootingOnTheMove = shootingOnTheMove;
 
         addRequirements(armSub, shootSub);
     }
@@ -69,7 +74,7 @@ public class AutoLookUpShot extends Command {
         m_shooterSubsystem.runShooter(m_setpoints.shooterLeft, m_setpoints.shooterRight);
 
         if(m_armSubsystem.isArmJointAtSetpoint() && m_shooterSubsystem.areWheelsAtSpeed() && m_drivetrain.isAtFutureAngle()) {
-            if(m_armSubsystem.isArmSteady()) {
+            if(m_armSubsystem.isArmSteady() || (m_shootingOnTheMove && distance < m_maxShotDist)) {
                 m_isDone = true;
             }
         }

@@ -35,7 +35,7 @@ public class MoveAndShoot extends ParallelRaceGroup {
       m_arm = arm;
       m_shooter = shooter;
     m_distance = distance;
-    addCommands(new AutoLookUpShot(m_drivetrain, m_arm, m_shooter, m_distance)
+    addCommands(new AutoLookUpShot(m_drivetrain, m_arm, m_shooter, m_distance, 3.5, true)
             //.andThen(new WaitCommand(0.05))
             .andThen(m_stage.feedNote2ShooterCommand())
             .andThen(m_arm.prepareForIntakeCommand()));

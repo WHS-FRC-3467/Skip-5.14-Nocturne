@@ -337,7 +337,7 @@ public class RobotContainer {
         // speaker
         // AND adjusting Arm angle AND running Shooter
 
-        m_driverCtrl.rightStick().whileTrue(Commands.parallel(
+/*         m_driverCtrl.rightStick().whileTrue(Commands.parallel(
                 new velocityOffset(m_drivetrain, () -> (m_driverCtrl.getRightTriggerAxis() >= Constants.ControllerConstants.triggerThreashold)),
                 m_drivetrain.applyRequest(
                         () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
@@ -346,6 +346,13 @@ public class RobotContainer {
                                 .withDeadband(Constants.maxSpeed * 0.1)
                                 .withRotationalDeadband(0)),
                 new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance())));
+ */
+        // Stationary look and shoot with shoot when ready
+        m_driverCtrl.rightStick()
+                .whileTrue(new LookAndShoot(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_armSubsystem,
+                        m_shooterSubsystem, m_photonVision,
+                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),
+                        m_head, m_AngularRate).andThen(m_shooterSubsystem.stopShooterCommand()));
 
         // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X')
         // (while pressed)
@@ -380,14 +387,15 @@ public class RobotContainer {
                         .withTimeout(2)
                         .andThen(m_armSubsystem.prepareForIntakeCommand()));
 
-        m_driverCtrl.back().whileTrue(new calibrateLookupTable(m_drivetrain,m_armSubsystem,m_shooterSubsystem));
+        m_driverCtrl.back().whileTrue(new calibrateLookupTable(m_drivetrain, m_armSubsystem, m_shooterSubsystem));
 
         m_driverCtrl.start().whileTrue(
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
 
         m_driverCtrl.rightBumper().whileTrue(Commands.parallel(
                 new MoveAndShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem,
-                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())),
+                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()))
+                        .andThen(m_shooterSubsystem.stopShooterCommand()),
                 m_drivetrain.applyRequest(
                         () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
                                 .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
