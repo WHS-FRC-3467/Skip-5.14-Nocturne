@@ -135,8 +135,9 @@ public final class Constants {
 
         // Shooter speeds are set in the individual position Setpoints at the top of this file
         
-        public static final double kShooterTolerance = 5.0;
-        public static final double kTimeToShoot = .6; //Time it takes before note leave the shooter
+        public static final double kShooterTolerance = 1.0;
+        public static final double kTimeToShoot = .13; //Time it takes before note leave the shooter
+        public static final double kTimeToScore = .2;
         public static final double kShooterIdleSpeed = 15.0;
 
     }
