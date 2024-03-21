@@ -108,6 +108,7 @@ public class velocityOffset extends Command {
             if (!ranOnce) {
                 lockedMove = moveDelta;
                 lockedArm = armDelta;
+                shotTimer.start();
                 ranOnce = true;
             } else {
                 moveDelta = lockedMove;
