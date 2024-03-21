@@ -94,10 +94,10 @@ public class velocityOffset extends Command {
         //Get current drivetrain velocities in field relative terms
         speeds = m_drivetrain.getFieldRelativeChassisSpeeds(); 
         
-/*         timeUntilShot = Constants.ShooterConstants.kTimeToShoot - shotTimer.get();
+        timeUntilShot = Constants.ShooterConstants.kTimeToShoot - shotTimer.get();
         if (timeUntilShot < 0) {
             timeUntilShot = 0.00;
-        } */
+        }
         
         //Calculate change in x/y distance due to time and velocity
         //moveDelta = new Translation2d(timeUntilShot*(speeds.vxMetersPerSecond),timeUntilShot*(speeds.vyMetersPerSecond));
