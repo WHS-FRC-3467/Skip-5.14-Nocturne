@@ -137,6 +137,7 @@ public final class Constants {
         
         public static final double kShooterTolerance = 1.0;
         public static final double kTimeToShoot = .13; //Time it takes before note leave the shooter
+        public static final double kTimeToScore = .2;
         public static final double kShooterIdleSpeed = 15.0;
 
     }
