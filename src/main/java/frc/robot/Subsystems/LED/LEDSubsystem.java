@@ -175,11 +175,12 @@ public class LEDSubsystem extends SubsystemBase {
                     // Look for proper arm position and shooter speed
                     if (m_armSub.isArmAtSetpoint() && m_shooterSub.isShooterAtSpeed()) {
                         newState = LEDState.ARM_LOCKED;
+                    }
 
-                        // Look for proper alignment
-                        if (m_driveSub.isAtFutureAngle()) {
-                            newState = LEDState.AIM_LOCKED;
-                        }
+                } else if (m_currentState == LEDState.ARM_LOCKED) {
+                    // Look for proper alignment
+                    if (m_driveSub.isAtFutureAngle()) {
+                        newState = LEDState.AIM_LOCKED;
                     }
 
                 } else if (m_armSub.preparing2Shoot()) {
@@ -298,10 +299,10 @@ public class LEDSubsystem extends SubsystemBase {
             break;
 
         case AIM_LOCKED:
-            m_Matrix.setOff();
-            m_VerticalLeft.setAnimation(a_LeftFlame);
-            m_VerticalRight.setAnimation(a_RightFlame);
-            m_Intake.setColor(green);
+            m_Matrix.setAnimation(a_MatrixStrobe);
+            m_VerticalLeft.setColor(magenta);
+            m_VerticalRight.setColor(magenta);
+            m_Intake.setColor(magenta);
             break;
 
         default:
