@@ -16,6 +16,7 @@ import frc.robot.Constants;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import frc.robot.Subsystems.Stage.StageSubsystem;
 import frc.robot.Util.FieldCentricAiming;
+import frc.robot.Util.TunableNumber;
 
 public class velocityOffset extends Command {
 
@@ -38,6 +39,7 @@ public class velocityOffset extends Command {
 
     ChassisSpeeds speeds;
     Translation2d moveDelta;
+    Translation2d armDelta;
 
     /**The calculated the time until the note leaves based on the constant and time since button press */
     Double timeUntilShot; 
@@ -45,6 +47,15 @@ public class velocityOffset extends Command {
 
     Double correctedDistance;
     Rotation2d correctedRotation;
+
+    Translation2d lockedMove;
+    Translation2d lockedArm;
+
+    TunableNumber timeToShoot = new TunableNumber("timeToShoot", Constants.ShooterConstants.kTimeToShoot);
+    TunableNumber timeToScore = new TunableNumber("timeToScore", Constants.ShooterConstants.kTimeToScore);
+    
+
+
 
     /** Calculates the velocity compensated target to shoot at 
      * @param drivetrain CommandSwerveDrivetrain instance
@@ -70,12 +81,12 @@ public class velocityOffset extends Command {
     public void execute() {
 
         //Starts shot timer after trigger press
-        if (m_isShooting.getAsBoolean()) {
+/*         if (m_isShooting.getAsBoolean()) {
             if (!ranOnce) {
                 shotTimer.start();
                 ranOnce = true;
             }
-        }
+        } */
         //Get current translation of the drivetrain
         currentRobotTranslation = m_drivetrain.getState().Pose.getTranslation(); 
         //Calculate angle relative to the speaker from current pose
@@ -87,20 +98,37 @@ public class velocityOffset extends Command {
         if (timeUntilShot < 0) {
             timeUntilShot = 0.00;
         }
-
+        
         //Calculate change in x/y distance due to time and velocity
-        moveDelta = new Translation2d(timeUntilShot*(speeds.vxMetersPerSecond),timeUntilShot*(speeds.vyMetersPerSecond));
+        //moveDelta = new Translation2d(timeUntilShot*(speeds.vxMetersPerSecond),timeUntilShot*(speeds.vyMetersPerSecond));
+        moveDelta = new Translation2d(timeToShoot.get() *(speeds.vxMetersPerSecond),timeToShoot.get() *(speeds.vyMetersPerSecond));
+        armDelta = new Translation2d(timeToScore.get() *(speeds.vxMetersPerSecond),timeToScore.get() *(speeds.vyMetersPerSecond));
+
+        if (m_isShooting.getAsBoolean()) {
+            if (!ranOnce) {
+                lockedMove = moveDelta;
+                lockedArm = armDelta;
+                shotTimer.start();
+                ranOnce = true;
+            } else {
+                moveDelta = lockedMove;
+                armDelta = lockedArm;
+            }
+
+        }
 
         //futureRobotPose is the position the robot will be at timeUntilShot in the future
         futureRobotTranslation = currentRobotTranslation.plus(moveDelta);
         // Angle to the speaker at future position
         futureAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(futureRobotTranslation);
 
+
         //The amount to add to the current angle to speaker to aim for the future
         correctedRotation = futureAngleToSpeaker;
         //correctedRotation = currentAngleToSpeaker; //Uncomment to disable future pose aiming
         // Get the future distance to speaker
-        correctedDistance = m_FieldCentricAiming.getDistToSpeaker(futureRobotTranslation);
+        //correctedDistance = m_FieldCentricAiming.getDistToSpeaker(futureRobotTranslation);
+        correctedDistance = m_FieldCentricAiming.getDistToSpeaker(currentRobotTranslation.plus(armDelta));
         m_drivetrain.setVelocityOffset(correctedRotation,correctedDistance); //Pass the offsets to the drivetrain
         // Pass angle as an override for path planner rotation to do shoot on the move during path execution
         m_drivetrain.setOverrideAngle(correctedRotation); 
