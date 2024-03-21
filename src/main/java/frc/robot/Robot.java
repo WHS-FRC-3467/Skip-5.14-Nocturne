@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
         // Get currently selected command
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         // Check if is the same as the last one
-        if (m_autonomousCommand != m_lastAutonomousCommand) {
+        if (m_autonomousCommand != m_lastAutonomousCommand && m_autonomousCommand != null) {
             // Check if its contained in the list of our autos
             if (AutoBuilder.getAllAutoNames().contains(m_autonomousCommand.getName())) {
                 // Clear the current path
@@ -101,7 +101,6 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }   
-        m_robotContainer.setTeleopHeadPID();
     }
 
     @Override

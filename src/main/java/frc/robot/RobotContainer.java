@@ -129,12 +129,12 @@ public class RobotContainer {
 
         /* Dynamic turning PID */
         m_head.ForwardReference = ForwardReference.RedAlliance;
-        m_head.HeadingController.setP(20);
-        m_head.HeadingController.setI(75);
-        m_head.HeadingController.setD(6);
-/*         m_head.HeadingController.setP(15);
-        m_head.HeadingController.setI(80);
-        m_head.HeadingController.setD(0); */
+        //m_head.HeadingController.setP(20);
+        //m_head.HeadingController.setI(75);
+        //m_head.HeadingController.setD(6);
+         m_head.HeadingController.setP(20);
+        m_head.HeadingController.setI(0);
+        m_head.HeadingController.setD(2); 
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         m_head.HeadingController.setTolerance(Units.degreesToRadians(0.5));
 
@@ -394,11 +394,10 @@ public class RobotContainer {
 
         m_driverCtrl.rightBumper().whileTrue(Commands.parallel(
                 new MoveAndShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem,
-                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()))
-                        .andThen(m_shooterSubsystem.stopShooterCommand()),
+                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())),
                 m_drivetrain.applyRequest(
-                        () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
-                                .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * invertForAlliance())
+                        () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * .75 * invertForAlliance())
+                                .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * Constants.halfSpeed * invertForAlliance())
                                 .withTargetDirection(m_drivetrain.getVelocityOffset())
                                 .withDeadband(Constants.maxSpeed * 0.1))));
 
@@ -446,7 +445,9 @@ public class RobotContainer {
         m_operatorCtrl.start().onTrue(new prepareToShoot(RobotConstants.FEED, () -> m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
 
-        m_operatorCtrl.back().onTrue(new InstantCommand(()->m_armSubsystem.disable()).andThen(new InstantCommand(()->m_armSubsystem.enable())));
+        m_operatorCtrl.back().onTrue(m_shooterSubsystem.runShooterCommand(24, 24));
+
+        //m_operatorCtrl.back().onTrue(new InstantCommand(()->m_armSubsystem.disable()).andThen(new InstantCommand(()->m_armSubsystem.enable())));
         m_operatorCtrl.rightBumper().whileTrue(m_stageSubsystem.feedStageCommand());
         m_operatorCtrl.leftBumper().onTrue(m_shooterSubsystem.stopShooterCommand());
 

@@ -32,7 +32,7 @@ public class calibrateLookupTable extends Command {
     Command driveCommand;
 
     Pose2d speakerPos;
-    double calibrateAngleToSpeaker = Units.degreesToRadians(20); 
+    double calibrateAngleToSpeaker = Units.degreesToRadians(5); 
 
     Translation2d currentTarget;
     Rotation2d currentAngle;
@@ -69,7 +69,7 @@ public class calibrateLookupTable extends Command {
             allianceInvert *= -1;
         }
         // Creates positions to calibrate from every .5 meters
-        for (double dist = 2; dist <= 5; dist = dist + .5) {
+        for (double dist = 2; dist <= 7; dist = dist + .5) {
             aimingPositions.add(new Translation2d(speakerPos.getX() - Math.cos(calibrateAngleToSpeaker)*dist*allianceInvert,
                                                   speakerPos.getY() + Math.sin(calibrateAngleToSpeaker)*dist));
         }
