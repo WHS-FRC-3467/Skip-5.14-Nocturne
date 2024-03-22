@@ -19,9 +19,9 @@
   "autoFolders": [
     "Advantage Autos",
     "Backup",
-    "Week4",
     "PID",
-    "Week3"
+    "Week3",
+    "Week6"
   ],
   "defaultMaxVel": 6.0,
   "defaultMaxAccel": 6.0,
