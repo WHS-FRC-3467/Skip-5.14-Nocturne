@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.118232532761363,
-        "y": 7.437482225391801
+        "x": 7.9779026794520815,
+        "y": 2.1634185718513894
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.9914765518063895,
-        "y": 7.238804745274806
+        "x": 8.11530080393333,
+        "y": 2.9426420572716188
       },
       "isLocked": true,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.0660582232845375,
-        "y": 6.794303731057604
+        "x": 7.9779026794520815,
+        "y": 3.8239885026778606
       },
       "prevControl": {
-        "x": 5.814484107600693,
-        "y": 7.098351746561043
+        "x": 7.9545143705672015,
+        "y": 3.262669089440744
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,14 +38,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": -165.51179677196754,
+    "velocity": 0,
+    "rotation": -131.30861401354863,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "6 Note",
+  "folder": "[Steal] Source Side",
   "previewStartingState": {
-    "rotation": -174.89783474764184,
+    "rotation": -127.97160376105033,
     "velocity": 0
   },
   "useDefaultConstraints": true
