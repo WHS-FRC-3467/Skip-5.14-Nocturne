@@ -31,19 +31,38 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ShootNote"
+          }
+        },
+        {
           "type": "race",
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "[ZV]SW to R3"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "RunIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "[ZV]SW to R3"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -60,15 +79,28 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "R3-R2"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "RunIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "R3-R2"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -85,15 +117,28 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "R2-R1"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "RunIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "R2-R1"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -110,15 +155,28 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "R1-M1"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "RunIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "R1-M1"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -184,6 +242,6 @@
       ]
     }
   },
-  "folder": "Week4",
+  "folder": null,
   "choreoAuto": false
 }

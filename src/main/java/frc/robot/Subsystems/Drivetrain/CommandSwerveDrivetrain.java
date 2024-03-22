@@ -166,6 +166,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         if (RobotConstants.kIsAutoAimTuningMode) {
             SmartDashboard.putBoolean("Is within 3 deg of speaker", atAngle);
             SmartDashboard.putNumber("vel Offset drivertrain", getVelocityOffset().getDegrees());
+            SmartDashboard.putBoolean("IsRotatingFast", isRotatingFast());
+            SmartDashboard.putNumber("Rot Speed", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
         }
 
         atAngle = (Math.abs(m_FieldCentricAiming.getAngleToSpeaker(getState().Pose.getTranslation())
@@ -226,6 +228,14 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     
     public boolean isMoving() {
         if (getCurrentRobotChassisSpeeds().vxMetersPerSecond > .1 || getCurrentRobotChassisSpeeds().vyMetersPerSecond > .1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isRotatingFast(){
+        if (getCurrentRobotChassisSpeeds().omegaRadiansPerSecond > .2) {
             return true;
         } else {
             return false;

@@ -23,21 +23,23 @@ public class MoveAndShoot extends ParallelRaceGroup {
   ArmSubsystem m_arm;
   ShooterSubsystem m_shooter;
   DoubleSupplier m_distance;
+  double m_maxShotDist;
 
   /**
    * Shoot on move with shooting when robot is ready
    * 
    */
   public MoveAndShoot(CommandSwerveDrivetrain drivetrain, StageSubsystem stage,
-          ArmSubsystem arm, ShooterSubsystem shooter, DoubleSupplier distance) {
+          ArmSubsystem arm, ShooterSubsystem shooter, DoubleSupplier distance, double maxShotDist) {
       m_drivetrain = drivetrain;
       m_stage = stage;
       m_arm = arm;
       m_shooter = shooter;
     m_distance = distance;
-    addCommands(new AutoLookUpShot(m_drivetrain, m_arm, m_shooter, m_distance, 3.5, true)
+    m_maxShotDist = maxShotDist;
+    addCommands(new AutoLookUpShot(m_drivetrain, m_arm, m_shooter, m_distance, maxShotDist, true)
             //.andThen(new WaitCommand(0.05))
-            .andThen(m_stage.feedNote2ShooterCommand())
+            .andThen(m_stage.feedWithBeam())
             .andThen(m_arm.prepareForIntakeCommand()));
     addCommands(new velocityOffset(m_drivetrain, () -> m_stage.isStageRunning()));
 }

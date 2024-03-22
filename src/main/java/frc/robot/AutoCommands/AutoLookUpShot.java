@@ -73,7 +73,7 @@ public class AutoLookUpShot extends Command {
         // Bring Shooter to requested speed
         m_shooterSubsystem.runShooter(m_setpoints.shooterLeft, m_setpoints.shooterRight);
 
-        if(m_armSubsystem.isArmJointAtSetpoint() && m_shooterSubsystem.areWheelsAtSpeed() && m_drivetrain.isAtFutureAngle()) {
+        if(m_armSubsystem.isArmJointAtSetpoint() && m_shooterSubsystem.areWheelsAtSpeed() && m_drivetrain.isAtFutureAngle() && !m_drivetrain.isRotatingFast()) {
             if((m_armSubsystem.isArmSteady() && !m_shootingOnTheMove) || (m_shootingOnTheMove && distance < m_maxShotDist)) {
                 m_isDone = true;
             }

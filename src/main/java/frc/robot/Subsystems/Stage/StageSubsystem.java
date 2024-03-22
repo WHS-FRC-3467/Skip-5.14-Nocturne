@@ -1,5 +1,7 @@
 package frc.robot.Subsystems.Stage;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
@@ -9,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CanConstants;
@@ -119,19 +122,21 @@ public class StageSubsystem extends SubsystemBase {
      */
 
     // Pass the Note to the Shooter
-    public Command feedNote2ShooterCommand() {
-        if (isNoteInStage()) {
-            return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
-                .until(() -> !isNoteInStage()) // run until there is NOT a Note in the Stage
-                .andThen(() -> this.stopStage());
+    public ConditionalCommand feedNote2ShooterCommand = new ConditionalCommand(feedWithTimeout(),feedWithBeam(),() -> m_noteInStage); 
 
-        } else {
-            // If there's no note to start, run with timeout
-            return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
+    public Command feedWithTimeout() {
+        System.out.println("Note Not In Stage");
+        return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
                 .withTimeout(1.5) // run for 1.5 seconds
                 .andThen(() -> this.stopStage());
-        }
-        
+
+    }
+
+    public Command feedWithBeam() {
+        System.out.println("Note In Stage");
+        return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
+                .until(() -> !isNoteInStage()) // run until there is NOT a Note in the Stage
+                .andThen(() -> this.stopStage());
     }
 
     public Command feedStageCommand() {

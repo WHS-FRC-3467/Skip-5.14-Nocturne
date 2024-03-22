@@ -132,7 +132,8 @@ public class RobotContainer {
         //m_head.HeadingController.setP(20);
         //m_head.HeadingController.setI(75);
         //m_head.HeadingController.setD(6);
-         m_head.HeadingController.setP(20);
+         m_head.HeadingController.setP(25);
+         
         m_head.HeadingController.setI(0);
         m_head.HeadingController.setD(2); 
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -140,11 +141,11 @@ public class RobotContainer {
 
                 /* Static turning PID */
         m_cardinal.ForwardReference = ForwardReference.RedAlliance;
-        m_cardinal.HeadingController.setP(14);
+        m_cardinal.HeadingController.setP(20);
         m_cardinal.HeadingController.setI(0);
-        m_cardinal.HeadingController.setD(3);
+        m_cardinal.HeadingController.setD(1.5);
         m_cardinal.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
-        m_cardinal.HeadingController.setTolerance(Units.degreesToRadians(0.1));
+        m_cardinal.HeadingController.setTolerance(Units.degreesToRadians(0.01));
 
         /* Game Piece Detection PID */
         m_note.ForwardReference = ForwardReference.RedAlliance;
@@ -186,7 +187,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Passthrough", m_shooterSubsystem.runShooterCommand(8, 8));
         NamedCommands.registerCommand("StopShooter", m_shooterSubsystem.stopShooterCommand());
         NamedCommands.registerCommand("ShootNote",
-                m_stageSubsystem.feedNote2ShooterCommand());
+                m_stageSubsystem.feedWithBeam());
         NamedCommands.registerCommand("GetThatNote",
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
         NamedCommands.registerCommand("LookAndShoot",
@@ -196,7 +197,7 @@ public class RobotContainer {
                         m_cardinal, invertForAlliance()));
         NamedCommands.registerCommand("MoveAndShoot",
                 new MoveAndShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem,
-                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())));
+                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),5));
         NamedCommands.registerCommand("OverrideToNote", new overrideAngleToNote(m_drivetrain, m_limelightVision));
     }
 
@@ -242,7 +243,8 @@ public class RobotContainer {
     private void configureSmartDashboard() {
 
         if (RobotConstants.kIsAutoAimTuningMode) {
-            SmartDashboard.putData("Auto Turning PID", m_head.HeadingController);
+            SmartDashboard.putData("Shoot on Move Turning PID", m_head.HeadingController);
+            SmartDashboard.putData("Static Turning PID", m_cardinal.HeadingController);
         }
         if (RobotConstants.kIsShooterTuningMode) {
             SmartDashboard.putData("Update Shooter Gains", m_shooterSubsystem.updateShooterGainsCommand());
@@ -337,7 +339,7 @@ public class RobotContainer {
         // speaker
         // AND adjusting Arm angle AND running Shooter
 
-/*         m_driverCtrl.rightStick().whileTrue(Commands.parallel(
+/*          m_driverCtrl.rightStick().whileTrue(Commands.parallel(
                 new velocityOffset(m_drivetrain, () -> (m_driverCtrl.getRightTriggerAxis() >= Constants.ControllerConstants.triggerThreashold)),
                 m_drivetrain.applyRequest(
                         () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * invertForAlliance())
@@ -346,13 +348,14 @@ public class RobotContainer {
                                 .withDeadband(Constants.maxSpeed * 0.1)
                                 .withRotationalDeadband(0)),
                 new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.getCorrectedDistance())));
- */
+  */
         // Stationary look and shoot with shoot when ready
-        m_driverCtrl.rightStick()
+         m_driverCtrl.rightStick()
                 .whileTrue(new LookAndShoot(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_armSubsystem,
                         m_shooterSubsystem, m_photonVision,
                         () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),
-                        m_head, m_AngularRate).andThen(m_shooterSubsystem.stopShooterCommand()));
+                        m_cardinal, m_AngularRate)); 
+        m_driverCtrl.rightStick().onFalse(m_shooterSubsystem.stopShooterCommand());
 
         // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X')
         // (while pressed)
@@ -383,7 +386,7 @@ public class RobotContainer {
 
         // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
         m_driverCtrl.rightTrigger(Constants.ControllerConstants.triggerThreashold)
-                .onTrue(m_stageSubsystem.feedNote2ShooterCommand()
+                .onTrue(m_stageSubsystem.feedWithBeam()
                         .withTimeout(2)
                         .andThen(m_armSubsystem.prepareForIntakeCommand()));
 
@@ -394,12 +397,14 @@ public class RobotContainer {
 
         m_driverCtrl.rightBumper().whileTrue(Commands.parallel(
                 new MoveAndShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem,
-                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation())),
+                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),4),
                 m_drivetrain.applyRequest(
                         () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * Constants.maxSpeed * .75 * invertForAlliance())
-                                .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * Constants.halfSpeed * invertForAlliance())
+                                .withVelocityY(-m_driverCtrl.getLeftX() * Constants.maxSpeed * .75 * invertForAlliance())
                                 .withTargetDirection(m_drivetrain.getVelocityOffset())
                                 .withDeadband(Constants.maxSpeed * 0.1))));
+
+        m_driverCtrl.rightBumper().onFalse(m_shooterSubsystem.stopShooterCommand());
 
         /*
          * OPERATOR Controls
@@ -490,7 +495,7 @@ public class RobotContainer {
     }
 
     public void setTeleopHeadPID() {
-        m_head.HeadingController.setP(15);
+        m_head.HeadingController.setP(12);
         m_head.HeadingController.setI(80);
         m_head.HeadingController.setD(0);
     }
