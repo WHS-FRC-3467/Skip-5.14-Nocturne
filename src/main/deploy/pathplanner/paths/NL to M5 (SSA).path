@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.071455914991601,
-        "y": 5.917242147874609
+        "x": 2.1845960673053426,
+        "y": 3.3703302034794973
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.726628154111008,
-        "y": 7.460870534276681
+        "x": 2.185220634238948,
+        "y": 0.9488860232488852
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.8643485056115514,
-        "y": 6.371855052256165
+        "x": 7.848023687168352,
+        "y": 0.7818592329748474
       },
       "prevControl": {
-        "x": 3.809274655175282,
-        "y": 6.480673682103979
+        "x": 4.416108794835005,
+        "y": 1.1328505287816677
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -154.0256060375686,
+    "rotation": 175.91438322002514,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "(Rush)",
+  "folder": "PSW-R5NL-R4NL (SSA)",
   "previewStartingState": {
-    "rotation": 158.68208772453855,
+    "rotation": 134.99999999999994,
     "velocity": 0
   },
   "useDefaultConstraints": true
