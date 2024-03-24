@@ -147,7 +147,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.2
+                        "waitTime": 0.3
                       }
                     }
                   ]
@@ -216,6 +216,12 @@
           "type": "named",
           "data": {
             "name": "StopShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[ZV]SW to Mid"
           }
         }
       ]

@@ -217,6 +217,12 @@
           "data": {
             "name": "StopShooter"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[ZV]SW to Mid"
+          }
         }
       ]
     }

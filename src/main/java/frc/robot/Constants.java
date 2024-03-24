@@ -31,13 +31,13 @@ public final class Constants {
 
     public static final class RobotConstants {
 
-        public static final boolean kIsTuningMode = true;
+        public static final boolean kIsTuningMode = false;
         public static final boolean kIsDriveTuningMode = false;
-        public static final boolean kIsArmTuningMode = true;
+        public static final boolean kIsArmTuningMode = false;
         public static final boolean kIsIntakeTuningMode = false;
         public static final boolean kIsStageTuningMode = false;
-        public static final boolean kIsShooterTuningMode = true;
-        public static final boolean kIsAutoAimTuningMode = true;
+        public static final boolean kIsShooterTuningMode = false;
+        public static final boolean kIsAutoAimTuningMode = false;
     
         // Shooter and Arm Setpoints
         public static final Setpoints STOWED =    new Setpoints(1.0, 0.4, 0.0, 0.0, GameState.STOWED);
@@ -49,8 +49,8 @@ public final class Constants {
         public static final Setpoints PREPCLIMB = new Setpoints(0.0, 0.4, 0.0,0.0,  GameState.PREPCLIMB);
         public static final Setpoints CLIMB =     new Setpoints(88.0, 0.4, 0.0,0.0,  GameState.CLIMB);
         public static final Setpoints TRAP =      new Setpoints(0.0, 0.4, 20.0,20.0,  GameState.TRAP);
-        public static final Setpoints LOOKUP =    new Setpoints(0.0, 0.4, 20.0,25.0,  GameState.LOOKUP);
-        public static final Setpoints FEED =      new Setpoints(10.0, 2, 25,25.0,  GameState.FEED);
+        public static final Setpoints LOOKUP =    new Setpoints(0.0, 0.8, 20.0,25.0,  GameState.LOOKUP);
+        public static final Setpoints FEED =      new Setpoints(10.0, 2, 28,28.0,  GameState.FEED);
 
         public static final double autoShootMaxDist = 4.0;
     }
