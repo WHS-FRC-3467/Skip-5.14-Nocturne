@@ -37,7 +37,7 @@ public class autoShootNote extends Command {
   @Override
   public void execute() {
     if(m_arm.isArmJointAtSetpoint() && m_shooter.areWheelsAtSpeed() && m_drivetrain.isAtAngle()) {
-        m_stage.feedNote2ShooterCommand.schedule();
+        m_stage.feedNote2ShooterCommand().schedule();
         m_isDone = true;
     }
   }

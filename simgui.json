@@ -42,6 +42,8 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/Pose": "Field2d",
+      "/SmartDashboard/Arm Brake Command": "Command",
+      "/SmartDashboard/Arm Coast Command": "Command",
       "/SmartDashboard/Arm Contoller": "ProfiledPIDController",
       "/SmartDashboard/Arm Controller": "Motor Controller",
       "/SmartDashboard/Arm to Angle": "Command",
@@ -61,6 +63,7 @@
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
       "/SmartDashboard/Move Arm To Setpoint": "Command",
+      "/SmartDashboard/Note PID": "ProfiledPIDController",
       "/SmartDashboard/ProfiledPIDController[1]": "ProfiledPIDController",
       "/SmartDashboard/Robot Pose Field Map": "Field2d",
       "/SmartDashboard/Run Shooter": "Command",

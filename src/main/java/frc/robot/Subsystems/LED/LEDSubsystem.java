@@ -217,20 +217,21 @@ public class LEDSubsystem extends SubsystemBase {
     private void LEDStateMachine(LEDState newState) {
         
         switch (newState) {
-        case DISABLED:
-            m_Matrix.setOff();
-            if (DriverStation.getAlliance().get() == Alliance.Blue) {
-                m_VerticalLeft.setAnimation(a_LeftBlueFlow);
-                m_VerticalRight.setAnimation(a_RightBlueFlow);
-                m_Intake.setAnimation(a_IntakeBlueFlow);
+            case DISABLED:
+                m_Matrix.setOff();
+                if (DriverStation.getAlliance().isPresent()) {
+                    if (DriverStation.getAlliance().get() == Alliance.Blue) {
+                        m_VerticalLeft.setAnimation(a_LeftBlueFlow);
+                        m_VerticalRight.setAnimation(a_RightBlueFlow);
+                        m_Intake.setAnimation(a_IntakeBlueFlow);
+                    } else {
+                        m_VerticalLeft.setAnimation(a_LeftRedFlow);
+                        m_VerticalRight.setAnimation(a_RightRedFlow);
+                        m_Intake.setAnimation(a_IntakeRedFlow);
+                    }
+                }
 
-            } else {
-                m_VerticalLeft.setAnimation(a_LeftRedFlow);
-                m_VerticalRight.setAnimation(a_RightRedFlow);
-                m_Intake.setAnimation(a_IntakeRedFlow);
-
-            }
-            this.timerDisabled();
+                this.timerDisabled();
             break;
 
         case DISABLED_TARGET:

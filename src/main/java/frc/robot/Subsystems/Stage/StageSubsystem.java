@@ -26,6 +26,7 @@ public class StageSubsystem extends SubsystemBase {
     TalonSRX m_stageMotor = new WPI_TalonSRX(CanConstants.ID_StageMotor);
     DigitalInput m_stageBeamBreak = new DigitalInput(DIOConstants.kStageBeamBreak);
     boolean m_noteInStage = false;
+    BooleanSupplier m_noteInStageSupplier;
     boolean m_stageRunning = false;
 
     /** Creates a new StageSubsystem. */
@@ -105,6 +106,17 @@ public class StageSubsystem extends SubsystemBase {
         this.runStage(speed);
     }
 
+        public void ejectFrontDebug(double speed) {
+            System.out.println("DEBUG");
+        this.runStage(speed);
+    }
+
+            public void ejectFrontDebug2(double speed) {
+            System.out.println("DEBUG2");
+        this.runStage(speed);
+    }
+
+
     public void ejectBack(double speed) {
         this.runStage((-1.0) * speed);
     }
@@ -122,19 +134,19 @@ public class StageSubsystem extends SubsystemBase {
      */
 
     // Pass the Note to the Shooter
-    public ConditionalCommand feedNote2ShooterCommand = new ConditionalCommand(feedWithTimeout(),feedWithBeam(),() -> m_noteInStage); 
+    public ConditionalCommand feedNote2ShooterCommand() {
+        return new ConditionalCommand(feedWithBeam(),feedWithTimeout(),() -> m_noteInStage); 
+    }
 
     public Command feedWithTimeout() {
-        System.out.println("Note Not In Stage");
-        return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
+        return new RunCommand(() -> this.ejectFrontDebug2(StageConstants.kFeedToShooterSpeed), this)
                 .withTimeout(1.5) // run for 1.5 seconds
                 .andThen(() -> this.stopStage());
 
     }
 
     public Command feedWithBeam() {
-        System.out.println("Note In Stage");
-        return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
+        return new RunCommand(() -> this.ejectFrontDebug(StageConstants.kFeedToShooterSpeed), this)
                 .until(() -> !isNoteInStage()) // run until there is NOT a Note in the Stage
                 .andThen(() -> this.stopStage());
     }

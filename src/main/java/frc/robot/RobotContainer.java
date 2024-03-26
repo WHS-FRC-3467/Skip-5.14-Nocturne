@@ -386,11 +386,11 @@ public class RobotContainer {
 
         // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
         m_driverCtrl.rightTrigger(Constants.ControllerConstants.triggerThreashold)
-                .onTrue(m_stageSubsystem.feedWithBeam()
+                .onTrue(m_stageSubsystem.feedNote2ShooterCommand()
                         .withTimeout(2)
                         .andThen(m_armSubsystem.prepareForIntakeCommand()));
 
-        m_driverCtrl.back().whileTrue(new calibrateLookupTable(m_drivetrain, m_armSubsystem, m_shooterSubsystem));
+        //m_driverCtrl.back().whileTrue(new calibrateLookupTable(m_drivetrain, m_armSubsystem, m_shooterSubsystem));
 
         m_driverCtrl.start().whileTrue(
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
@@ -450,7 +450,8 @@ public class RobotContainer {
         m_operatorCtrl.start().onTrue(new prepareToShoot(RobotConstants.FEED, () -> m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
 
-        m_operatorCtrl.back().onTrue(m_shooterSubsystem.runShooterCommand(24, 24));
+        //m_operatorCtrl.back().onTrue(m_shooterSubsystem.runShooterCommand(24, 24));
+        
 
         //m_operatorCtrl.back().onTrue(new InstantCommand(()->m_armSubsystem.disable()).andThen(new InstantCommand(()->m_armSubsystem.enable())));
         m_operatorCtrl.rightBumper().whileTrue(m_stageSubsystem.feedWithTimeout());
