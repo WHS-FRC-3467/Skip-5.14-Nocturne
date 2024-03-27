@@ -57,7 +57,7 @@ public class smartShootOnMove extends Command {
     Rotation2d lockedRotation;
     double lockedDistance;
 
-    TunableNumber timeToShoot = new TunableNumber("Smart timeToShoot", .13);
+    TunableNumber timeToShoot = new TunableNumber("Smart timeToShoot", .15);
     TunableNumber timeToBeReady = new TunableNumber("Smart timeToBeReady", .5);
 
     double m_maxShotDist = 3.5;
@@ -115,7 +115,11 @@ public class smartShootOnMove extends Command {
 
         if (timerIsRunning) {
             System.out.println(shotTimer.get());
-            if (shotTimer.hasElapsed(.4)) {
+            if (shotTimer.hasElapsed(timeToBeReady.get()/2)) {
+                // TODO: add checks for shooter speed, arm angle, drivetrain angle
+
+            }
+            if (shotTimer.hasElapsed(timeToBeReady.get()-timeToShoot.get())) {
                 System.out.println("STARTING STAGE");
                 m_stage.feedNote2ShooterCommand().schedule();
             }
