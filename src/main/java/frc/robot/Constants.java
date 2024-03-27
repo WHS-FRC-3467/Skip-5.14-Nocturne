@@ -244,19 +244,8 @@ public final class Constants {
 
     // Initial max is true top speed
     public static final double maxSpeed = TunerConstants.kSpeedAt12VoltsMps;
-    // Reduction in speed from Max Speed, 0.5 = 50%
-    public static final double halfSpeed = 0.5;
-    // Reduction in speed from Max Speed, 0.25 = 25%
-    public static final double quarterSpeed = 0.25;
-    // .75 rotation per second max angular velocity. Adjust for max turning rate
-    // speed.
     public static final double maxAngularRate = Math.PI * 1.5;
-    // .75 rotation per second max angular velocity. Adjust for max turning rate
-    // speed.
-    public static final double halfAngularRate = Math.PI * 1.0;
-    // .75 rotation per second max angular velocity. Adjust for max turning rate
-    // speed.
-    public static final double quarterAngularRate = Math.PI * 0.5;
+
 
     public static final double robotAtAngleTolerance = 2;
 

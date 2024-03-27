@@ -48,7 +48,8 @@ public class AutoLookUpShot extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        if (!m_armSubsystem.isEnabled()) m_armSubsystem.enable();
+        if (!m_armSubsystem.isEnabled()) {m_armSubsystem.enable();};
+        System.out.println("SCHEDULED");
         m_isDone = false;
     }
 

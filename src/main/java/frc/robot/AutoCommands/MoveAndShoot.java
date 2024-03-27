@@ -35,8 +35,8 @@ public class MoveAndShoot extends ParallelRaceGroup {
       m_stage = stage;
       m_arm = arm;
       m_shooter = shooter;
-    m_distance = distance;
-    m_maxShotDist = maxShotDist;
+      m_distance = distance;
+      m_maxShotDist = maxShotDist;
     addCommands(new AutoLookUpShot(m_drivetrain, m_arm, m_shooter, m_distance, maxShotDist, true)
             //.andThen(new WaitCommand(0.05))
             .andThen(m_stage.feedWithBeam())

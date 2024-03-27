@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
+import frc.robot.Robot;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import static frc.robot.Constants.LimelightConstants.*;
 
@@ -34,7 +35,7 @@ public class Limelight extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (enable) {
+        if (enable && !Robot.isSimulation()) {
             //if (LimelightHelpers.getTV(kCameraName)) {
                 LimelightHelpers.Results result = LimelightHelpers.getLatestResults(ll).targetingResults;
                 if (result.valid && LimelightHelpers.getTA(kCameraName) > .25) {

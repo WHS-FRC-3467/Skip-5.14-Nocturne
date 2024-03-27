@@ -67,8 +67,7 @@ public class autoRunToNote extends Command {
             m_drivetrain.setControl(m_forwardStraight
                     .withVelocityX(-Constants.maxSpeed * (1 - Math.abs(tx) / 32) * .5) // Constants.halfSpeed
                     .withVelocityY(0)
-                    .withRotationalRate(omegaSpeed)
-                    .withDeadband(Constants.maxSpeed * 0.1));
+                    .withRotationalRate(omegaSpeed));
         }
         if (DriverStation.getAlliance().get() != null && DriverStation.isAutonomousEnabled()) {
             if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {

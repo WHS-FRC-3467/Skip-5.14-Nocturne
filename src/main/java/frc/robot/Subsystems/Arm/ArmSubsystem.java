@@ -18,6 +18,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.CanConstants;
 import frc.robot.Constants.DIOConstants;
@@ -170,11 +171,14 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         // Validate current encoder reading; stop motors if out of range
         double armPos = getJointPosAbsolute();
         //TODO: Test if encoder disconnect code works
-        if (!m_encoder.isConnected() || ( armPos < 0.1 || armPos >= 1.0)) {
-            System.out.println("Arm Encoder error reported in periodic().");
-            // Stop the arm and disable the PID
-            neutralOutput();
-            this.disable();
+        if (Robot.isReal()) {
+            if (!m_encoder.isConnected() || (armPos < 0.1 || armPos >= 1.0)) {
+                System.out.println("Arm Encoder error reported in periodic().");
+                // Stop the arm and disable the PID
+                neutralOutput();
+                this.disable();
+            }
+
         }
         
         // Arm Action logic
