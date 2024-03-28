@@ -4,9 +4,11 @@
   "holonomicMode": true,
   "pathFolders": [
     "(Rush)",
-    "MA Help",
     "6 Note",
+    "MA Help",
+    "[Steal] Source Side",
     "PID",
+    "PSW-M3-M4orM2",
     "PSW-R2NL-M1WL-M2NL-R1NL (AS)",
     "PSW-R2SW-R3SW-R1SW (Mid)",
     "PSW-R2SW-R3SW-R1SW-M3NL (Mid)",
@@ -17,9 +19,9 @@
   "autoFolders": [
     "Advantage Autos",
     "Backup",
-    "Week4",
     "PID",
-    "Week3"
+    "Week3",
+    "Week6"
   ],
   "defaultMaxVel": 6.0,
   "defaultMaxAccel": 6.0,

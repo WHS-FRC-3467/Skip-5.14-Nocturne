@@ -4,24 +4,40 @@
     {
       "anchor": {
         "x": 8.14162084164624,
-        "y": 5.788606449007769
+        "y": 2.5493256684519072
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.162068414408197,
-        "y": 6.354151306559005
+        "x": 7.793080019938702,
+        "y": 3.1530160801611697
       },
       "isLocked": true,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.785398516665979,
-        "y": 6.5136440244390466
+        "x": 5.206388076593817,
+        "y": 4.151424827066179
       },
       "prevControl": {
-        "x": 6.305638594183171,
-        "y": 6.993104356579084
+        "x": 6.51613337414709,
+        "y": 4.046177437084219
+      },
+      "nextControl": {
+        "x": 4.386357811402671,
+        "y": 4.217320116233324
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.048666786792263,
+        "y": 5.695053213468251
+      },
+      "prevControl": {
+        "x": 4.177302485659102,
+        "y": 5.227287035770654
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,14 +54,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": -168.77871487068592,
+    "velocity": 0,
+    "rotation": -178.98000486692385,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "6 Note",
+  "folder": "PSW-M3-M4orM2",
   "previewStartingState": {
-    "rotation": 170.75388725443662,
+    "rotation": 132.8789036033385,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.6924444618120005,
+        "y": 4.3385312981452175
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.5110352727827958,
+        "y": 2.596102286221667
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.69184528112646,
+        "y": 3.7421294215807808
+      },
+      "prevControl": {
+        "x": 3.3126992313017136,
+        "y": 1.955508402489631
+      },
+      "nextControl": {
+        "x": 5.206388076593817,
+        "y": 4.408696224799858
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.094844223876482,
+        "y": 4.139730672623739
+      },
+      "prevControl": {
+        "x": 6.785098926323211,
+        "y": 4.256672217048139
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 172.69424046668902,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "PSW-M3-M4orM2",
+  "previewStartingState": {
+    "rotation": 120.80144597613688,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

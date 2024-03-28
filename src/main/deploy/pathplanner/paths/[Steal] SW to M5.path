@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6976021055260757,
-        "y": 4.306585660896072
+        "x": 0.7392210795817603,
+        "y": 4.397002070357417
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6982266724596813,
-        "y": 1.88514148066546
+        "x": 0.7398456465153663,
+        "y": 1.9755578901268052
       },
       "isLocked": false,
-      "linkedName": "SubSource"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -21,11 +21,11 @@
       },
       "prevControl": {
         "x": 4.545987787118735,
-        "y": 1.134499643450297
+        "y": 1.1344996434502992
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "M5 (SSA)"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -43,7 +43,7 @@
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "PSW-R5NL-R4NL (SSA)",
+  "folder": "[Steal] Source Side",
   "previewStartingState": {
     "rotation": 120.17352002964432,
     "velocity": 0

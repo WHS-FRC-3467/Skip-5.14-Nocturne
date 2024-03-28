@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6976021055260757,
-        "y": 4.306585660896072
+        "x": 2.76230979812387,
+        "y": 3.0053976917070653
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6982266724596813,
-        "y": 1.88514148066546
+        "x": 1.7949459402573615,
+        "y": 3.5639054754506088
       },
-      "isLocked": false,
-      "linkedName": "SubSource"
+      "isLocked": true,
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.9779026794520815,
-        "y": 0.7835083476434771
+        "x": 2.5050384003901907,
+        "y": 4.151424827066179
       },
       "prevControl": {
-        "x": 4.545987787118735,
-        "y": 1.134499643450297
+        "x": 1.2537638750491173,
+        "y": 4.280060525933018
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "M5 (SSA)"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 175.91438322002514,
+    "rotation": 180.0,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "PSW-R5NL-R4NL (SSA)",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 120.17352002964432,
+    "rotation": 139.3987053549956,
     "velocity": 0
   },
   "useDefaultConstraints": true
