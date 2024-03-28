@@ -82,6 +82,7 @@ public final class Constants {
         21. VRM
         22. RIO
         23. N/A
+        30. Blower Motor
          * 
          * 
          */
@@ -105,6 +106,9 @@ public final class Constants {
         public static final int ID_ArmLeader = 25;
         public static final int ID_ArmFollower = 26;
         public static final int LED_CANDLE = 27;
+
+        // Trap CAN IDs
+        public static final int ID_Blower = 30;
     }
 
     public static final class DIOConstants {
