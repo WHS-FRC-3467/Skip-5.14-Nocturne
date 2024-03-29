@@ -6,6 +6,9 @@ package frc.robot.Commands;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.SteerRequestType;
+
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 
@@ -49,13 +52,30 @@ public class driveToPose extends Command {
         yController.setTolerance(0.1);
         swerveRequestFacing.HeadingController = new PhoenixPIDController(10, 0, 2.25);
         swerveRequestFacing.HeadingController.setTolerance(0.01);
+        
 
         addRequirements(drivetrain);
     }
 
+    public driveToPose(CommandSwerveDrivetrain drivetrain, DoubleSupplier x,DoubleSupplier y, DoubleSupplier a) {
+        m_drivetrain = drivetrain;
+        targetTranslation = new Translation2d(x.getAsDouble(), y.getAsDouble());
+        targetAngle = new Rotation2d(a.getAsDouble());
+        xController.setTolerance(0.1);
+        yController.setTolerance(0.1);
+        swerveRequestFacing.HeadingController = new PhoenixPIDController(10, 0, 2.25);
+        swerveRequestFacing.HeadingController.setTolerance(0.01);
+        
+
+        addRequirements(drivetrain);
+    }
+
+    
+
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        System.out.println(targetTranslation);
         robotPose = m_drivetrain.getState().Pose;
         omegaController.reset(robotPose.getRotation().getRadians());
         xController.reset(robotPose.getX());

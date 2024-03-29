@@ -40,6 +40,7 @@ import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.LED.LEDSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Stage.StageSubsystem;
+import frc.robot.Subsystems.Trap.TrapSubsystem;
 import frc.robot.Util.CommandXboxPS5Controller;
 import frc.robot.Util.FieldCentricAiming;
 import frc.robot.Vision.Limelight;
@@ -106,6 +107,7 @@ public class RobotContainer {
     IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
     StageSubsystem m_stageSubsystem = new StageSubsystem();
     ArmSubsystem m_armSubsystem = new ArmSubsystem();
+    TrapSubsystem m_trapSubsystem = new TrapSubsystem(m_drivetrain);
     PhotonVision m_photonVision = new PhotonVision(m_drivetrain);
     Limelight m_limelightVision = new Limelight(m_drivetrain);
     LEDSubsystem m_ledSubsystem = new LEDSubsystem(m_stageSubsystem, m_intakeSubsystem, m_armSubsystem,
@@ -353,6 +355,9 @@ public class RobotContainer {
         // Driver: DPad Up: Reset the field-centric heading (when pressed)
         m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
 
+        //m_driverCtrl.povDown().whileTrue(new driveToPose(m_drivetrain, () -> m_trapSubsystem.getTrapTarget().getX(),() -> m_trapSubsystem.getTrapTarget().getY(),() -> m_trapSubsystem.getTrapTarget().getRotation().getRadians()));
+        m_driverCtrl.povDown().whileTrue(new driveToPose(m_drivetrain,new Translation2d(12.02,3.16),Rotation2d.fromDegrees(120)));
+
         // Driver: While Left Bumper is held, reduce speed by 50%
         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = Constants.maxSpeed * .5)
                 .andThen(() -> m_AngularRate = Constants.maxAngularRate * .5));
@@ -445,9 +450,10 @@ public class RobotContainer {
         m_operatorCtrl.start().onTrue(new prepareToShoot(RobotConstants.FEED, () -> m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
 
-        //m_operatorCtrl.back().onTrue(m_shooterSubsystem.runShooterCommand(24, 24));
+        m_operatorCtrl.back().onTrue(Commands.parallel(m_shooterSubsystem.runShooterCommand(22, 22), m_trapSubsystem.startBlowerCommand()));
+        m_operatorCtrl.back().onFalse(Commands.parallel(m_shooterSubsystem.stopShooterCommand(), m_trapSubsystem.stopBlowerCommand()));
         
-        m_operatorCtrl.back().onTrue(new InstantCommand(()->m_armSubsystem.disable()).andThen(new InstantCommand(()->m_armSubsystem.enable())));
+        //m_operatorCtrl.back().onTrue(new InstantCommand(()->m_armSubsystem.disable()).andThen(new InstantCommand(()->m_armSubsystem.enable())));
 
         m_operatorCtrl.rightBumper().whileTrue(m_stageSubsystem.feedWithTimeout());
 
