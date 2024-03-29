@@ -221,6 +221,6 @@
       ]
     }
   },
-  "folder": "Backup",
+  "folder": null,
   "choreoAuto": false
 }
