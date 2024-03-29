@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.036972632349823,
+        "y": 5.928936302317049
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.037062144636051,
+        "y": 5.920880196557066
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.019281605514777,
+        "y": 4.186507290393498
+      },
+      "prevControl": {
+        "x": 4.206939691920335,
+        "y": 4.346969890609684
+      },
+      "nextControl": {
+        "x": 5.966508115352413,
+        "y": 3.99940081931446
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.913734625190047,
+        "y": 2.923538610609985
+      },
+      "prevControl": {
+        "x": 6.59799245524417,
+        "y": 4.092954054853979
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 134.32596310201544,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "[Steal] Source Side",
+  "previewStartingState": {
+    "rotation": 178.66717324991416,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

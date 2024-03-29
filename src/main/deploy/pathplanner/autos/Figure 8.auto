@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3479282065452507,
+      "x": 1.4759528094554764,
       "y": 5.55472336015897
     },
-    "rotation": 178.95837332399006
+    "rotation": -178.8766972859248
   },
   "command": {
     "type": "sequential",
@@ -24,27 +24,20 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.4
+                  "waitTime": 0.3
                 }
               }
             ]
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNote"
-                }
-              }
-            ]
+            "name": "ShootNote"
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -60,13 +53,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SW to R2 (S4)"
+                        "pathName": "[Fig 8] SW-M3"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 0.2
                       }
                     }
                   ]
@@ -78,67 +71,51 @@
         {
           "type": "path",
           "data": {
-            "pathName": "R2 to SW (S4)"
+            "pathName": "[Fig 8] M3-NL"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootNote"
+            "name": "LookAndShoot"
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "SW to R3 (S4)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "R3 to SW (S4)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "SW to R1 (S4)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "R1 to SW (S4)"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "[Fig 8] NL-R3"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootNote"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShooter"
+            "name": "LookAndShoot"
           }
         }
       ]
