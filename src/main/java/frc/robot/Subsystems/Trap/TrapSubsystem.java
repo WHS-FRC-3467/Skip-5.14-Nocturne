@@ -36,9 +36,7 @@ public class TrapSubsystem extends SubsystemBase {
     CommandSwerveDrivetrain m_drivetrain;
     TalonSRX m_blowerMotor = new WPI_TalonSRX(CanConstants.ID_Blower);
     Timer m_runningTimer = new Timer();
-    TunableNumber trap_dist = new TunableNumber("Trap Dist", 1);
-    Pose2d trap_target = new Pose2d();
-    Pose3d trap_location = AprilTagFields.kDefaultField.loadAprilTagLayoutField().getTagPose(11).get();
+
 
     /** Creates a new TrapSubsystem. */
     public TrapSubsystem(CommandSwerveDrivetrain drivetrain) {
@@ -68,10 +66,6 @@ public class TrapSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
-        trap_target = trap_location.toPose2d().plus(new Transform2d(new Translation2d(trap_dist.get(), 0), trap_location.getRotation().toRotation2d()));
-        //System.out.println(trap_target);
-        // This method will be called once per scheduler run
     }
 
     public void startBlower() {
@@ -83,10 +77,6 @@ public class TrapSubsystem extends SubsystemBase {
         m_blowerMotor.set(ControlMode.PercentOutput, 0.0);
         m_runningTimer.stop();
         m_runningTimer.reset();
-    }
-
-    public Pose2d getTrapTarget() {
-        return trap_target;
     }
 
     public boolean isRunning() {

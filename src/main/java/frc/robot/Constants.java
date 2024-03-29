@@ -31,13 +31,14 @@ public final class Constants {
 
     public static final class RobotConstants {
 
-        public static final boolean kIsTuningMode = false;
+        public static final boolean kIsTuningMode = true;
         public static final boolean kIsDriveTuningMode = false;
         public static final boolean kIsArmTuningMode = false;
         public static final boolean kIsIntakeTuningMode = false;
         public static final boolean kIsStageTuningMode = false;
         public static final boolean kIsShooterTuningMode = false;
         public static final boolean kIsAutoAimTuningMode = false;
+        public static final boolean kIsTrapTuningMode = true;
     
         // Shooter and Arm Setpoints
         public static final Setpoints STOWED =    new Setpoints(1.0, 0.4, 0.0, 0.0, GameState.STOWED);
