@@ -48,8 +48,8 @@ public class driveToPose extends Command {
         m_drivetrain = drivetrain;
         targetTranslation = target;
         targetAngle = angle;
-        xController.setTolerance(0.1);
-        yController.setTolerance(0.1);
+        xController.setTolerance(0.01);
+        yController.setTolerance(0.01);
         swerveRequestFacing.HeadingController = new PhoenixPIDController(10, 0, 2.25);
         swerveRequestFacing.HeadingController.setTolerance(0.01);
         

@@ -39,18 +39,21 @@ public class driveToTrap extends Command {
     Rotation2d currentAngle;
     Setpoints currentSetpoint;
 
-    TunableNumber trap_dist = new TunableNumber("Trap Dist", 3);
+    TunableNumber trap_dist = new TunableNumber("Trap Dist", .5);
     Pose2d trap_target = new Pose2d();
     Pose3d trap_location = AprilTagFields.kDefaultField.loadAprilTagLayoutField().getTagPose(11).get();
 
     TunableNumber leftSpeedTuner = new TunableNumber("Trap : Left Shooter Speed", 20);
     TunableNumber rightSpeedTuner = new TunableNumber("Trap: Right Shooter Speed", 20);
 
+    Rotation2d offset = new Rotation2d(-Math.PI/2);
+
     /** Creates a new calibrateLookupTable. */
     public driveToTrap(CommandSwerveDrivetrain drivetrain, ShooterSubsystem shooter, PhotonVision photonvision) {
         m_drivetrain = drivetrain;
         m_shooter = shooter;
         m_photonvision = photonvision;
+        currentSetpoint = new Setpoints(0, 0.4, 0, 0, GameState.TRAP);
        
         if (Constants.RobotConstants.kIsAutoAimTuningMode) {
 
@@ -61,7 +64,8 @@ public class driveToTrap extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        trap_target = trap_location.toPose2d().plus(new Transform2d(new Translation2d(trap_dist.get(), 0), trap_location.getRotation().toRotation2d()));
+        Rotation2d temp = Rotation2d.fromDegrees(trap_location.getRotation().toRotation2d().getDegrees()+240);
+        trap_target = trap_location.toPose2d().plus(new Transform2d(new Translation2d(trap_dist.get(), 0), temp));
         driveCommand = new driveToPose(m_drivetrain,getTranslationTarget(),getRotationTarget());
         driveCommand.schedule();
     }
@@ -69,7 +73,8 @@ public class driveToTrap extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        
+        System.out.println(trap_location);
+        System.out.println(trap_target);
         currentSetpoint.shooterLeft = leftSpeedTuner.get();
         currentSetpoint.shooterRight = rightSpeedTuner.get();
         if (currentSetpoint.shooterLeft > 0) {

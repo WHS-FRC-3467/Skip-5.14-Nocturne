@@ -356,7 +356,7 @@ public class RobotContainer {
         m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
 
         //m_driverCtrl.povDown().whileTrue(new driveToPose(m_drivetrain, () -> m_trapSubsystem.getTrapTarget().getX(),() -> m_trapSubsystem.getTrapTarget().getY(),() -> m_trapSubsystem.getTrapTarget().getRotation().getRadians()));
-        m_driverCtrl.povDown().whileTrue(new driveToPose(m_drivetrain,new Translation2d(12.02,3.16),Rotation2d.fromDegrees(120)));
+        m_driverCtrl.povDown().whileTrue(new driveToTrap(m_drivetrain, m_shooterSubsystem, m_photonVision));
 
         // Driver: While Left Bumper is held, reduce speed by 50%
         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = Constants.maxSpeed * .5)
