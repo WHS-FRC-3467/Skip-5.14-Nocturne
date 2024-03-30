@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.AutoCommands.*;
 import frc.robot.Commands.*;
 import frc.robot.Constants.RobotConstants;
@@ -108,7 +107,8 @@ public class RobotContainer {
     StageSubsystem m_stageSubsystem = new StageSubsystem();
     ArmSubsystem m_armSubsystem = new ArmSubsystem();
     TrapSubsystem m_trapSubsystem = new TrapSubsystem(m_drivetrain);
-    PhotonVision m_photonVision = new PhotonVision(m_drivetrain);
+    PhotonVision m_photonVision = new PhotonVision(m_drivetrain,0);
+    PhotonVision m_photonVision2 = new PhotonVision(m_drivetrain,1);
     Limelight m_limelightVision = new Limelight(m_drivetrain);
     LEDSubsystem m_ledSubsystem = new LEDSubsystem(m_stageSubsystem, m_intakeSubsystem, m_armSubsystem,
             m_shooterSubsystem, m_drivetrain, m_photonVision);
@@ -141,7 +141,6 @@ public class RobotContainer {
             m_head.HeadingController.setP(4);
             m_head.HeadingController.setI(0);
             m_head.HeadingController.setD(0);
-
         }
 
                 /* Static turning PID */
@@ -197,7 +196,6 @@ public class RobotContainer {
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
         NamedCommands.registerCommand("LookAndShoot",
                 new LookAndShoot(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem,
-                        m_photonVision,
                         () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),
                         m_cardinal, invertForAlliance()));
         NamedCommands.registerCommand("MoveAndShoot",
@@ -343,7 +341,7 @@ public class RobotContainer {
         // Stationary look and shoot with shoot when ready
          m_driverCtrl.rightStick()
                 .whileTrue(new LookAndShoot(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_armSubsystem,
-                        m_shooterSubsystem, m_photonVision,
+                        m_shooterSubsystem,
                         () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),
                         m_cardinal, m_AngularRate)); 
         m_driverCtrl.rightStick().onFalse(m_shooterSubsystem.stopShooterCommand());
@@ -356,7 +354,7 @@ public class RobotContainer {
         m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
 
         //m_driverCtrl.povDown().whileTrue(new driveToPose(m_drivetrain, () -> m_trapSubsystem.getTrapTarget().getX(),() -> m_trapSubsystem.getTrapTarget().getY(),() -> m_trapSubsystem.getTrapTarget().getRotation().getRadians()));
-        m_driverCtrl.povDown().whileTrue(new driveToTrap(m_drivetrain, m_shooterSubsystem, m_photonVision));
+        m_driverCtrl.povDown().whileTrue(new driveToTrap(m_drivetrain, m_shooterSubsystem));
         
 
         // Driver: While Left Bumper is held, reduce speed by 50%
@@ -407,9 +405,6 @@ public class RobotContainer {
 
         m_driverCtrl.rightBumper().onFalse(m_shooterSubsystem.stopShooterCommand());
 
-         
-
-        //m_driverCtrl.back().whileTrue(new smartShootOnMove(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, 3.5));
 
         /*
          * OPERATOR Controls

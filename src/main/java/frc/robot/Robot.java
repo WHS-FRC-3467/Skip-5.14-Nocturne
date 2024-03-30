@@ -14,6 +14,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,6 +41,18 @@ public class Robot extends TimedRobot {
          SignalLogger.start();
 
          FollowPathCommand.warmupCommand().schedule(); //Added to warmup pathplanner class load
+
+        PortForwarder.add(5800, "photonvision.local", 5800); // Forward the photon vision page for tethered connection to RIO
+        PortForwarder.add(1181, "photonvision.local", 1181);
+        PortForwarder.add(1182, "photonvision.local", 1182);
+        PortForwarder.add(1183, "photonvision.local", 1183);
+        PortForwarder.add(1184, "photonvision.local", 1184);
+        PortForwarder.add(1185, "photonvision.local", 1185);
+        PortForwarder.add(1186, "photonvision.local", 1186);
+
+        for (int port = 5800; port <= 5809; port++) {
+            PortForwarder.add(port, "limelight.local", port);
+        }
     }
 
     @Override

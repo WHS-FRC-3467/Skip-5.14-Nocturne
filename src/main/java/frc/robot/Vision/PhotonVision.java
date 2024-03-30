@@ -35,6 +35,9 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.PhotonVisionConstants.front_left_cam;
+import frc.robot.Constants.PhotonVisionConstants.top_right_cam;
 import frc.robot.Robot;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 
@@ -48,7 +51,7 @@ import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-public class PhotonVision extends SubsystemBase{
+public class PhotonVision extends SubsystemBase {
     CommandSwerveDrivetrain drivetrain;
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimator;
@@ -59,40 +62,46 @@ public class PhotonVision extends SubsystemBase{
     private PhotonCameraSim cameraSim;
     private VisionSystemSim visionSim;
 
-    public PhotonVision(CommandSwerveDrivetrain drivetrain) {
+    public PhotonVision(CommandSwerveDrivetrain drivetrain, int cam_num) {
         this.drivetrain = drivetrain;
-        camera = new PhotonCamera(kCameraName);
-        photonEstimator =
-                new PhotonPoseEstimator(
-                        kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam);
+        if (cam_num == 0) {
+            camera = new PhotonCamera(front_left_cam.kCameraName);
+            photonEstimator = new PhotonPoseEstimator(
+                    kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, front_left_cam.kRobotToCam);
+
+        } else {
+            camera = new PhotonCamera(top_right_cam.kCameraName);
+            photonEstimator = new PhotonPoseEstimator(
+                    kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, top_right_cam.kRobotToCam);
+
+        }
+
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
-        PortForwarder.add(5800, "10.34.67.11", 5800); // Forward the photon vision page for tethered connection to RIO
-        PortForwarder.add(1181, "10.34.67.11", 1181);
-        PortForwarder.add(1182, "10.34.67.11", 1182);
-        PortForwarder.add(1183, "10.34.67.11", 1183);
-        PortForwarder.add(1184, "10.34.67.11", 1184);
-        PortForwarder.add(1185, "10.34.67.11", 1185);
-        PortForwarder.add(1186, "10.34.67.11", 1186);
+
 
         // ----- Simulation
         if (Robot.isSimulation()) {
-            // Create the vision system simulation which handles cameras and targets on the field.
+            // Create the vision system simulation which handles cameras and targets on the
+            // field.
             visionSim = new VisionSystemSim("main");
-            // Add all the AprilTags inside the tag layout as visible targets to this simulated field.
+            // Add all the AprilTags inside the tag layout as visible targets to this
+            // simulated field.
             visionSim.addAprilTags(kTagLayout);
-            // Create simulated camera properties. These can be set to mimic your actual camera.
+            // Create simulated camera properties. These can be set to mimic your actual
+            // camera.
             var cameraProp = new SimCameraProperties();
             cameraProp.setCalibration(960, 720, Rotation2d.fromDegrees(90));
             cameraProp.setCalibError(0.35, 0.10);
             cameraProp.setFPS(15);
             cameraProp.setAvgLatencyMs(50);
             cameraProp.setLatencyStdDevMs(15);
-            // Create a PhotonCameraSim which will update the linked PhotonCamera's values with visible
+            // Create a PhotonCameraSim which will update the linked PhotonCamera's values
+            // with visible
             // targets.
             cameraSim = new PhotonCameraSim(camera, cameraProp);
             // Add the simulated camera to view the targets on this simulated field.
-            visionSim.addCamera(cameraSim, kRobotToCam);
+            visionSim.addCamera(cameraSim, front_left_cam.kRobotToCam);
 
             cameraSim.enableDrawWireframe(true);
         }
@@ -103,11 +112,13 @@ public class PhotonVision extends SubsystemBase{
     }
 
     /**
-     * The latest estimated robot pose on the field from vision data. This may be empty. This should
+     * The latest estimated robot pose on the field from vision data. This may be
+     * empty. This should
      * only be called once per loop.
      *
-     * @return An {@link EstimatedRobotPose} with an estimated pose, estimate timestamp, and targets
-     *     used for estimation.
+     * @return An {@link EstimatedRobotPose} with an estimated pose, estimate
+     *         timestamp, and targets
+     *         used for estimation.
      */
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
         var visionEst = photonEstimator.update();
@@ -115,21 +126,24 @@ public class PhotonVision extends SubsystemBase{
         boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
         if (Robot.isSimulation()) {
             visionEst.ifPresentOrElse(
-                    est ->
-                            getSimDebugField()
-                                    .getObject("VisionEstimation")
-                                    .setPose(est.estimatedPose.toPose2d()),
+                    est -> getSimDebugField()
+                            .getObject("VisionEstimation")
+                            .setPose(est.estimatedPose.toPose2d()),
                     () -> {
-                        if (newResult) getSimDebugField().getObject("VisionEstimation").setPoses();
+                        if (newResult)
+                            getSimDebugField().getObject("VisionEstimation").setPoses();
                     });
         }
-        if (newResult) lastEstTimestamp = latestTimestamp;
+        if (newResult)
+            lastEstTimestamp = latestTimestamp;
         return visionEst;
     }
 
     /**
-     * The standard deviations of the estimated pose from {@link #getEstimatedGlobalPose()}, for use
-     * with {@link edu.wpi.first.math.estimator.SwerveDrivePoseEstimator SwerveDrivePoseEstimator}.
+     * The standard deviations of the estimated pose from
+     * {@link #getEstimatedGlobalPose()}, for use
+     * with {@link edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
+     * SwerveDrivePoseEstimator}.
      * This should only be used when there are targets visible.
      *
      * @param estimatedPose The estimated pose to guess standard deviations for.
@@ -141,19 +155,22 @@ public class PhotonVision extends SubsystemBase{
         double avgDist = 0;
         for (var tgt : targets) {
             var tagPose = photonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
-            if (tagPose.isEmpty()) continue;
+            if (tagPose.isEmpty())
+                continue;
             numTags++;
-            avgDist +=
-                    tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
+            avgDist += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
         }
-        if (numTags == 0) return estStdDevs;
+        if (numTags == 0)
+            return estStdDevs;
         avgDist /= numTags;
         // Decrease std devs if multiple targets are visible
-        if (numTags > 1) estStdDevs = kMultiTagStdDevs;
+        if (numTags > 1)
+            estStdDevs = kMultiTagStdDevs;
         // Increase std devs based on (average) distance
         if (numTags == 1 && avgDist > 4)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+        else
+            estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
 
         return estStdDevs;
     }
@@ -166,13 +183,12 @@ public class PhotonVision extends SubsystemBase{
                     var estPose = est.estimatedPose.toPose2d();
                     // Change our trust in the measurement based on the tags we can see
                     var estStdDevs = getEstimationStdDevs(estPose);
-                    //System.out.println("Adding to vision");
+                    // System.out.println("Adding to vision");
                     drivetrain.addVisionMeasurement(
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 });
 
         hasTarget = getLatestResult().hasTargets();
-
 
     }
 
@@ -184,17 +200,20 @@ public class PhotonVision extends SubsystemBase{
 
     /** Reset pose history of the robot in the vision system simulation. */
     public void resetSimPose(Pose2d pose) {
-        if (Robot.isSimulation()) visionSim.resetRobotPose(pose);
+        if (Robot.isSimulation())
+            visionSim.resetRobotPose(pose);
     }
 
     /** A Field2d for visualizing our robot and objects on the field. */
     public Field2d getSimDebugField() {
-        if (!Robot.isSimulation()) return null;
+        if (!Robot.isSimulation())
+            return null;
         return visionSim.getDebugField();
     }
 
     /**
      * Checks if the latest results from photonvision camera has a target
+     * 
      * @return whether a target is found
      */
     public boolean hasTarget() {

@@ -12,24 +12,18 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
-import frc.robot.Subsystems.Arm.ArmSubsystem;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
-import frc.robot.Util.FieldCentricAiming;
 import frc.robot.Util.Setpoints;
 import frc.robot.Util.TunableNumber;
 import frc.robot.Util.Setpoints.GameState;
-import frc.robot.Vision.PhotonVision;
 
 public class driveToTrap extends Command {
     CommandSwerveDrivetrain m_drivetrain;
-    PhotonVision m_photonvision;
     ShooterSubsystem m_shooter;
 
     driveToPose m_driveToPose;
@@ -41,40 +35,80 @@ public class driveToTrap extends Command {
 
     TunableNumber trap_dist = new TunableNumber("Trap Dist", .625);
     Pose2d trap_target = new Pose2d();
-    Pose3d trap_location = AprilTagFields.kDefaultField.loadAprilTagLayoutField().getTagPose(11).get();
+    Pose3d trap_location;
 
     TunableNumber leftSpeedTuner = new TunableNumber("Trap : Left Shooter Speed", 20);
     TunableNumber rightSpeedTuner = new TunableNumber("Trap: Right Shooter Speed", 20);
 
-    Rotation2d offset = new Rotation2d(-Math.PI/2);
+    double offset = 0;
+    double dist_to_trap = 999;
+    double current_dist;
+    int closest_trap = 0;
+    int current_tag = 0;
+
 
     /** Creates a new calibrateLookupTable. */
-    public driveToTrap(CommandSwerveDrivetrain drivetrain, ShooterSubsystem shooter, PhotonVision photonvision) {
+    public driveToTrap(CommandSwerveDrivetrain drivetrain, ShooterSubsystem shooter) {
         m_drivetrain = drivetrain;
         m_shooter = shooter;
-        m_photonvision = photonvision;
         currentSetpoint = new Setpoints(0, 0.4, 0, 0, GameState.TRAP);
-       
-        if (Constants.RobotConstants.kIsAutoAimTuningMode) {
-
-        }     
-
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        Rotation2d temp = Rotation2d.fromDegrees(trap_location.getRotation().toRotation2d().getDegrees()+240);
-        trap_target = trap_location.toPose2d().plus(new Transform2d(new Translation2d(trap_dist.get(), 0), temp));
-        driveCommand = new driveToPose(m_drivetrain,getTranslationTarget(),getRotationTarget());
+        dist_to_trap = 999;
+        current_dist = 999;
+        closest_trap = 0;
+        current_tag = 0;
+        trap_location = new Pose3d();
+
+        if (DriverStation.getAlliance().get() == Alliance.Blue) {
+            for (int i = 0; i < 3; i++) {
+                current_tag = i+14;
+                Pose2d current_trap_location = AprilTagFields.kDefaultField.loadAprilTagLayoutField().getTagPose(current_tag).get().toPose2d();
+                current_dist = m_drivetrain.getState().Pose.getTranslation().getDistance(current_trap_location.getTranslation());
+                if (dist_to_trap > current_dist) {
+                    dist_to_trap = current_dist;
+                    closest_trap = current_tag;
+                }
+            }
+        } else {
+            for (int i = 0; i < 3; i++) {
+                current_tag = i+11;
+                Pose2d current_trap_location = AprilTagFields.kDefaultField.loadAprilTagLayoutField().getTagPose(current_tag).get().toPose2d();
+                current_dist = m_drivetrain.getState().Pose.getTranslation().getDistance(current_trap_location.getTranslation());
+                if (dist_to_trap > current_dist) {
+                    dist_to_trap = current_dist;
+                    closest_trap = current_tag;
+                }
+            }
+        }
+        switch(closest_trap) {
+            case 11: offset = 120; break;
+            case 12: offset = -120; break;
+            case 13: offset = 0; break;
+            case 14: offset = 180; break;
+            case 15: offset = -60; break; 
+            case 16: offset = 60; break;
+            default: System.out.println("INVALID TRAP"); break;
+        }
+        
+        trap_location = AprilTagFields.kDefaultField.loadAprilTagLayoutField().getTagPose(closest_trap).get();
+        if (Constants.RobotConstants.kIsTrapTuningMode) {
+                    System.out.println(closest_trap);
+        System.out.println(offset);
+
+        }
+
+        trap_target = trap_location.toPose2d().plus(new Transform2d(new Translation2d(trap_dist.get(), 0), Rotation2d.fromDegrees(0)));
+        driveCommand = new driveToPose(m_drivetrain,trap_target.getTranslation(),Rotation2d.fromDegrees(offset));
         driveCommand.schedule();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        //System.out.println(trap_location);
-        System.out.println(trap_target); 
         currentSetpoint.shooterLeft = leftSpeedTuner.get();
         currentSetpoint.shooterRight = rightSpeedTuner.get();
         if (currentSetpoint.shooterLeft > 0) {

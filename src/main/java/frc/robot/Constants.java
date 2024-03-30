@@ -202,14 +202,21 @@ public final class Constants {
 	
     public static class PhotonVisionConstants {
         //public static final String kCameraName = "front_cam";
-        public static final String kCameraName = "front_left";
-        // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-        //public static final Transform3d kRobotToCam =
-                //new Transform3d(new Translation3d(.174,-0.186, 0.588), new Rotation3d(0, Math.toRadians(10),0));
+        public static class front_left_cam {
+            public static final String kCameraName = "front_left";
+            public static final Transform3d kRobotToCam = new Transform3d(
+                    new Translation3d(Units.inchesToMeters(9.812), Units.inchesToMeters(9.29),
+                            Units.inchesToMeters(8.693)),
+                    new Rotation3d(0, Units.degreesToRadians(-25), Units.degreesToRadians(0)));
+        }
 
-        public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(Units.inchesToMeters(9.812),Units.inchesToMeters(9.29), Units.inchesToMeters(8.693)),
-                new Rotation3d(0, Units.degreesToRadians(-25),Units.degreesToRadians(0)));
+        public static class top_right_cam {
+            public static final String kCameraName = "top_right";
+            public static final Transform3d kRobotToCam = new Transform3d(
+                    new Translation3d(.159, -.213,.53),
+                    new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(0)));
+        }
+       
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout kTagLayout =

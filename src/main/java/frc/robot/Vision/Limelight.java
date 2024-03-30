@@ -23,13 +23,6 @@ public class Limelight extends SubsystemBase {
     /** Creates a new Limelight. */
     public Limelight(CommandSwerveDrivetrain drivetrain) {
         m_drivetrain = drivetrain;
-        PortForwarder.add(5800, "10.34.67.12", 5800); // Forward the photon vision page for tethered connection to RIO
-        PortForwarder.add(1181, "10.34.67.12", 1181);
-        PortForwarder.add(1182, "10.34.67.12", 1182);
-        PortForwarder.add(1183, "10.34.67.12", 1183);
-        PortForwarder.add(1184, "10.34.67.12", 1184);
-        PortForwarder.add(1185, "10.34.67.12", 1185);
-        PortForwarder.add(1186, "10.34.67.12", 1186);
 
     }
 

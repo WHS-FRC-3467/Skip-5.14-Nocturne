@@ -29,20 +29,18 @@ public class LookAndShoot extends ParallelRaceGroup {
     StageSubsystem m_stage;
     ArmSubsystem m_arm;
     ShooterSubsystem m_shooter;
-    PhotonVision m_photonVision;
     DoubleSupplier m_distance;
     SwerveRequest.FieldCentricFacingAngle m_head;
     double m_alliance;
 
     public LookAndShoot(CommandSwerveDrivetrain drivetrain, IntakeSubsystem intake, StageSubsystem stage,
-            ArmSubsystem arm, ShooterSubsystem shooter, PhotonVision photonVision, DoubleSupplier distance,
+            ArmSubsystem arm, ShooterSubsystem shooter, DoubleSupplier distance,
             SwerveRequest.FieldCentricFacingAngle head, double alliance) {
         m_drivetrain = drivetrain;
         m_intake = intake;
         m_stage = stage;
         m_arm = arm;
         m_shooter = shooter;
-        m_photonVision = photonVision;
         m_distance = distance;
         m_head = head;
 

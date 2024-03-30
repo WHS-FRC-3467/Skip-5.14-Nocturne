@@ -69,6 +69,7 @@ public class driveToPose extends Command {
     @Override
     public void initialize() {
         System.out.println(targetTranslation);
+        System.out.println(targetAngle);
         robotPose = m_drivetrain.getState().Pose;
         xController.reset(robotPose.getX());
         yController.reset(robotPose.getY());
@@ -80,6 +81,8 @@ public class driveToPose extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        xController.setGoal(targetTranslation.getX());
+        yController.setGoal(targetTranslation.getY());
         robotPose = m_drivetrain.getState().Pose;
         
         xSpeed = xController.calculate(robotPose.getX());
