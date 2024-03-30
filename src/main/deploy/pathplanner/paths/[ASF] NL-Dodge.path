@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.059140113840147,
-        "y": 2.6910860480988443
+        "x": 1.3122346472613169,
+        "y": 7.262069908755202
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.059229626126376,
-        "y": 2.6830299423388615
-      },
-      "isLocked": true,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 5.085152190282184,
-        "y": 4.29740668582336
-      },
-      "prevControl": {
-        "x": 6.370208700461797,
-        "y": 3.664057405806266
-      },
-      "nextControl": {
-        "x": 4.355678725625389,
-        "y": 4.656932893404209
+        "x": 1.6747534349769553,
+        "y": 7.5895062331435215
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.029570056920359,
-        "y": 5.591642171075685
+        "x": 2.9556299734131106,
+        "y": 7.693627462726624
       },
       "prevControl": {
-        "x": 4.5435926609922035,
-        "y": 4.976650841204013
+        "x": 2.037272222692593,
+        "y": 7.8467776308772
       },
       "nextControl": null,
       "isLocked": false,
@@ -56,12 +40,12 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 180.0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Steal",
+  "folder": "Amp Side Feed",
   "previewStartingState": {
-    "rotation": 134.9999999994824,
+    "rotation": -178.65211271980144,
     "velocity": 0
   },
   "useDefaultConstraints": true

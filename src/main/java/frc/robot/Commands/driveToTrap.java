@@ -39,7 +39,7 @@ public class driveToTrap extends Command {
     Rotation2d currentAngle;
     Setpoints currentSetpoint;
 
-    TunableNumber trap_dist = new TunableNumber("Trap Dist", .5);
+    TunableNumber trap_dist = new TunableNumber("Trap Dist", .625);
     Pose2d trap_target = new Pose2d();
     Pose3d trap_location = AprilTagFields.kDefaultField.loadAprilTagLayoutField().getTagPose(11).get();
 
@@ -73,8 +73,8 @@ public class driveToTrap extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        System.out.println(trap_location);
-        System.out.println(trap_target);
+        //System.out.println(trap_location);
+        System.out.println(trap_target); 
         currentSetpoint.shooterLeft = leftSpeedTuner.get();
         currentSetpoint.shooterRight = rightSpeedTuner.get();
         if (currentSetpoint.shooterLeft > 0) {

@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
@@ -100,12 +101,13 @@ public class smartShootOnMove extends Command {
     @Override
     public void execute() {
         currentRobotTranslation = m_drivetrain.getState().Pose.getTranslation();
+        currentAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(currentRobotTranslation); 
         // Get current drivetrain velocities in field relative terms
         speeds = m_drivetrain.getFieldRelativeChassisSpeeds();
 
         // Calculate change in x/y distance due to time and velocity
         moveDelta = new Translation2d(timeToBeReady.get() * (speeds.vxMetersPerSecond),
-                timeToShoot.get() * (speeds.vyMetersPerSecond));
+                                      timeToBeReady.get() * (speeds.vyMetersPerSecond));
 
         futureRobotTranslation = currentRobotTranslation.plus(moveDelta);
         futureAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(futureRobotTranslation);
@@ -115,17 +117,37 @@ public class smartShootOnMove extends Command {
 
         if (timerIsRunning) {
             System.out.println(shotTimer.get());
-            if (shotTimer.hasElapsed(timeToBeReady.get()/2)) {
-                // TODO: add checks for shooter speed, arm angle, drivetrain angle
+            if (shotTimer.hasElapsed(timeToBeReady.get() / 2)) {
+                if (!m_shooter.isShooterAtSpeed()) {
+                    System.out.println("SHOOTER ISNT READY");
+                    if (!m_arm.isArmJointAtSetpoint()) {
+                        System.out.println("ARM ISNT READY");
+                        if (m_drivetrain.isRotatingFast()) {
+                            System.out.println("DRIVE ROT ISNT READY");
+                            
+
+                        }
+
+                    }
+
+                }
+                if (!m_shooter.isShooterAtSpeed() || !m_arm.isArmJointAtSetpoint() || m_drivetrain.isRotatingFast()) {
+                    System.out.println("WONT BE READY, RESTARTING SHOT");
+                            shotTimer.stop();
+                            shotTimer.reset();
+                            timerIsRunning = false;
+                }
 
             }
-            if (shotTimer.hasElapsed(timeToBeReady.get()-timeToShoot.get())) {
+            if (shotTimer.hasElapsed(timeToBeReady.get()-timeToShoot.get()) && !m_stage.isStageRunning()) {
                 System.out.println("STARTING STAGE");
                 m_stage.feedNote2ShooterCommand().schedule();
+                SmartDashboard.putNumber("Angle error at t=0", currentAngleToSpeaker.minus(m_drivetrain.getState().Pose.getRotation()).getDegrees());SmartDashboard.putNumber("Angle error at t=0", currentAngleToSpeaker.minus(m_drivetrain.getState().Pose.getRotation()).getDegrees());
             }
 
             if (shotTimer.hasElapsed(timeToBeReady.get())) {
                 System.out.println("NOTE SHOULD BE SHOOTING NOW");
+                
                 m_isFinished = true;
             }
 
@@ -157,6 +179,7 @@ public class smartShootOnMove extends Command {
     public void end(boolean interrupted) {
         shotTimer.stop();
         shotTimer.reset();
+        m_shooter.stopShooter();
     }
 
     // Returns true when the command should end.

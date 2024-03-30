@@ -47,7 +47,7 @@ public class LookAndShoot extends ParallelRaceGroup {
         m_head = head;
 
         addCommands(new AutoLookUpShot(m_drivetrain, m_arm, m_shooter, m_distance, 5.0, false)
-                .andThen(m_stage.feedWithBeam())
+                .andThen(m_stage.feedNote2ShooterCommand())
                 .andThen(m_arm.prepareForIntakeCommand()));
         addCommands(new velocityOffset(m_drivetrain, () -> m_stage.isStageRunning()));
         addCommands(m_drivetrain.applyRequest(

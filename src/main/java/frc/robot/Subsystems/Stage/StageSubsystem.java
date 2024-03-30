@@ -106,13 +106,11 @@ public class StageSubsystem extends SubsystemBase {
         this.runStage(speed);
     }
 
-        public void ejectFrontDebug(double speed) {
-            System.out.println("DEBUG");
+    public void ejectFrontDebug(double speed) {
         this.runStage(speed);
     }
 
-            public void ejectFrontDebug2(double speed) {
-            System.out.println("DEBUG2");
+    public void ejectFrontDebug2(double speed) {
         this.runStage(speed);
     }
 

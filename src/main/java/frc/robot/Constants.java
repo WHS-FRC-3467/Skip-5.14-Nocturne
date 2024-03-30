@@ -37,7 +37,7 @@ public final class Constants {
         public static final boolean kIsIntakeTuningMode = false;
         public static final boolean kIsStageTuningMode = false;
         public static final boolean kIsShooterTuningMode = false;
-        public static final boolean kIsAutoAimTuningMode = false;
+        public static final boolean kIsAutoAimTuningMode = true;
         public static final boolean kIsTrapTuningMode = true;
     
         // Shooter and Arm Setpoints
@@ -105,7 +105,7 @@ public final class Constants {
 
         // Arm CAN IDs
         public static final int ID_ArmLeader = 25;
-        public static final int ID_ArmFollower = 26;
+        public static final int ID_ArmFollower = 26;    
         public static final int LED_CANDLE = 27;
 
         // Trap CAN IDs

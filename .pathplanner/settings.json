@@ -3,10 +3,11 @@
   "robotLength": 0.96,
   "holonomicMode": true,
   "pathFolders": [
+    "6 Note Auto",
     "Amp Side",
     "Far Side",
     "Mid Auto",
-    "6 Note Auto",
+    "Amp Side Feed",
     "PID",
     "PSW-M3-M4or2",
     "SS Steal",

@@ -357,6 +357,7 @@ public class RobotContainer {
 
         //m_driverCtrl.povDown().whileTrue(new driveToPose(m_drivetrain, () -> m_trapSubsystem.getTrapTarget().getX(),() -> m_trapSubsystem.getTrapTarget().getY(),() -> m_trapSubsystem.getTrapTarget().getRotation().getRadians()));
         m_driverCtrl.povDown().whileTrue(new driveToTrap(m_drivetrain, m_shooterSubsystem, m_photonVision));
+        
 
         // Driver: While Left Bumper is held, reduce speed by 50%
         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = Constants.maxSpeed * .5)
@@ -380,28 +381,33 @@ public class RobotContainer {
 
         //m_driverCtrl.back().whileTrue(new calibrateLookupTable(m_drivetrain, m_armSubsystem, m_shooterSubsystem));
 
-        m_driverCtrl.start().whileTrue(
+         m_driverCtrl.start().whileTrue(
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note)
-                .andThen(rumbleDriverCommand()));
+                .andThen(rumbleDriverCommand())); 
 
-        m_driverCtrl.rightBumper().whileTrue(Commands.parallel(
+        m_driverCtrl.back().onTrue(m_trapSubsystem.startBlowerCommand());
+        m_driverCtrl.back().onFalse(m_trapSubsystem.stopBlowerCommand());
+
+/*         m_driverCtrl.rightBumper().whileTrue(Commands.parallel(
                 new MoveAndShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem,
                         () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),4),
                 m_drivetrain.applyRequest(
                         () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * .75 * invertForAlliance())
                                 .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * .75 * invertForAlliance())
                                 .withTargetDirection(m_drivetrain.getVelocityOffset())
-                                .withDeadband(Constants.maxSpeed * 0.1))));
+                                .withDeadband(Constants.maxSpeed * 0.1)))); */
 
-        m_driverCtrl.rightBumper().onFalse(m_shooterSubsystem.stopShooterCommand());
-
-          m_driverCtrl.back().whileTrue(Commands.parallel(
-                new smartShootOnMove(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, 3.5),
+         m_driverCtrl.rightBumper().whileTrue(Commands.parallel(
+                new smartShootOnMove(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, 4.5).andThen(m_armSubsystem.prepareForIntakeCommand()),
                 m_drivetrain.applyRequest(
                         () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * .75 * invertForAlliance())
                                 .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * .75 * invertForAlliance())
                                 .withTargetDirection(m_drivetrain.getVelocityOffset())
                                 .withDeadband(Constants.maxSpeed * 0.1))));  
+
+        m_driverCtrl.rightBumper().onFalse(m_shooterSubsystem.stopShooterCommand());
+
+         
 
         //m_driverCtrl.back().whileTrue(new smartShootOnMove(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, 3.5));
 
@@ -450,7 +456,7 @@ public class RobotContainer {
         m_operatorCtrl.start().onTrue(new prepareToShoot(RobotConstants.FEED, () -> m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
 
-        m_operatorCtrl.back().onTrue(Commands.parallel(m_shooterSubsystem.runShooterCommand(22, 22), m_trapSubsystem.startBlowerCommand()));
+        m_operatorCtrl.back().onTrue(Commands.parallel(m_shooterSubsystem.runShooterCommand(20, 20), m_trapSubsystem.startBlowerCommand()));
         m_operatorCtrl.back().onFalse(Commands.parallel(m_shooterSubsystem.stopShooterCommand(), m_trapSubsystem.stopBlowerCommand()));
         
         //m_operatorCtrl.back().onTrue(new InstantCommand(()->m_armSubsystem.disable()).andThen(new InstantCommand(()->m_armSubsystem.enable())));

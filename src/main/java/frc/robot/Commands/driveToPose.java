@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 
@@ -30,13 +31,12 @@ public class driveToPose extends Command {
     Rotation2d targetAngle = new Rotation2d(0);
     boolean isFinished;
 
-    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(4, 2);
-    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(4, 2);
-    private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = new TrapezoidProfile.Constraints(8, 8);
+    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, .5);
+    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, .5);
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(5, 0.5, 0, X_CONSTRAINTS);
-    private final ProfiledPIDController yController = new ProfiledPIDController(5, 0.5, 0, Y_CONSTRAINTS);
-    private final ProfiledPIDController omegaController = new ProfiledPIDController(3, .5, 0, OMEGA_CONSTRATINTS);
+    private final ProfiledPIDController xController = new ProfiledPIDController(8, 40, 0, X_CONSTRAINTS);
+    private final ProfiledPIDController yController = new ProfiledPIDController(8, 40, 0, Y_CONSTRAINTS);
+    
 
     private final SwerveRequest.FieldCentricFacingAngle swerveRequestFacing = new SwerveRequest.FieldCentricFacingAngle()
     .withDriveRequestType(DriveRequestType.Velocity)
@@ -48,27 +48,20 @@ public class driveToPose extends Command {
         m_drivetrain = drivetrain;
         targetTranslation = target;
         targetAngle = angle;
-        xController.setTolerance(0.01);
-        yController.setTolerance(0.01);
+        xController.setTolerance(0.02);
+        yController.setTolerance(0.02);
         swerveRequestFacing.HeadingController = new PhoenixPIDController(10, 0, 2.25);
         swerveRequestFacing.HeadingController.setTolerance(0.01);
+        SmartDashboard.putData("driveToPose xController",xController);
+        SmartDashboard.putData("driveToPose yController",yController);
+        SmartDashboard.putBoolean("driveToPose xController at Target", xController.atGoal());
+        SmartDashboard.putBoolean("driveToPose yController at Target", yController.atGoal());
         
 
         addRequirements(drivetrain);
     }
 
-    public driveToPose(CommandSwerveDrivetrain drivetrain, DoubleSupplier x,DoubleSupplier y, DoubleSupplier a) {
-        m_drivetrain = drivetrain;
-        targetTranslation = new Translation2d(x.getAsDouble(), y.getAsDouble());
-        targetAngle = new Rotation2d(a.getAsDouble());
-        xController.setTolerance(0.1);
-        yController.setTolerance(0.1);
-        swerveRequestFacing.HeadingController = new PhoenixPIDController(10, 0, 2.25);
-        swerveRequestFacing.HeadingController.setTolerance(0.01);
-        
 
-        addRequirements(drivetrain);
-    }
 
     
 
@@ -77,7 +70,6 @@ public class driveToPose extends Command {
     public void initialize() {
         System.out.println(targetTranslation);
         robotPose = m_drivetrain.getState().Pose;
-        omegaController.reset(robotPose.getRotation().getRadians());
         xController.reset(robotPose.getX());
         yController.reset(robotPose.getY());
         xController.setGoal(targetTranslation.getX());
