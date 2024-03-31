@@ -3,17 +3,19 @@
   "robotLength": 0.96,
   "holonomicMode": true,
   "pathFolders": [
-    "6 Note Auto",
-    "Amp Side",
-    "Amp Side Feed",
-    "Far Side",
-    "Mid Auto",
-    "Mid 4 + Search",
+    "(Rush)",
+    "6 Note",
+    "MA Help",
+    "Feed Autos",
     "PID",
-    "PSW-M3-M4or2",
-    "SS Steal",
+    "PSW-M3-M4orM2",
+    "PSW-R2NL-M1WL-M2NL-R1NL (AS)",
+    "PSW-R2SW-R3SW-R1SW (Mid)",
+    "PSW-R2SW-R3SW-R1SW-M3NL (Mid)",
+    "PSW-R5NL-R4NL (SSA)",
     "Steal",
-    "Zero Vision"
+    "Zero Vision",
+    "[Steal] Source Side"
   ],
   "autoFolders": [
     "Advantage Autos",
