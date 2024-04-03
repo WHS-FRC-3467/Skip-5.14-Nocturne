@@ -32,7 +32,7 @@ public class autoRunToNote extends Command {
     boolean m_isFinished = false;
 
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = new TrapezoidProfile.Constraints(.1, .01);
-    private final ProfiledPIDController omegaController = new ProfiledPIDController(.1, 0, 0, OMEGA_CONSTRATINTS);
+    private final ProfiledPIDController omegaController = new ProfiledPIDController(.095, 0, 0, OMEGA_CONSTRATINTS);
 
     /** Creates a new aimAtNote. */
     public autoRunToNote(CommandSwerveDrivetrain drivetrain, Limelight limelight, SwerveRequest.FieldCentricFacingAngle head) {
@@ -41,7 +41,7 @@ public class autoRunToNote extends Command {
         m_head = head;
         omegaController.setTolerance(1);
         omegaController.setGoal(0);
-        SmartDashboard.putData("Note PID",omegaController);
+        //SmartDashboard.putData("Note PID",omegaController);
         // Use addRequirements() here to declare subsystem dependencies.
     }
 
@@ -52,11 +52,13 @@ public class autoRunToNote extends Command {
             SmartDashboard.putData("Note Detect PID",omegaController);
         }
         omegaController.reset(tx);
+        m_isFinished = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        System.out.println("AUTO NOTE RUNNING");
         tx = LimelightHelpers.getTX(kCameraName);
         omegaSpeed = omegaController.calculate(tx);
         if (omegaController.atGoal()) {
@@ -65,17 +67,19 @@ public class autoRunToNote extends Command {
 
         if (m_limelight.hasTarget()) {
             m_drivetrain.setControl(m_forwardStraight
-                    .withVelocityX(-Constants.maxSpeed * (1 - Math.abs(tx) / 32) * .5) // Constants.halfSpeed
+                    .withVelocityX(-Constants.maxSpeed * (1 - Math.abs(tx) / 32) * .50) // Constants.halfSpeed
                     .withVelocityY(0)
                     .withRotationalRate(omegaSpeed));
         }
         if (DriverStation.getAlliance().get() != null && DriverStation.isAutonomousEnabled()) {
             if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
                 if (m_drivetrain.getState().Pose.getX() > Constants.FieldConstants.BLUE_AUTO_PENALTY_LINE) {
+                    System.out.println("Find Note1");
                     m_isFinished = true;
                 }
             } else {
                 if (m_drivetrain.getState().Pose.getX() < Constants.FieldConstants.RED_AUTO_PENALTY_LINE) {
+                    System.out.println("Find Note2");
                     m_isFinished = true;
                 }
             }
@@ -85,6 +89,7 @@ public class autoRunToNote extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBB");
     }
 
     // Returns true when the command should end.

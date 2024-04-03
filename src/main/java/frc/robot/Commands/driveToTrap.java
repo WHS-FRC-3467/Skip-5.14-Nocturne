@@ -33,9 +33,10 @@ public class driveToTrap extends Command {
     Rotation2d currentAngle;
     Setpoints currentSetpoint;
 
-    TunableNumber trap_dist = new TunableNumber("Trap Dist", .625);
+    TunableNumber trap_dist = new TunableNumber("Trap Dist", .6);
     Pose2d trap_target = new Pose2d();
     Pose3d trap_location;
+    
 
     TunableNumber leftSpeedTuner = new TunableNumber("Trap : Left Shooter Speed", 20);
     TunableNumber rightSpeedTuner = new TunableNumber("Trap: Right Shooter Speed", 20);
@@ -96,8 +97,8 @@ public class driveToTrap extends Command {
         
         trap_location = AprilTagFields.kDefaultField.loadAprilTagLayoutField().getTagPose(closest_trap).get();
         if (Constants.RobotConstants.kIsTrapTuningMode) {
-                    System.out.println(closest_trap);
-        System.out.println(offset);
+            System.out.println(closest_trap);
+            System.out.println(offset);
 
         }
 

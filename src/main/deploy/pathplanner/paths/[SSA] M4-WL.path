@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3122346472613169,
-        "y": 7.262069908755202
+        "x": 8.288614490658505,
+        "y": 2.4248957709902097
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6747534349769553,
-        "y": 7.5895062331435215
+        "x": 6.324313825097434,
+        "y": 3.508014829569755
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9556299734131106,
-        "y": 7.693627462726624
+        "x": 4.993362439555068,
+        "y": 3.966963583205746
       },
       "prevControl": {
-        "x": 2.037272222692593,
-        "y": 7.8467776308772
+        "x": 5.734564676676271,
+        "y": 4.315764635968657
+      },
+      "nextControl": {
+        "x": 4.252160202433865,
+        "y": 3.618162530442838
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.551755070213803,
+        "y": 3.168392751879844
+      },
+      "prevControl": {
+        "x": 3.9377803061932433,
+        "y": 2.6727280979534216
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,14 +54,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 3.0,
-    "rotation": 180.0,
+    "velocity": 0,
+    "rotation": 156.66595872391622,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Amp Side Feed",
+  "folder": "Far Side",
   "previewStartingState": {
-    "rotation": -178.65211271980144,
+    "rotation": 179.10482628978903,
     "velocity": 0
   },
   "useDefaultConstraints": true

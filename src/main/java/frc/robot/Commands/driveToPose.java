@@ -34,8 +34,8 @@ public class driveToPose extends Command {
     private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, .5);
     private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, .5);
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(8, 40, 0, X_CONSTRAINTS);
-    private final ProfiledPIDController yController = new ProfiledPIDController(8, 40, 0, Y_CONSTRAINTS);
+    private final ProfiledPIDController xController = new ProfiledPIDController(10, 2, 2, X_CONSTRAINTS);
+    private final ProfiledPIDController yController = new ProfiledPIDController(10, 2, 2, Y_CONSTRAINTS);
     
 
     private final SwerveRequest.FieldCentricFacingAngle swerveRequestFacing = new SwerveRequest.FieldCentricFacingAngle()
@@ -50,10 +50,11 @@ public class driveToPose extends Command {
         targetAngle = angle;
         xController.setTolerance(0.02);
         yController.setTolerance(0.02);
-        swerveRequestFacing.HeadingController = new PhoenixPIDController(10, 0, 2.25);
+        swerveRequestFacing.HeadingController = new PhoenixPIDController(20, 0, 1.5);
         swerveRequestFacing.HeadingController.setTolerance(0.01);
         SmartDashboard.putData("driveToPose xController",xController);
         SmartDashboard.putData("driveToPose yController",yController);
+        SmartDashboard.putData("driveToPoseHead",swerveRequestFacing.HeadingController);
         SmartDashboard.putBoolean("driveToPose xController at Target", xController.atGoal());
         SmartDashboard.putBoolean("driveToPose yController at Target", yController.atGoal());
         
@@ -68,8 +69,8 @@ public class driveToPose extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        System.out.println(targetTranslation);
-        System.out.println(targetAngle);
+        //System.out.println(targetTranslation);
+        //System.out.println(targetAngle);
         robotPose = m_drivetrain.getState().Pose;
         xController.reset(robotPose.getX());
         yController.reset(robotPose.getY());

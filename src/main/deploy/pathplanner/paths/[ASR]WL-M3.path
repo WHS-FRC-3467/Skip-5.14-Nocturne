@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4525645005705963,
-        "y": 5.55472336015897
+        "x": 4.791424987955415,
+        "y": 6.28006530152905
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0489663771350335,
-        "y": 7.238681599870323
+        "x": 5.874544046535375,
+        "y": 7.2530366592364715
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.281950694955519,
-        "y": 7.414093916506922
+        "x": 7.434969808896334,
+        "y": 4.802250314822494
       },
       "prevControl": {
-        "x": 7.281950694955519,
-        "y": 7.414093916506922
+        "x": 7.122884656424142,
+        "y": 5.931264248766012
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Note Override",
-      "waypointRelativePos": 0.7,
+      "waypointRelativePos": 0.8,
       "command": {
         "type": "parallel",
         "data": {
@@ -56,14 +56,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 180.0,
-    "rotateFast": false
+    "velocity": 2.0,
+    "rotation": 136.57655005518365,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "Zero Vision",
+  "folder": "Amp Side",
   "previewStartingState": {
-    "rotation": -177.4362297885351,
+    "rotation": 178.9949139947457,
     "velocity": 0
   },
   "useDefaultConstraints": true

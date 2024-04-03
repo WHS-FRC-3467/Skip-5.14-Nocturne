@@ -153,9 +153,11 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
 
         // Put controls for the PID controller on the dashboard
-        if (RobotConstants.kIsArmTuningMode) SmartDashboard.putData(this.m_controller);    
+        if (RobotConstants.kIsArmTuningMode) {
+        SmartDashboard.putData(this.m_controller);    
         SmartDashboard.putData("Arm Coast Command", armCoastCommand());    
-        SmartDashboard.putData("Arm Brake Command", armBrakeCommand());    
+        SmartDashboard.putData("Arm Brake Command", armBrakeCommand()); 
+        }   
     }
 
     @Override
@@ -174,6 +176,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         if (Robot.isReal()) {
             if (!m_encoder.isConnected() || (armPos < 0.1 || armPos >= 1.0)) {
                 System.out.println("Arm Encoder error reported in periodic().");
+                System.out.println(armPos);
                 // Stop the arm and disable the PID
                 neutralOutput();
                 this.disable();
@@ -402,12 +405,18 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     public void armCoastMode() {
         m_armLeader.setNeutralMode(NeutralModeValue.Coast);
         m_armFollower.setNeutralMode(NeutralModeValue.Coast);
+        disable();
+        m_armLeader.disable();
+
+        //m_armFollower.disable();
         //m_armFollower.setControl(new Follower(m_armLeader.getDeviceID(), true));
     } 
 
     public void armBrakeMode() {
         m_armLeader.setNeutralMode(NeutralModeValue.Brake);
         m_armFollower.setNeutralMode(NeutralModeValue.Brake);
+        setGoal(getArmJointRadians());
+        enable();
         //m_armFollower.setControl(new Follower(m_armLeader.getDeviceID(), true));
     }
 

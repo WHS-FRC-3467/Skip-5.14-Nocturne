@@ -46,6 +46,9 @@ public class ShooterSubsystem extends SubsystemBase {
     private static TunableNumber m_ShooterSetpointL = new TunableNumber("Shooter Setpoint L", 0.0);
     private static TunableNumber m_ShooterSetpointR = new TunableNumber("Shooter Setpoint R", 0.0);
 
+    private static TunableNumber trap_speedL = new TunableNumber("Trap Speed L", 22);
+    private static TunableNumber trap_speedR = new TunableNumber("Trap Speed R", 22);
+
     // Current Limits
     private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
@@ -197,6 +200,15 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
+    public void runTrap() {
+        // Get Velocity setpoint from TunableNumber
+        m_motorLeft.setControl(m_voltageVelocityLeft.withVelocity(trap_speedL.get()));
+        m_motorRight.setControl(m_voltageVelocityRight.withVelocity(trap_speedR.get()));
+        if (m_state != kShooterState.kREADY) {
+            m_state = kShooterState.kSPOOLING;
+        }
+    }
+
     public void stopShooter() {
         m_motorLeft.setControl(m_brake);
         m_motorRight.setControl(m_brake);
@@ -265,6 +277,10 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public Command runShooterCommand(double velocityL, double velocityR) {
         return new RunCommand(()->this.runShooter(velocityL, velocityR), this);
+    }
+
+    public Command runTrapShooterCommand() {
+        return new RunCommand(()->this.runTrap(), this);
     }
 
     public Command runShooterCommand() {

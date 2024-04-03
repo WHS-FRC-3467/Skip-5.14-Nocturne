@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4135621611975744,
+      "y": 1.5253562138644805
+    },
+    "rotation": -178.97696981133225
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "GetThatNote"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Week6",
+  "choreoAuto": false
+}

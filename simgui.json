@@ -67,7 +67,9 @@
       "/SmartDashboard/ProfiledPIDController[1]": "ProfiledPIDController",
       "/SmartDashboard/Robot Pose Field Map": "Field2d",
       "/SmartDashboard/Run Shooter": "Command",
+      "/SmartDashboard/Shoot on Move Turning PID": "PIDController",
       "/SmartDashboard/Speed Limit": "String Chooser",
+      "/SmartDashboard/Static Turning PID": "PIDController",
       "/SmartDashboard/Stop Shooter": "Command",
       "/SmartDashboard/Update Shooter Gains": "Command",
       "/SmartDashboard/VisionSystemSim-main/Sim Field": "Field2d"

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.1,
-        "y": 5.9
+        "x": 5.24119476651828,
+        "y": 1.5345351889371925
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.907163717094038,
-        "y": 6.129813332935694
+        "x": 4.03874903199307,
+        "y": 1.9016941918456538
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.196824739931388,
-        "y": 4.187258984950823
+        "x": 2.423249419195842,
+        "y": 3.1867507020252672
       },
       "prevControl": {
-        "x": 7.416611858750911,
-        "y": 4.875682115404187
+        "x": 2.7628714968861687,
+        "y": 2.920560424916632
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 140.84071719402777,
-    "rotateFast": true
+    "rotation": 147.52880770915152,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Amp Side Feed",
+  "folder": "Far Side",
   "previewStartingState": {
-    "rotation": 135.91867121253856,
+    "rotation": 131.7295120768164,
     "velocity": 0
   },
   "useDefaultConstraints": true

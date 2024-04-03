@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4525645005705963,
-        "y": 5.55472336015897
+        "x": 8.73838426922137,
+        "y": 0.7543223077567138
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0489663771350335,
-        "y": 7.238681599870323
+        "x": 7.012736955546293,
+        "y": 0.8920069338480062
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.281950694955519,
-        "y": 7.414093916506922
+        "x": 7.306464157878372,
+        "y": 2.195421394172422
       },
       "prevControl": {
-        "x": 7.281950694955519,
-        "y": 7.414093916506922
+        "x": 6.4528194761162,
+        "y": 1.690577765173286
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Note Override",
-      "waypointRelativePos": 0.7,
+      "name": "shoot",
+      "waypointRelativePos": 0.3,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "OverrideToNote"
+                "name": "ShootNote"
               }
             }
           ]
@@ -57,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": -163.07248693644863,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Zero Vision",
+  "folder": "Far Side",
   "previewStartingState": {
-    "rotation": -177.4362297885351,
+    "rotation": 179.10482628978903,
     "velocity": 0
   },
   "useDefaultConstraints": true

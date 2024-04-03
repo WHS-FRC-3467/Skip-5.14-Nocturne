@@ -33,7 +33,7 @@ public final class Constants {
 
         public static final boolean kIsTuningMode = true;
         public static final boolean kIsDriveTuningMode = false;
-        public static final boolean kIsArmTuningMode = false;
+        public static final boolean kIsArmTuningMode = true;
         public static final boolean kIsIntakeTuningMode = false;
         public static final boolean kIsStageTuningMode = false;
         public static final boolean kIsShooterTuningMode = false;
@@ -41,7 +41,7 @@ public final class Constants {
         public static final boolean kIsTrapTuningMode = true;
     
         // Shooter and Arm Setpoints
-        public static final Setpoints STOWED =    new Setpoints(1.0, 0.4, 0.0, 0.0, GameState.STOWED);
+        public static final Setpoints STOWED =    new Setpoints(0.0, 0.2, 0.0, 0.0, GameState.STOWED);
         public static final Setpoints INTAKE =    new Setpoints(1.0, 2.0, 0.0, 0.0, GameState.INTAKE);
         public static final Setpoints SUBWOOFER = new Setpoints(1.0, 1.0, 40.0,35.0,  GameState.SUBWOOFER);
         public static final Setpoints AMP =       new Setpoints(95.0, 0.4, 40.0,40.0,  GameState.AMP);
@@ -49,8 +49,8 @@ public final class Constants {
         public static final Setpoints WING =      new Setpoints(30.0, 0.4, 70.0,60.0,  GameState.WING);
         public static final Setpoints PREPCLIMB = new Setpoints(0.0, 0.4, 0.0,0.0,  GameState.PREPCLIMB);
         public static final Setpoints CLIMB =     new Setpoints(88.0, 0.4, 0.0,0.0,  GameState.CLIMB);
-        public static final Setpoints TRAP =      new Setpoints(1.0, 0.4, 20.0,20.0,  GameState.TRAP);
-        public static final Setpoints LOOKUP =    new Setpoints(0.0, 0.8, 20.0,25.0,  GameState.LOOKUP);
+        public static final Setpoints TRAP =      new Setpoints(-3.0, 0.4, 22.0,22.0,  GameState.TRAP);
+        public static final Setpoints LOOKUP =    new Setpoints(0.0, 0.5, 20.0,25.0,  GameState.LOOKUP);
         public static final Setpoints FEED =      new Setpoints(10.0, 2, 28,28.0,  GameState.FEED);
 
         public static final double autoShootMaxDist = 4.0;
@@ -247,8 +247,8 @@ public final class Constants {
     public static class FieldConstants {
         public static final Pose2d BLUE_SPEAKER = new Pose2d(Units.inchesToMeters(-1.5+12), Units.inchesToMeters(218.42), new Rotation2d(0));
         public static final Pose2d RED_SPEAKER = new Pose2d(Units.inchesToMeters(652.73-12), Units.inchesToMeters(218.42), new Rotation2d(Math.PI));
-        public static final double BLUE_AUTO_PENALTY_LINE = 8.6; // X distance from origin to center of the robot almost fully crossing the midline
-        public static final double RED_AUTO_PENALTY_LINE = 8; // X distance from origin to center of the robot almost fully crossing the midline
+        public static final double BLUE_AUTO_PENALTY_LINE = 7.5; // X distance from origin to center of the robot almost fully crossing the midline
+        public static final double RED_AUTO_PENALTY_LINE = 7.5; // X distance from origin to center of the robot almost fully crossing the midline
 
         public static final double NOTE_DIAMETER = 14; // Outer diameter of note
 

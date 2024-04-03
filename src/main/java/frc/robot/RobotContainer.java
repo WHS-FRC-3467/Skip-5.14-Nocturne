@@ -16,6 +16,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -42,6 +43,7 @@ import frc.robot.Subsystems.Stage.StageSubsystem;
 import frc.robot.Subsystems.Trap.TrapSubsystem;
 import frc.robot.Util.CommandXboxPS5Controller;
 import frc.robot.Util.FieldCentricAiming;
+import frc.robot.Util.TunableNumber;
 import frc.robot.Vision.Limelight;
 import frc.robot.Vision.PhotonVision;
 import frc.robot.generated.TunerConstants;
@@ -64,6 +66,9 @@ public class RobotContainer {
     CommandXboxPS5Controller m_driverCtrl = new CommandXboxPS5Controller(0);
     CommandXboxPS5Controller m_operatorCtrl = new CommandXboxPS5Controller(1);
     GenericHID m_driveRmbl = m_driverCtrl.getHID();
+    GenericHID m_operatorRmbl = m_operatorCtrl.getHID();
+
+   
 
     // Drive Control style settings
     private Supplier<SwerveRequest> m_controlStyle;
@@ -79,7 +84,7 @@ public class RobotContainer {
     // characterization
     SwerveRequest.FieldCentric m_drive = new SwerveRequest.FieldCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-            .withDeadband(Constants.maxSpeed * 0.1).withRotationalDeadband(m_AngularRate * 0.1);
+            .withDeadband(Constants.maxSpeed * 0.2).withRotationalDeadband(m_AngularRate * 0.1);
 
     // Field-centric driving in Closed Loop. Comment above and uncomment below.
     // SwerveRequest.FieldCentric m_drive = new
@@ -145,7 +150,7 @@ public class RobotContainer {
 
                 /* Static turning PID */
         m_cardinal.ForwardReference = ForwardReference.RedAlliance;
-        m_cardinal.HeadingController.setP(20);
+        m_cardinal.HeadingController.setP(22);
         m_cardinal.HeadingController.setI(0);
         m_cardinal.HeadingController.setD(1.5);
         m_cardinal.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -199,8 +204,7 @@ public class RobotContainer {
                         () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),
                         m_cardinal, invertForAlliance()));
         NamedCommands.registerCommand("MoveAndShoot",
-                new MoveAndShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem,
-                        () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),5));
+                new smartShootOnMove(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, 4.5));
         NamedCommands.registerCommand("OverrideToNote", new overrideAngleToNote(m_drivetrain, m_limelightVision));
     }
 
@@ -244,6 +248,7 @@ public class RobotContainer {
     }
 
     private void configureSmartDashboard() {
+        
 
         if (RobotConstants.kIsAutoAimTuningMode) {
             SmartDashboard.putData("Shoot on Move Turning PID", m_head.HeadingController);
@@ -257,6 +262,9 @@ public class RobotContainer {
         }
         if (RobotConstants.kIsArmTuningMode) {
             SmartDashboard.putData("Move Arm To Setpoint", m_armSubsystem.tuneArmSetPointCommand());
+        }
+        if (RobotConstants.kIsTuningMode){
+            //SmartDashboard.putNumber("Trap Speed", 22);
         }
     }
 
@@ -354,19 +362,18 @@ public class RobotContainer {
         m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
 
         //m_driverCtrl.povDown().whileTrue(new driveToPose(m_drivetrain, () -> m_trapSubsystem.getTrapTarget().getX(),() -> m_trapSubsystem.getTrapTarget().getY(),() -> m_trapSubsystem.getTrapTarget().getRotation().getRadians()));
-        m_driverCtrl.povDown().whileTrue(new driveToTrap(m_drivetrain, m_shooterSubsystem));
+        //m_driverCtrl.leftBumper().whileTrue(new driveToTrap(m_drivetrain, m_shooterSubsystem));
         
 
         // Driver: While Left Bumper is held, reduce speed by 50%
-        m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = Constants.maxSpeed * .5)
-                .andThen(() -> m_AngularRate = Constants.maxAngularRate * .5));
+         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = Constants.maxSpeed * .25)
+                .andThen(() -> m_AngularRate = Constants.maxAngularRate * .25));
         m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = Constants.maxSpeed)
-                .andThen(() -> m_AngularRate = Constants.maxAngularRate * .5));
-
+                .andThen(() -> m_AngularRate = Constants.maxAngularRate));
         // Driver: When LeftTrigger is pressed, lower the Arm and then run the Intake
         // and Stage until a Note is found and then Rumble the driver controller for 1/2
         // sec
-        m_driverCtrl.leftTrigger(Constants.ControllerConstants.triggerThreashold)
+         m_driverCtrl.leftTrigger(Constants.ControllerConstants.triggerThreashold)
                 .whileTrue(m_armSubsystem.prepareForIntakeCommand()
                         .andThen(new intakeNote(m_intakeSubsystem, m_stageSubsystem))
                         .andThen(rumbleDriverCommand()));
@@ -451,7 +458,9 @@ public class RobotContainer {
         m_operatorCtrl.start().onTrue(new prepareToShoot(RobotConstants.FEED, () -> m_stageSubsystem.isNoteInStage(),
                 m_armSubsystem, m_shooterSubsystem));
 
-        m_operatorCtrl.back().onTrue(Commands.parallel(m_shooterSubsystem.runShooterCommand(20, 20), m_trapSubsystem.startBlowerCommand()));
+        //m_operatorCtrl.back().onTrue(Commands.parallel(m_shooterSubsystem.runShooterCommand(25, 25), m_trapSubsystem.startBlowerCommand()));
+        m_operatorCtrl.back().onTrue(Commands.parallel(m_trapSubsystem.startBlowerCommand(),new prepareToShoot(RobotConstants.TRAP, () -> m_stageSubsystem.isNoteInStage(),
+                m_armSubsystem, m_shooterSubsystem)));
         m_operatorCtrl.back().onFalse(Commands.parallel(m_shooterSubsystem.stopShooterCommand(), m_trapSubsystem.stopBlowerCommand()));
         
         //m_operatorCtrl.back().onTrue(new InstantCommand(()->m_armSubsystem.disable()).andThen(new InstantCommand(()->m_armSubsystem.enable())));
@@ -486,9 +495,11 @@ public class RobotContainer {
 
     public void rumbleDriverCtrl() {
         m_driveRmbl.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+        m_operatorRmbl.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
     }
 
     public void stopRumbleDriverCtrl() {
         m_driveRmbl.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+        m_operatorRmbl.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
     }
 }

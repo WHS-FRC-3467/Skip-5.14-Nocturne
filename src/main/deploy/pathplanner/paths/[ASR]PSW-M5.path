@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4525645005705963,
-        "y": 5.55472336015897
+        "x": 0.7434969808896333,
+        "y": 6.720656105019202
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0489663771350335,
-        "y": 7.238681599870323
+        "x": 1.2575195849614786,
+        "y": 7.344826409963586
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.281950694955519,
-        "y": 7.414093916506922
+        "x": 2.8271243223951488,
+        "y": 7.702806437799336
       },
       "prevControl": {
-        "x": 7.281950694955519,
-        "y": 7.414093916506922
+        "x": 1.5971416626518047,
+        "y": 7.656911562435778
+      },
+      "nextControl": {
+        "x": 4.038961041394441,
+        "y": 7.748024225821698
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.223853382223969,
+        "y": 7.409079235472567
+      },
+      "prevControl": {
+        "x": 6.223853382223969,
+        "y": 7.409079235472567
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +48,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Note Override",
-      "waypointRelativePos": 0.7,
+      "name": "LocateNote",
+      "waypointRelativePos": 1.7,
       "command": {
         "type": "parallel",
         "data": {
@@ -56,14 +72,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 180.0,
-    "rotateFast": false
+    "velocity": 2.0,
+    "rotation": -179.45958470625976,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "Zero Vision",
+  "folder": "Amp Side",
   "previewStartingState": {
-    "rotation": -177.4362297885351,
+    "rotation": -120.0183674276091,
     "velocity": 0
   },
   "useDefaultConstraints": true

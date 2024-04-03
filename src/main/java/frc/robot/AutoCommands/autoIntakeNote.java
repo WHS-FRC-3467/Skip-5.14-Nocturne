@@ -36,6 +36,7 @@ public class autoIntakeNote extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        System.out.println("AUTO INTAKE RUNNING");
 
         // Turn on the Intake and Run the Stage until a Note is inside
         if (!m_stageSubsystem.isNoteInStage()) {
@@ -45,7 +46,9 @@ public class autoIntakeNote extends Command {
         } else {
             m_stageSubsystem.stopStage();
             m_intakeSubsystem.stopIntake();
+            System.out.println("Note In Intake");
             m_isDone = true;
+            
         }
     }
 
@@ -55,6 +58,7 @@ public class autoIntakeNote extends Command {
         // Turn off the Stage and Intake
         m_stageSubsystem.stopStage();
         m_intakeSubsystem.stopIntake();
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 
     // Returns true when the command should end.
