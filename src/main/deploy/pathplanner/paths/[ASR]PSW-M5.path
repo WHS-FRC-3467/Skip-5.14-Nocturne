@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2575195849614786,
-        "y": 7.344826409963586
+        "x": 1.0739400835072481,
+        "y": 7.555942836635952
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.8271243223951488,
-        "y": 7.702806437799336
+        "x": 2.83630329746786,
+        "y": 7.785417213453739
       },
       "prevControl": {
-        "x": 1.5971416626518047,
-        "y": 7.656911562435778
+        "x": 1.606320637724516,
+        "y": 7.739522338090181
       },
       "nextControl": {
-        "x": 4.038961041394441,
-        "y": 7.748024225821698
+        "x": 4.048140016467153,
+        "y": 7.830635001476101
       },
       "isLocked": false,
       "linkedName": null
@@ -46,25 +46,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "LocateNote",
-      "waypointRelativePos": 1.7,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "OverrideToNote"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 6.0,
     "maxAcceleration": 6.0,

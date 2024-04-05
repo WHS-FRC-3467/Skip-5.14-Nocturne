@@ -36,9 +36,9 @@ public final class Constants {
         public static final boolean kIsArmTuningMode = true;
         public static final boolean kIsIntakeTuningMode = false;
         public static final boolean kIsStageTuningMode = false;
-        public static final boolean kIsShooterTuningMode = false;
+        public static final boolean kIsShooterTuningMode = true;
         public static final boolean kIsAutoAimTuningMode = true;
-        public static final boolean kIsTrapTuningMode = true;
+        public static final boolean kIsTrapTuningMode = false;
     
         // Shooter and Arm Setpoints
         public static final Setpoints STOWED =    new Setpoints(0.0, 0.2, 0.0, 0.0, GameState.STOWED);
@@ -48,10 +48,11 @@ public final class Constants {
         public static final Setpoints PODIUM =    new Setpoints(23.0, 0.4, 50.0,50.0,  GameState.PODIUM);
         public static final Setpoints WING =      new Setpoints(30.0, 0.4, 70.0,60.0,  GameState.WING);
         public static final Setpoints PREPCLIMB = new Setpoints(0.0, 0.4, 0.0,0.0,  GameState.PREPCLIMB);
-        public static final Setpoints CLIMB =     new Setpoints(88.0, 0.4, 0.0,0.0,  GameState.CLIMB);
+        public static final Setpoints CLIMB =     new Setpoints(122.0, 0.4, 0.0,0.0,  GameState.CLIMB); //88
         public static final Setpoints TRAP =      new Setpoints(-3.0, 0.4, 22.0,22.0,  GameState.TRAP);
         public static final Setpoints LOOKUP =    new Setpoints(0.0, 0.5, 20.0,25.0,  GameState.LOOKUP);
         public static final Setpoints FEED =      new Setpoints(10.0, 2, 28,28.0,  GameState.FEED);
+        public static final Setpoints HARMONY =      new Setpoints(122.0, 2, 0,0,  GameState.HARMONY);
 
         public static final double autoShootMaxDist = 4.0;
     }
@@ -247,8 +248,8 @@ public final class Constants {
     public static class FieldConstants {
         public static final Pose2d BLUE_SPEAKER = new Pose2d(Units.inchesToMeters(-1.5+12), Units.inchesToMeters(218.42), new Rotation2d(0));
         public static final Pose2d RED_SPEAKER = new Pose2d(Units.inchesToMeters(652.73-12), Units.inchesToMeters(218.42), new Rotation2d(Math.PI));
-        public static final double BLUE_AUTO_PENALTY_LINE = 7.5; // X distance from origin to center of the robot almost fully crossing the midline
-        public static final double RED_AUTO_PENALTY_LINE = 7.5; // X distance from origin to center of the robot almost fully crossing the midline
+        public static final double BLUE_AUTO_PENALTY_LINE = 8.7; // X distance from origin to center of the robot almost fully crossing the midline
+        public static final double RED_AUTO_PENALTY_LINE = 7.8; // X distance from origin to center of the robot almost fully crossing the midline
 
         public static final double NOTE_DIAMETER = 14; // Outer diameter of note
 
@@ -256,7 +257,7 @@ public final class Constants {
 
     // Initial max is true top speed
     public static final double maxSpeed = TunerConstants.kSpeedAt12VoltsMps;
-    public static final double maxAngularRate = Math.PI * 1.5;
+    public static final double maxAngularRate = Math.PI * 2;
 
 
     public static final double robotAtAngleTolerance = 2;

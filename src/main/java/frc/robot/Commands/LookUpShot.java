@@ -30,7 +30,7 @@ public class LookUpShot extends Command {
         
         m_armSubsystem = armSub;
         m_shooterSubsystem = shootSub;
-        m_VisionLookUpTable = new VisionLookUpTable();
+        //m_VisionLookUpTable = new VisionLookUpTable();
         m_distance = distance;
         m_setpoints = RobotConstants.LOOKUP;
 
@@ -41,6 +41,7 @@ public class LookUpShot extends Command {
     @Override
     public void initialize() {
         if (!m_armSubsystem.isEnabled()) m_armSubsystem.enable();
+        m_VisionLookUpTable = new VisionLookUpTable();
     }
 
     // Called every time the scheduler runs while the command is scheduled.

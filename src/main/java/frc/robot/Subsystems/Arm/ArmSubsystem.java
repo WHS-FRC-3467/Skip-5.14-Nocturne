@@ -284,7 +284,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
      * Indicate if arm is being setup to shoot in any way
      */
     public boolean preparing2Shoot() {
-        return ((m_armState != GameState.STOWED) && (m_armState != GameState.INTAKE) && (m_armState != GameState.CLIMB));
+        return ((m_armState != GameState.STOWED) && (m_armState != GameState.INTAKE) && (m_armState != GameState.CLIMB) && (m_armState != GameState.HARMONY));
     }
     
     /**

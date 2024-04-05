@@ -29,7 +29,7 @@ public class Setpoints {
     }
 
     public enum GameState {
-        STOWED, INTAKE, SUBWOOFER, AMP, PODIUM, WING, PREPCLIMB, CLIMB, TRAP, LOOKUP, FEED
+        STOWED, INTAKE, SUBWOOFER, AMP, PODIUM, WING, PREPCLIMB, CLIMB, TRAP, LOOKUP, FEED, HARMONY
     }
 
     // Display the commanded Arm state on the dashboard

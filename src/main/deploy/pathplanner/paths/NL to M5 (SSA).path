@@ -38,12 +38,12 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": 175.91438322002514,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "PSW-R5NL-R4NL (SSA)",
+  "folder": null,
   "previewStartingState": {
     "rotation": 134.99999999999994,
     "velocity": 0

@@ -36,7 +36,7 @@ public class AutoLookUpShot extends Command {
         m_drivetrain = drivetrain;
         m_armSubsystem = armSub;
         m_shooterSubsystem = shootSub;
-        m_VisionLookUpTable = new VisionLookUpTable();
+        //m_VisionLookUpTable = new VisionLookUpTable();
         m_distance = distance;
         m_maxShotDist = maxShotDist;
         m_setpoints = RobotConstants.LOOKUP;
@@ -49,8 +49,9 @@ public class AutoLookUpShot extends Command {
     @Override
     public void initialize() {
         if (!m_armSubsystem.isEnabled()) {m_armSubsystem.enable();};
-        System.out.println("SCHEDULED");
+        //System.out.println("SCHEDULED");
         m_isDone = false;
+        m_VisionLookUpTable = new VisionLookUpTable();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -75,7 +76,7 @@ public class AutoLookUpShot extends Command {
         m_shooterSubsystem.runShooter(m_setpoints.shooterLeft, m_setpoints.shooterRight);
 
         if(m_armSubsystem.isArmJointAtSetpoint() && m_shooterSubsystem.areWheelsAtSpeed() && m_drivetrain.isAtFutureAngle() && !m_drivetrain.isRotatingFast()) {
-            if((m_armSubsystem.isArmJointAtSetpoint() && !m_shootingOnTheMove) || (m_shootingOnTheMove && distance < m_maxShotDist)) {
+            if((!m_shootingOnTheMove) || (m_shootingOnTheMove && distance < m_maxShotDist)) {
                 m_isDone = true;
             }
         }

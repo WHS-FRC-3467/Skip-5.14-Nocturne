@@ -35,7 +35,7 @@ public class autoCollectNote extends ParallelRaceGroup {
         m_head = head;
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
-        addCommands(new autoRunToNote(m_drivetrain, m_limelight, m_head));
+        addCommands(new autoRunToNote(m_drivetrain, m_limelight, m_head).withTimeout(2.00));
         addCommands(new autoIntakeNote(m_intake, m_stage));
     }
 }

@@ -49,23 +49,9 @@
           }
         },
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "[ASR]M5-WL"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
+            "pathName": "[ASR]M5-WL"
           }
         },
         {
@@ -87,23 +73,9 @@
           }
         },
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "[ASR]M4-WL"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
+            "pathName": "[ASR]M4-WL"
           }
         },
         {

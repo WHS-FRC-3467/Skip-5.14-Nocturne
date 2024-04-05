@@ -78,7 +78,7 @@
     },
     {
       "name": "Note Override",
-      "waypointRelativePos": 0.8,
+      "waypointRelativePos": 0.85,
       "command": {
         "type": "parallel",
         "data": {

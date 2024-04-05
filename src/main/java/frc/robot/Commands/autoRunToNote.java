@@ -30,6 +30,7 @@ public class autoRunToNote extends Command {
     double omegaSpeed;
 
     boolean m_isFinished = false;
+    boolean m_isOverLine = false;
 
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = new TrapezoidProfile.Constraints(.1, .01);
     private final ProfiledPIDController omegaController = new ProfiledPIDController(.095, 0, 0, OMEGA_CONSTRATINTS);
@@ -65,7 +66,7 @@ public class autoRunToNote extends Command {
             omegaSpeed = 0;
         }
 
-        if (m_limelight.hasTarget()) {
+        if (m_limelight.hasTarget() && !m_isOverLine) {
             m_drivetrain.setControl(m_forwardStraight
                     .withVelocityX(-Constants.maxSpeed * (1 - Math.abs(tx) / 32) * .50) // Constants.halfSpeed
                     .withVelocityY(0)
@@ -75,12 +76,12 @@ public class autoRunToNote extends Command {
             if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
                 if (m_drivetrain.getState().Pose.getX() > Constants.FieldConstants.BLUE_AUTO_PENALTY_LINE) {
                     System.out.println("Find Note1");
-                    m_isFinished = true;
+                    m_isOverLine = true;
                 }
             } else {
                 if (m_drivetrain.getState().Pose.getX() < Constants.FieldConstants.RED_AUTO_PENALTY_LINE) {
                     System.out.println("Find Note2");
-                    m_isFinished = true;
+                    m_isOverLine = true;
                 }
             }
         }

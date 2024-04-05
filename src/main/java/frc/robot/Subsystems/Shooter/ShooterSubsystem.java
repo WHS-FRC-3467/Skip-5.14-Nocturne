@@ -114,14 +114,14 @@ public class ShooterSubsystem extends SubsystemBase {
         m_motorRight.getConfigurator().apply(leadConfiguration);
 
         // optimize StatusSignal rates for the Talons
-        m_motorLeft.getVelocity().setUpdateFrequency(50);
+        /* m_motorLeft.getVelocity().setUpdateFrequency(50);
         m_motorLeft.getStatorCurrent().setUpdateFrequency(100);
         m_motorLeft.getSupplyCurrent().setUpdateFrequency(100);
         m_motorLeft.optimizeBusUtilization();
         m_motorRight.getVelocity().setUpdateFrequency(50);
         m_motorRight.getStatorCurrent().setUpdateFrequency(100);
         m_motorRight.getSupplyCurrent().setUpdateFrequency(100);
-        m_motorRight.optimizeBusUtilization();
+        m_motorRight.optimizeBusUtilization(); */
     
 
     }

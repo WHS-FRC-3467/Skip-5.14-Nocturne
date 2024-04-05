@@ -63,6 +63,7 @@
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
       "/SmartDashboard/Move Arm To Setpoint": "Command",
+      "/SmartDashboard/Note Detect PID": "ProfiledPIDController",
       "/SmartDashboard/Note PID": "ProfiledPIDController",
       "/SmartDashboard/ProfiledPIDController[1]": "ProfiledPIDController",
       "/SmartDashboard/Robot Pose Field Map": "Field2d",
