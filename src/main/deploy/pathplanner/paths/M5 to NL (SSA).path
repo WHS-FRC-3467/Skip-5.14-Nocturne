@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.00232558917107,
-        "y": 0.23386741114369636
+        "x": 5.085152190282184,
+        "y": 0.9654387344290779
       },
       "isLocked": false,
       "linkedName": "M5 (SSA)"
     },
     {
       "anchor": {
-        "x": 3.001524848776668,
-        "y": 2.718622973316979
+        "x": 2.4966812197775345,
+        "y": 3.039887100861882
       },
       "prevControl": {
-        "x": 3.0833839298737473,
-        "y": 0.9878881158358674
+        "x": 2.578540300874614,
+        "y": 1.3091522433807707
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,25 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Speed Up Shooter",
+      "waypointRelativePos": 0.15,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SpeedUpShooter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 6.0,
     "maxAcceleration": 6.0,
@@ -39,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 150.85192815428687,
+    "rotation": 137.84947456067724,
     "rotateFast": true
   },
   "reversed": false,

@@ -171,7 +171,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
 
         atAngle = (Math.abs(m_FieldCentricAiming.getAngleToSpeaker(getState().Pose.getTranslation())
-                .minus(getState().Pose.getRotation()).getDegrees()) < Constants.robotAtAngleTolerance);
+                .minus(getState().Pose.getRotation()).getDegrees()) < Constants.RobotConstants.robotAtAngleTolerance);
 
         atFutureAngle = (Math.abs(velocityOffset
                 .minus(getState().Pose.getRotation()).getDegrees()) < 5);
@@ -224,14 +224,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public boolean isAtFutureAngle() {
         return atFutureAngle;
-    }
-    
-    public boolean isMoving() {
-        if (getCurrentRobotChassisSpeeds().vxMetersPerSecond > .1 || getCurrentRobotChassisSpeeds().vyMetersPerSecond > .1) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public boolean isRotatingFast(){

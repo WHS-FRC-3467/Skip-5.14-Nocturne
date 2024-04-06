@@ -59,7 +59,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.4
+                        "waitTime": 0.6
                       }
                     }
                   ]
@@ -77,7 +77,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNote"
+            "name": "LookAndShoot"
           }
         },
         {
@@ -103,7 +103,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.4
+                        "waitTime": 0.6
                       }
                     }
                   ]
@@ -121,7 +121,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNote"
+            "name": "LookAndShoot"
           }
         },
         {
@@ -165,7 +165,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNote"
+            "name": "LookAndShoot"
           }
         },
         {
@@ -187,17 +187,17 @@
                       "data": {
                         "pathName": "[ZV]SW to M1"
                       }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.4
-                      }
                     }
                   ]
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GetThatNote"
           }
         },
         {

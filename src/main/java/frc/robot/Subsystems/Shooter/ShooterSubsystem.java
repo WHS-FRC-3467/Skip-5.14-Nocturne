@@ -79,7 +79,7 @@ public class ShooterSubsystem extends SubsystemBase {
     double m_idleSpeed = ShooterConstants.kShooterIdleSpeed;
 
     public ShooterSubsystem() {
-        SmartDashboard.putData("POWER", new PowerDistribution());
+        //SmartDashboard.putData("POWER", new PowerDistribution());
 
         /* Configure the motors */
         var leadConfiguration = new TalonFXConfiguration();

@@ -78,7 +78,7 @@ public class IntakeSubsystem extends SubsystemBase {
         //m_intakeMotor.getConfigurator().apply(m_configuration);
 
         // optimize StatusSignal rates for the Talon
-        m_intakeMotor.getDutyCycle().setUpdateFrequency(100);
+/*         m_intakeMotor.getDutyCycle().setUpdateFrequency(100);
         m_intakeMotor.getSupplyCurrent().setUpdateFrequency(100);
         m_intakeMotor.getStatorCurrent().setUpdateFrequency(100);
         m_intakeMotor.optimizeBusUtilization();
@@ -87,7 +87,7 @@ public class IntakeSubsystem extends SubsystemBase {
         m_intakeFollower.getDutyCycle().setUpdateFrequency(100);
         m_intakeFollower.getSupplyCurrent().setUpdateFrequency(100);
         m_intakeFollower.getStatorCurrent().setUpdateFrequency(100);
-        m_intakeFollower.optimizeBusUtilization();
+        m_intakeFollower.optimizeBusUtilization(); */
 
         /*
          * Apply the configurations to the motors, and set one to follow the other in

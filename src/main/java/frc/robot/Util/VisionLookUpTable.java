@@ -17,7 +17,15 @@ public class VisionLookUpTable {
     }
     public VisionLookUpTable() {
         shooterConfig = new ShooterConfig();
-        if (DriverStation.getAlliance().isPresent()) {
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5)); 
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(19, 70, 40, 2)); 
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(23.25, 70, 40, 2.5)); 
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(27.33, 70, 40, 3));
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(30.44, 70, 40, 3.5));
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(32.60, 70,40, 4)); 
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(33.80, 75, 40, 4.5)); 
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(34.04, 75, 40, 5)); //Maybe was good in match
+        /* if (DriverStation.getAlliance().isPresent()) {
             if (DriverStation.getAlliance().get() == Alliance.Red) {
                 shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5)); 
                 shooterConfig.getShooterConfigs().add(new ShooterPreset(19, 70, 40, 2)); 
@@ -40,7 +48,18 @@ public class VisionLookUpTable {
 
             }
 
-        }
+        } else {
+                System.out.println("ALLIANCE NOT PRESENT, FALLING BACK TO BLUE PRESETS");
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5)); 
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(19, 70, 40, 2)); 
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(22, 70, 40, 2.5)); 
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(27, 70, 40, 3));
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(29, 70, 40, 3.5));
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(30.8, 70,40, 4)); 
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(32.35, 75, 40, 4.5)); 
+                shooterConfig.getShooterConfigs().add(new ShooterPreset(33.8, 75, 40, 5)); //Maybe was good in match
+
+        } */
         
         
         //shooterConfig.getShooterConfigs().add(new ShooterPreset(36, 75, 50, 5.5)); 
@@ -58,28 +77,38 @@ public class VisionLookUpTable {
      * @return new shooter preset for given distance
      */
     public ShooterPreset getShooterPreset(double DistanceFromTarget) {
-        int endIndex = shooterConfig.getShooterConfigs().size()-1;
+        if (!shooterConfig.getShooterConfigs().isEmpty()) {
+            int endIndex = shooterConfig.getShooterConfigs().size() - 1;
 
-        /*
-         * Check if distance falls below the shortest distance in the lookup table. If the measured distance is shorter
-         * select the lookup table entry with the shortest distance
-         */
-        if(DistanceFromTarget <= shooterConfig.getShooterConfigs().get(0).getDistance()){
-            return shooterConfig.getShooterConfigs().get(0);
-        }
+            /*
+             * Check if distance falls below the shortest distance in the lookup table. If
+             * the measured distance is shorter
+             * select the lookup table entry with the shortest distance
+             */
+            if (DistanceFromTarget <= shooterConfig.getShooterConfigs().get(0).getDistance()) {
+                return shooterConfig.getShooterConfigs().get(0);
+            }
 
-        /*
-         * Check if distance falls above the largest distance in the lookup table. If the measured distance is larger
-         * select the lookup table entry with the largest distance
-         */
-        if(DistanceFromTarget >= shooterConfig.getShooterConfigs().get(endIndex).getDistance()){
-            return shooterConfig.getShooterConfigs().get(endIndex);
+            /*
+             * Check if distance falls above the largest distance in the lookup table. If
+             * the measured distance is larger
+             * select the lookup table entry with the largest distance
+             */
+            if (DistanceFromTarget >= shooterConfig.getShooterConfigs().get(endIndex).getDistance()) {
+                return shooterConfig.getShooterConfigs().get(endIndex);
+            }
+            /*
+             * If the measured distance falls somewhere within the lookup table perform a
+             * binary seqarch within the lookup
+             * table
+             */
+            return binarySearchDistance(shooterConfig.getShooterConfigs(), 0, endIndex, DistanceFromTarget);
+
+        } else {
+            System.out.println("LOOKUP TABLE NOT PRESENT, FALLING BACK TO SUB SHOT");
+            return new ShooterPreset(10, 70, 40, 1.5);
         }
-        /*
-         * If the measured distance falls somewhere within the lookup table perform a binary seqarch within the lookup
-         * table
-         */
-        return binarySearchDistance(shooterConfig.getShooterConfigs(),0, endIndex, DistanceFromTarget);
+        
     }
 
     /*

@@ -189,7 +189,8 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("RunIntake",Commands.deadline(new autoIntakeNote(m_intakeSubsystem, m_stageSubsystem),
         m_armSubsystem.prepareForIntakeCommand()));
-        NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(70, 40));
+        NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(40, 30));
+        NamedCommands.registerCommand("SpeedUpShooter", m_shooterSubsystem.runShooterCommand(70, 50));
         NamedCommands.registerCommand("Passthrough", m_shooterSubsystem.runShooterCommand(8, 8));
         NamedCommands.registerCommand("StopShooter", m_shooterSubsystem.stopShooterCommand());
         NamedCommands.registerCommand("ShootNote",
@@ -201,7 +202,7 @@ public class RobotContainer {
                         () -> m_fieldCentricAiming.getDistToSpeaker(m_drivetrain.getState().Pose.getTranslation()),
                         m_cardinal, invertForAlliance()));
         NamedCommands.registerCommand("MoveAndShoot",
-                new smartShootOnMove(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, 4.5));
+                new smartShootOnMove(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, 4.5).repeatedly().until(()-> !m_stageSubsystem.isNoteInStage()));
         NamedCommands.registerCommand("OverrideToNote", new overrideAngleToNote(m_drivetrain, m_limelightVision));
     }
 
@@ -435,7 +436,7 @@ public class RobotContainer {
                 m_armSubsystem, m_shooterSubsystem));
 
         // Operator: DPad Right: Arm to Wing Position (when pressed)
-        m_operatorCtrl.povRight().onTrue(new prepareToShoot(RobotConstants.WING, () -> m_stageSubsystem.isNoteInStage(),
+        m_operatorCtrl.povRight().onTrue(new prepareToShoot(RobotConstants.HARMONY, () -> true,
                 m_armSubsystem, m_shooterSubsystem));
 
         // Operator: DPad Down: Arm to Subwoofer Position (when pressed)
