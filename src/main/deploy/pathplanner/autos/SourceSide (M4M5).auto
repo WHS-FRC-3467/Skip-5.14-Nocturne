@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3479282065452507,
-      "y": 5.55472336015897
+      "x": 0.7336934388833163,
+      "y": 4.387391197585246
     },
-    "rotation": 178.95837332399006
+    "rotation": 118.73979529168795
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.45
+                  "waitTime": 0.4
                 }
               }
             ]
@@ -37,15 +37,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "SW to R1 (S4)"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SW to M4 (SSA)"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "GetThatNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M4 to NL (SSA)"
           }
         },
         {
@@ -57,7 +76,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NL to M2 (AS)"
+            "pathName": "NL to M5 (SSA)"
           }
         },
         {
@@ -69,25 +88,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M2 to SW (Mid)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "SW to R3 (S4)"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GetThatNote"
+            "pathName": "M5 to NL (SSA)"
           }
         },
         {
@@ -105,6 +106,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Development",
   "choreoAuto": false
 }

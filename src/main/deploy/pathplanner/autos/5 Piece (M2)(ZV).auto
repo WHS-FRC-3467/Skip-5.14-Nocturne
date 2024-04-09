@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7392210795817603,
-      "y": 4.3385312981452175
+      "x": 1.4525645005705765,
+      "y": 5.543029205712317
     },
-    "rotation": 119.98163937036335
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -53,13 +53,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "[ZV]SW to M5"
+                        "pathName": "[ZV]SW to R2"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.2
+                        "waitTime": 0.4
                       }
                     }
                   ]
@@ -71,7 +71,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[ZV]M5 to SW"
+            "pathName": "[ZV]R2 to SW"
           }
         },
         {
@@ -97,13 +97,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "[ZV]SW to M4"
+                        "pathName": "[ZV]SW to R3"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.2
+                        "waitTime": 0.4
                       }
                     }
                   ]
@@ -115,7 +115,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[ZV]M4 to SW"
+            "pathName": "[ZV]R3 to SW"
           }
         },
         {
@@ -125,14 +125,108 @@
           }
         },
         {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "[ZV]SW to R1"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.3
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[ZV]R1 to SW"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNote"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "[ZV]SW to M2"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.4
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[ZV]M2 to SW"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LookAndShoot"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "StopShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[ZV]SW to Mid"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Development",
   "choreoAuto": false
 }
