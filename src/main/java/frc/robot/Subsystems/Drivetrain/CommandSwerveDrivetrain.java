@@ -234,4 +234,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
     }
 
+    public boolean isMoving(){
+        if (getCurrentRobotChassisSpeeds().vxMetersPerSecond > .2 || getCurrentRobotChassisSpeeds().vyMetersPerSecond > .2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

@@ -1,7 +1,6 @@
 package frc.robot.Subsystems.Shooter;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-//import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
@@ -10,7 +9,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -111,18 +109,7 @@ public class ShooterSubsystem extends SubsystemBase {
         leadConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         m_motorLeft.getConfigurator().apply(leadConfiguration);
         leadConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        m_motorRight.getConfigurator().apply(leadConfiguration);
-
-        // optimize StatusSignal rates for the Talons
-        /* m_motorLeft.getVelocity().setUpdateFrequency(50);
-        m_motorLeft.getStatorCurrent().setUpdateFrequency(100);
-        m_motorLeft.getSupplyCurrent().setUpdateFrequency(100);
-        m_motorLeft.optimizeBusUtilization();
-        m_motorRight.getVelocity().setUpdateFrequency(50);
-        m_motorRight.getStatorCurrent().setUpdateFrequency(100);
-        m_motorRight.getSupplyCurrent().setUpdateFrequency(100);
-        m_motorRight.optimizeBusUtilization(); */
-    
+        m_motorRight.getConfigurator().apply(leadConfiguration);    
 
     }
 

@@ -54,6 +54,11 @@ public final class Constants {
         public static final Setpoints HARMONY =   new Setpoints(122.0, 2, 0,0,  GameState.HARMONY);
 
         public static final double robotAtAngleTolerance = 2;
+        public static final double robotMaxStaticShotDist = 5;
+        public static final double robotMaxDynamicShotDist = 4.5;
+
+        public static final double kTimeToShoot = .15; //Time it takes before note leave the shooter
+        public static final double kTimeToReady = .5;
     }
     
     public static final class CanConstants {
@@ -141,8 +146,6 @@ public final class Constants {
         // Shooter speeds are set in the individual position Setpoints at the top of this file
         
         public static final double kShooterTolerance = 5.0;
-        public static final double kTimeToShoot = .13; //Time it takes before note leave the shooter
-        public static final double kTimeToScore = 3;
         public static final double kShooterIdleSpeed = 15.0;
 
     }

@@ -20,7 +20,7 @@ import frc.robot.Util.CommandXboxPS5Controller;
 import frc.robot.Vision.Limelight;
 import frc.robot.Vision.LimelightHelpers;
 
-public class autoRunToNote extends Command {
+public class driveToNote extends Command {
     CommandSwerveDrivetrain m_drivetrain;
     Limelight m_limelight;
     SwerveRequest.FieldCentricFacingAngle m_head;
@@ -29,21 +29,20 @@ public class autoRunToNote extends Command {
     double tx = 0;
     double omegaSpeed;
 
-    boolean m_isFinished = false;
+    boolean m_isFinished;
     boolean m_isOverLine = false;
 
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = new TrapezoidProfile.Constraints(.1, .01);
     private final ProfiledPIDController omegaController = new ProfiledPIDController(.095, 0, 0, OMEGA_CONSTRATINTS);
 
     /** Creates a new aimAtNote. */
-    public autoRunToNote(CommandSwerveDrivetrain drivetrain, Limelight limelight, SwerveRequest.FieldCentricFacingAngle head) {
+    public driveToNote(CommandSwerveDrivetrain drivetrain, Limelight limelight, SwerveRequest.FieldCentricFacingAngle head) {
         m_drivetrain = drivetrain;
         m_limelight = limelight;
         m_head = head;
         omegaController.setTolerance(1);
         omegaController.setGoal(0);
-        //SmartDashboard.putData("Note PID",omegaController);
-        // Use addRequirements() here to declare subsystem dependencies.
+        addRequirements(m_drivetrain);
     }
 
     // Called when the command is initially scheduled.
@@ -61,36 +60,43 @@ public class autoRunToNote extends Command {
     public void execute() {
         System.out.println("AUTO NOTE RUNNING");
         tx = LimelightHelpers.getTX(kCameraName);
+
         omegaSpeed = omegaController.calculate(tx);
         if (omegaController.atGoal()) {
             omegaSpeed = 0;
         }
+        
+        if (DriverStation.getAlliance().get() != null && DriverStation.isAutonomousEnabled()) {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+                if (m_drivetrain.getState().Pose.getX() > Constants.FieldConstants.BLUE_AUTO_PENALTY_LINE) {
+                    System.out.println("Whoops, drove too far over mindline, canceling command");
+                    m_isFinished = true;
+                }
+            } else {
+                if (m_drivetrain.getState().Pose.getX() < Constants.FieldConstants.RED_AUTO_PENALTY_LINE) {
+                    System.out.println("Whoops, drove too far over mindline, canceling command");
+                    m_isFinished = true;
+                }
+            }
+        }
 
-        if (m_limelight.hasTarget() && !m_isOverLine) {
+        if (m_limelight.hasTarget()) {
             m_drivetrain.setControl(m_forwardStraight
                     .withVelocityX(-Constants.maxSpeed * (1 - Math.abs(tx) / 32) * .50) // Constants.halfSpeed
                     .withVelocityY(0)
                     .withRotationalRate(omegaSpeed));
-        }
-        if (DriverStation.getAlliance().get() != null && DriverStation.isAutonomousEnabled()) {
-            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-                if (m_drivetrain.getState().Pose.getX() > Constants.FieldConstants.BLUE_AUTO_PENALTY_LINE) {
-                    System.out.println("Find Note1");
-                    m_isOverLine = true;
-                }
-            } else {
-                if (m_drivetrain.getState().Pose.getX() < Constants.FieldConstants.RED_AUTO_PENALTY_LINE) {
-                    System.out.println("Find Note2");
-                    m_isOverLine = true;
-                }
-            }
+        } else {
+            m_drivetrain.setControl(m_forwardStraight
+                    .withVelocityX(0) // Constants.halfSpeed
+                    .withVelocityY(0)
+                    .withRotationalRate(0));
         }
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        System.out.println("driveToNote finished or interrupted");
     }
 
     // Returns true when the command should end.

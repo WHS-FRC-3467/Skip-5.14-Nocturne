@@ -36,6 +36,7 @@ public class intakeNote extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        System.out.println("intakeNote Running");
         // Run the Stage until a Note is inside
         if (!m_stageSubsystem.isNoteInStage()) {
             m_stageSubsystem.runStage();
@@ -53,6 +54,7 @@ public class intakeNote extends Command {
         // Turn off the Stage and Intake
         m_stageSubsystem.stopStage();
         m_intakeSubsystem.stopIntake();
+        System.out.println("intakeNote Finished");
     }
 
     // Returns true when the command should end.

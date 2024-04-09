@@ -7,7 +7,6 @@ package frc.robot.Commands;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import frc.robot.AutoCommands.autoIntakeNote;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.Stage.StageSubsystem;
@@ -35,7 +34,7 @@ public class autoCollectNote extends ParallelRaceGroup {
         m_head = head;
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
-        addCommands(new autoRunToNote(m_drivetrain, m_limelight, m_head).withTimeout(2.00));
-        addCommands(new autoIntakeNote(m_intake, m_stage));
+        addCommands(new driveToNote(m_drivetrain, m_limelight, m_head).withTimeout(2.00));
+        addCommands(new intakeNote(m_intake, m_stage));
     }
 }

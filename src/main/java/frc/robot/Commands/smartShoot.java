@@ -5,8 +5,6 @@
 package frc.robot.Commands;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -27,7 +25,7 @@ import frc.robot.Util.ShooterPreset;
 import frc.robot.Util.TunableNumber;
 import frc.robot.Util.VisionLookUpTable;
 
-public class smartShootOnMove extends Command {
+public class smartShoot extends Command {
 
     CommandSwerveDrivetrain m_drivetrain;
     IntakeSubsystem m_intake;
@@ -48,9 +46,12 @@ public class smartShootOnMove extends Command {
     Translation2d moveDelta;
     Translation2d armDelta;
 
-    /**The calculated the time until the note leaves based on the constant and time since button press */
-    Double timeUntilShot; 
-    BooleanSupplier m_isShooting; 
+    /**
+     * The calculated the time until the note leaves based on the constant and time
+     * since button press
+     */
+    Double timeUntilShot;
+    BooleanSupplier m_isShooting;
 
     Double correctedDistance;
     Rotation2d correctedRotation;
@@ -58,10 +59,10 @@ public class smartShootOnMove extends Command {
     Rotation2d lockedRotation;
     double lockedDistance;
 
-    TunableNumber timeToShoot = new TunableNumber("Smart timeToShoot", .15);
-    TunableNumber timeToBeReady = new TunableNumber("Smart timeToBeReady", .5);
+    TunableNumber timeToShoot = new TunableNumber("Smart timeToShoot", Constants.RobotConstants.kTimeToShoot);
+    TunableNumber timeToBeReady = new TunableNumber("Smart timeToBeReady", Constants.RobotConstants.kTimeToReady);
 
-    double m_maxShotDist = 3.5;
+    boolean m_isShootOnTheMove;
     Timer shotTimer;
     boolean timerIsRunning = false;
 
@@ -72,27 +73,27 @@ public class smartShootOnMove extends Command {
     boolean m_isFinished = false;
 
     /** Creates a new smartShootOnMove. */
-    public smartShootOnMove(CommandSwerveDrivetrain drivetrain, StageSubsystem stage,
-            ArmSubsystem arm, ShooterSubsystem shooter, double maxShotDist) {
+    public smartShoot(CommandSwerveDrivetrain drivetrain, StageSubsystem stage,
+            ArmSubsystem arm, ShooterSubsystem shooter, boolean isShootOnTheMove) {
 
         m_drivetrain = drivetrain;
         m_stage = stage;
         m_arm = arm;
         m_shooter = shooter;
-        m_maxShotDist = maxShotDist;
+        m_isShootOnTheMove = isShootOnTheMove;
         m_FieldCentricAiming = new FieldCentricAiming();
         m_VisionLookUpTable = new VisionLookUpTable();
         m_setpoints = RobotConstants.LOOKUP;
         shotTimer = new Timer();
 
-        addRequirements(m_arm,m_shooter);
+        addRequirements(m_arm, m_stage, m_shooter);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
         System.out.println("SCHEDULED");
-        
+
         m_isFinished = false;
         timerIsRunning = false;
     }
@@ -101,67 +102,72 @@ public class smartShootOnMove extends Command {
     @Override
     public void execute() {
         currentRobotTranslation = m_drivetrain.getState().Pose.getTranslation();
-        currentAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(currentRobotTranslation); 
+        currentAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(currentRobotTranslation);
         // Get current drivetrain velocities in field relative terms
         speeds = m_drivetrain.getFieldRelativeChassisSpeeds();
 
         // Calculate change in x/y distance due to time and velocity
         moveDelta = new Translation2d(timeToBeReady.get() * (speeds.vxMetersPerSecond),
-                                      timeToBeReady.get() * (speeds.vyMetersPerSecond));
+                timeToBeReady.get() * (speeds.vyMetersPerSecond));
 
         futureRobotTranslation = currentRobotTranslation.plus(moveDelta);
         futureAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(futureRobotTranslation);
-        
+
         correctedDistance = m_FieldCentricAiming.getDistToSpeaker(futureRobotTranslation);
         correctedRotation = futureAngleToSpeaker;
 
         if (timerIsRunning) {
             System.out.println(shotTimer.get());
             if (shotTimer.hasElapsed(timeToBeReady.get() / 2)) {
-                if (!m_shooter.isShooterAtSpeed()) {
-                    System.out.println("SHOOTER ISNT READY");
-                    if (!m_arm.isArmJointAtSetpoint()) {
-                        System.out.println("ARM ISNT READY");
-                        if (m_drivetrain.isRotatingFast()) {
-                            System.out.println("DRIVE ROT ISNT READY");
-                            
-
-                        }
-
-                    }
-
-                }
-                if (!m_shooter.isShooterAtSpeed() || !m_arm.isArmJointAtSetpoint() || m_drivetrain.isRotatingFast()) {
+                if (!m_shooter.isShooterAtSpeed() || !m_arm.isArmJointAtSetpoint() || m_drivetrain.isRotatingFast()
+                        || (!m_isShootOnTheMove && m_drivetrain.isMoving())) {
                     System.out.println("WONT BE READY, RESTARTING SHOT");
-                            shotTimer.stop();
-                            shotTimer.reset();
-                            timerIsRunning = false;
+                    shotTimer.stop();
+                    shotTimer.reset();
+                    timerIsRunning = false;
+                    if (!m_shooter.isShooterAtSpeed()) {
+                        System.out.println("Shooter is not at speed");
+                    }
+                    if (m_drivetrain.isRotatingFast()) {
+                        System.out.println("Drivetrain is rotating too fast");
+                    }
+                    if (!m_arm.isArmJointAtSetpoint()) {
+                        System.out.println("Arm is not at setpoint");
+                    }
+                    if (!m_isShootOnTheMove && m_drivetrain.isMoving()) {
+                        System.out.println("Drivetrain is moving during static shot");
+                    }
                 }
 
             }
-            if (shotTimer.hasElapsed(timeToBeReady.get()-timeToShoot.get()) && !m_stage.isStageRunning()) {
-                System.out.println("STARTING STAGE");
+            if (shotTimer.hasElapsed(timeToBeReady.get() - timeToShoot.get()) && !m_stage.isStageRunning()) {
+                System.out.println("Starting stage");
                 m_stage.feedNote2ShooterCommand().schedule();
-                SmartDashboard.putNumber("Angle error at t=0", currentAngleToSpeaker.minus(m_drivetrain.getState().Pose.getRotation()).getDegrees());SmartDashboard.putNumber("Angle error at t=0", currentAngleToSpeaker.minus(m_drivetrain.getState().Pose.getRotation()).getDegrees());
+                SmartDashboard.putNumber("Angle error at t=0",
+                        currentAngleToSpeaker.minus(m_drivetrain.getState().Pose.getRotation()).getDegrees());
+                SmartDashboard.putNumber("Angle error at t=0",
+                        currentAngleToSpeaker.minus(m_drivetrain.getState().Pose.getRotation()).getDegrees());
             }
 
             if (shotTimer.hasElapsed(timeToBeReady.get())) {
-                System.out.println("NOTE SHOULD BE SHOOTING NOW");
-                
+                System.out.println("Shot should be complete now");
+
                 m_isFinished = true;
             }
 
         } else {
-            if (correctedDistance <= m_maxShotDist) {
-                System.out.println("STARTING READYUP TIMER");
+            if (m_isShootOnTheMove && correctedDistance <= Constants.RobotConstants.robotMaxDynamicShotDist) {
+                System.out.println("STARTING READYUP TIMER FOR DYNAMIC SHOT ");
+                shotTimer.start();
+                timerIsRunning = true;
+            } else if (!m_isShootOnTheMove && correctedDistance <= Constants.RobotConstants.robotMaxStaticShotDist) {
+                System.out.println("STARTING READYUP TIMER FOR STATIC SHOT ");
                 shotTimer.start();
                 timerIsRunning = true;
             }
             lockedRotation = correctedRotation;
             lockedDistance = correctedDistance;
-
         }
-
 
         m_shotInfo = m_VisionLookUpTable.getShooterPreset(lockedDistance);
         m_setpoints.arm = m_shotInfo.getArmAngle();
