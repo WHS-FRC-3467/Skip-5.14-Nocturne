@@ -13,6 +13,7 @@
   ],
   "autoFolders": [
     "Development",
+    "Alpha",
     "Stable"
   ],
   "defaultMaxVel": 6.0,

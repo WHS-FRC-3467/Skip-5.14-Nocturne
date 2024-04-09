@@ -57,7 +57,7 @@
         {
           "type": "named",
           "data": {
-            "name": "LookAndShoot"
+            "name": "MoveAndShoot"
           }
         },
         {
@@ -81,7 +81,7 @@
         {
           "type": "named",
           "data": {
-            "name": "LookAndShoot"
+            "name": "MoveAndShoot"
           }
         },
         {
@@ -105,7 +105,7 @@
         {
           "type": "named",
           "data": {
-            "name": "LookAndShoot"
+            "name": "MoveAndShoot"
           }
         }
       ]
