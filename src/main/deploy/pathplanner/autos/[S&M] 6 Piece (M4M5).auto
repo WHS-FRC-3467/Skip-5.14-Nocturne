@@ -24,7 +24,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.5
+                  "waitTime": 0.4
                 }
               }
             ]
@@ -59,7 +59,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.2
+                        "waitTime": 0.6
                       }
                     }
                   ]
@@ -103,7 +103,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.4
+                        "waitTime": 0.6
                       }
                     }
                   ]
@@ -147,7 +147,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.2
+                        "waitTime": 0.4
                       }
                     }
                   ]
@@ -157,15 +157,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "[ZV]R1 to SW"
+            "name": "MoveAndShoot"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ShootNote"
+            "pathName": "[6N] R1 to M1"
           }
         },
         {
@@ -187,6 +187,57 @@
                       "data": {
                         "pathName": "[ZV]SW to M1"
                       }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GetThatNote"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "[6N] M1 to WL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "MoveAndShoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "[6N] WL to M2"
+                      }
                     },
                     {
                       "type": "wait",
@@ -201,15 +252,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "[ZV]M1 to SW"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNote"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "[6N] M2 to WL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "MoveAndShoot"
+                }
+              }
+            ]
           }
         },
         {
@@ -217,16 +275,10 @@
           "data": {
             "name": "StopShooter"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[ZV]SW to Mid"
-          }
         }
       ]
     }
   },
-  "folder": "Week6",
+  "folder": "Alpha",
   "choreoAuto": false
 }

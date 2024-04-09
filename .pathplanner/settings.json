@@ -7,20 +7,14 @@
     "Amp Side",
     "Amp Side Feed",
     "Far Side",
-    "Mid Auto",
-    "Mid 4 + Search",
-    "PID",
-    "PSW-M3-M4or2",
-    "SS Steal",
+    "Source Side Auto",
     "Steal",
     "Zero Vision"
   ],
   "autoFolders": [
-    "Advantage Autos",
-    "Backup",
-    "PID",
-    "Week3",
-    "Week6"
+    "Development",
+    "Alpha",
+    "Stable"
   ],
   "defaultMaxVel": 6.0,
   "defaultMaxAccel": 6.0,

@@ -24,7 +24,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.5
+                  "waitTime": 0.4
                 }
               }
             ]
@@ -158,7 +158,7 @@
         {
           "type": "named",
           "data": {
-            "name": "LookAndShoot"
+            "name": "MoveAndShoot"
           }
         },
         {
@@ -182,12 +182,12 @@
         {
           "type": "named",
           "data": {
-            "name": "LookAndShoot"
+            "name": "MoveAndShoot"
           }
         }
       ]
     }
   },
-  "folder": "Week6",
+  "folder": "Development",
   "choreoAuto": false
 }
