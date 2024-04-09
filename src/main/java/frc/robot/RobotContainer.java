@@ -186,9 +186,9 @@ public class RobotContainer {
                 m_stageSubsystem.feedWithBeam());
         NamedCommands.registerCommand("GetThatNote",
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
-        NamedCommands.registerCommand("DynamicShot",
+        NamedCommands.registerCommand("MoveAndShoot",
                 new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, true).repeatedly().until(()-> !m_stageSubsystem.isNoteInStage()));
-        NamedCommands.registerCommand("StaticShot",
+        NamedCommands.registerCommand("LookAndShoot",
                 new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false).repeatedly().until(()-> !m_stageSubsystem.isNoteInStage()));
         NamedCommands.registerCommand("OverrideToNote", new overrideAngleToNote(m_drivetrain, m_limelightVision));
     }
