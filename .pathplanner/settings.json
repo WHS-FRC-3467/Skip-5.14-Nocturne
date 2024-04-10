@@ -1,12 +1,13 @@
 {
-  "robotWidth": 0.88,
-  "robotLength": 0.96,
+  "robotWidth": 0.846455,
+  "robotLength": 0.9525,
   "holonomicMode": true,
   "pathFolders": [
     "6 Note Auto",
     "Amp Side",
     "Amp Side Feed",
     "Far Side",
+    "5 Piece Mid",
     "Source Side Auto",
     "Steal",
     "Zero Vision"
