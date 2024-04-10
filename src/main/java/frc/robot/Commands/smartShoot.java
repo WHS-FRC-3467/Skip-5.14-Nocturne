@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,6 +25,7 @@ import frc.robot.Util.Setpoints;
 import frc.robot.Util.ShooterPreset;
 import frc.robot.Util.TunableNumber;
 import frc.robot.Util.VisionLookUpTable;
+import frc.robot.Util.Setpoints.GameState;
 
 public class smartShoot extends Command {
 
@@ -36,11 +38,11 @@ public class smartShoot extends Command {
 
     Pose2d currentRobotPose;
     Translation2d currentRobotTranslation;
-    Rotation2d currentAngleToSpeaker;
+    Rotation2d currentAngleToTarget;
 
     Pose2d futureRobotPose2d;
     Translation2d futureRobotTranslation;
-    Rotation2d futureAngleToSpeaker;
+    Rotation2d futureAngleToTarget;
 
     ChassisSpeeds speeds;
     Translation2d moveDelta;
@@ -70,11 +72,14 @@ public class smartShoot extends Command {
     VisionLookUpTable m_VisionLookUpTable;
     Setpoints m_setpoints;
 
+    int m_target = 0; //Speaker = 0, Feed = 1
+    double maxShotDist;
+
     boolean m_isFinished = false;
 
     /** Creates a new smartShootOnMove. */
     public smartShoot(CommandSwerveDrivetrain drivetrain, StageSubsystem stage,
-            ArmSubsystem arm, ShooterSubsystem shooter, boolean isShootOnTheMove) {
+            ArmSubsystem arm, ShooterSubsystem shooter, boolean isShootOnTheMove, int target) {
 
         m_drivetrain = drivetrain;
         m_stage = stage;
@@ -84,17 +89,27 @@ public class smartShoot extends Command {
         m_FieldCentricAiming = new FieldCentricAiming();
         m_VisionLookUpTable = new VisionLookUpTable();
         m_setpoints = RobotConstants.LOOKUP;
+        m_target = target;
         shotTimer = new Timer();
 
-        addRequirements(m_arm, m_shooter);
+        if (target == 1) {
+            maxShotDist = Constants.RobotConstants.robotMaxFeedShotDist;
+        } else {
+            if (isShootOnTheMove) {
+                maxShotDist = Constants.RobotConstants.robotMaxDynamicShotDist;
+            } else {
+                maxShotDist = Constants.RobotConstants.robotMaxStaticShotDist;
+            }
+        }
+
+        addRequirements(m_arm, m_stage, m_shooter);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        System.out.println("SCHEDULED");
+        System.out.println("SMART SHOOT SCHEDULED");
         m_arm.enable();
-
         m_isFinished = false;
         timerIsRunning = false;
     }
@@ -103,7 +118,7 @@ public class smartShoot extends Command {
     @Override
     public void execute() {
         currentRobotTranslation = m_drivetrain.getState().Pose.getTranslation();
-        currentAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(currentRobotTranslation);
+        currentAngleToTarget = m_FieldCentricAiming.getTargetAngle(currentRobotTranslation,m_target);
         // Get current drivetrain velocities in field relative terms
         speeds = m_drivetrain.getFieldRelativeChassisSpeeds();
 
@@ -112,15 +127,16 @@ public class smartShoot extends Command {
                 timeToBeReady.get() * (speeds.vyMetersPerSecond));
 
         futureRobotTranslation = currentRobotTranslation.plus(moveDelta);
-        futureAngleToSpeaker = m_FieldCentricAiming.getAngleToSpeaker(futureRobotTranslation);
+        futureAngleToTarget = m_FieldCentricAiming.getTargetAngle(futureRobotTranslation,m_target);
 
-        correctedDistance = m_FieldCentricAiming.getDistToSpeaker(futureRobotTranslation);
-        correctedRotation = futureAngleToSpeaker;
+        correctedDistance = m_FieldCentricAiming.getTargetDist(futureRobotTranslation,m_target);
+        correctedRotation = futureAngleToTarget;
 
         if (timerIsRunning) {
             System.out.println(shotTimer.get());
             if (shotTimer.hasElapsed(timeToBeReady.get() / 2)) {
-                if (!m_shooter.isShooterAtSpeed() || !m_arm.isArmJointAtSetpoint() || m_drivetrain.isRotatingFast() || !m_drivetrain.isAtFutureAngle()
+                if (!m_shooter.isShooterAtSpeed() || !m_arm.isArmJointAtSetpoint() || m_drivetrain.isRotatingFast()
+                        || !m_drivetrain.isAtFutureAngle()
                         || (!m_isShootOnTheMove && m_drivetrain.isMoving())) {
                     System.out.println("WONT BE READY, RESTARTING SHOT");
                     shotTimer.stop();
@@ -146,27 +162,26 @@ public class smartShoot extends Command {
             }
             if (shotTimer.hasElapsed(timeToBeReady.get() - timeToShoot.get()) && !m_stage.isStageRunning()) {
                 System.out.println("Starting stage");
-                m_stage.feedNote2ShooterCommand().schedule();
+                // m_stage.feedNote2ShooterCommand().schedule();
+                m_stage.ejectFront();
                 SmartDashboard.putNumber("Angle error at t=0",
-                        currentAngleToSpeaker.minus(m_drivetrain.getState().Pose.getRotation()).getDegrees());
+                        currentAngleToTarget.minus(m_drivetrain.getState().Pose.getRotation()).getDegrees());
             }
 
             if (shotTimer.hasElapsed(timeToBeReady.get())) {
                 System.out.println("Shot should be complete now");
+
+            }
+            if (!m_stage.isNoteInStage()) {
                 m_isFinished = true;
             }
 
-
         } else {
-            if (m_isShootOnTheMove && correctedDistance <= Constants.RobotConstants.robotMaxDynamicShotDist) {
+            if (correctedDistance <= maxShotDist) {
                 System.out.println("STARTING READYUP TIMER FOR DYNAMIC SHOT ");
                 shotTimer.start();
                 timerIsRunning = true;
-            } else if (!m_isShootOnTheMove && correctedDistance <= Constants.RobotConstants.robotMaxStaticShotDist) {
-                System.out.println("STARTING READYUP TIMER FOR STATIC SHOT ");
-                shotTimer.start();
-                timerIsRunning = true;
-            }
+            } 
             lockedRotation = correctedRotation;
             lockedDistance = correctedDistance;
         }
@@ -187,7 +202,10 @@ public class smartShoot extends Command {
     public void end(boolean interrupted) {
         shotTimer.stop();
         shotTimer.reset();
-        m_shooter.stopShooter();
+        if (!DriverStation.isAutonomousEnabled()) {
+            m_shooter.stopShooter();
+        }
+        m_stage.stopStage();
     }
 
     // Returns true when the command should end.

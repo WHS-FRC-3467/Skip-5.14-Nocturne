@@ -106,14 +106,10 @@ public class StageSubsystem extends SubsystemBase {
         this.runStage(speed);
     }
 
-    public void ejectFrontDebug(double speed) {
+    public void ejectFront() {
+        double speed = StageConstants.kFeedToShooterSpeed;
         this.runStage(speed);
     }
-
-    public void ejectFrontDebug2(double speed) {
-        this.runStage(speed);
-    }
-
 
     public void ejectBack(double speed) {
         this.runStage((-1.0) * speed);
@@ -137,14 +133,14 @@ public class StageSubsystem extends SubsystemBase {
     }
 
     public Command feedWithTimeout() {
-        return new RunCommand(() -> this.ejectFrontDebug2(StageConstants.kFeedToShooterSpeed), this)
-                .withTimeout(0.5) // run for 1.5 seconds
+        return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
+                .withTimeout(0.5) // run for time
                 .andThen(() -> this.stopStage());
 
     }
 
     public Command feedWithBeam() {
-        return new RunCommand(() -> this.ejectFrontDebug(StageConstants.kFeedToShooterSpeed), this)
+        return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
                 .until(() -> !isNoteInStage()) // run until there is NOT a Note in the Stage
                 .andThen(() -> this.stopStage());
     }

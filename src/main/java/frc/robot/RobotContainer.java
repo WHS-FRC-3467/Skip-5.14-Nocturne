@@ -187,9 +187,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("GetThatNote",
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
         NamedCommands.registerCommand("MoveAndShoot",
-                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, true));
+                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, true, 0));
         NamedCommands.registerCommand("LookAndShoot",
-                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false));
+                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false, 0));
         NamedCommands.registerCommand("OverrideToNote", new overrideAngleToNote(m_drivetrain, m_limelightVision));
         NamedCommands.registerCommand("SubwooferShoot",
                 new prepareShooterOnly(40.0, 35.0, m_shooterSubsystem).andThen(m_stageSubsystem.feedWithBeam()));
@@ -333,7 +333,7 @@ public class RobotContainer {
         // Stationary look and shoot with shoot when ready
          m_driverCtrl.rightStick()
                 .whileTrue(Commands.parallel(
-                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false)
+                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false, 0)
                         .andThen(m_armSubsystem.prepareForIntakeCommand()),
                 m_drivetrain.applyRequest(
                         () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * .25 * invertForAlliance())
@@ -377,7 +377,7 @@ public class RobotContainer {
                         .andThen(rumbleDriverCommand()));
 
         m_driverCtrl.rightBumper().whileTrue(Commands.parallel(
-                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, true)
+                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, true, 0)
                         .andThen(m_armSubsystem.prepareForIntakeCommand()),
                 m_drivetrain.applyRequest(
                         () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * .75 * invertForAlliance())

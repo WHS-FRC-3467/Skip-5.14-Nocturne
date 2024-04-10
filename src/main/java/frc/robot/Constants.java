@@ -56,6 +56,7 @@ public final class Constants {
         public static final double robotAtAngleTolerance = 2;
         public static final double robotMaxStaticShotDist = 5;
         public static final double robotMaxDynamicShotDist = 4.5;
+        public static final double robotMaxFeedShotDist = 15;
 
         public static final double kTimeToShoot = .15; //Time it takes before note leave the shooter
         public static final double kTimeToReady = .5;
@@ -247,6 +248,8 @@ public final class Constants {
     public static class FieldConstants {
         public static final Pose2d BLUE_SPEAKER = new Pose2d(Units.inchesToMeters(-1.5+12), Units.inchesToMeters(218.42), new Rotation2d(0));
         public static final Pose2d RED_SPEAKER = new Pose2d(Units.inchesToMeters(652.73-12), Units.inchesToMeters(218.42), new Rotation2d(Math.PI));
+        public static final Pose2d BLUE_AMP_FEED = new Pose2d(2.75,7.55, new Rotation2d(0));
+        public static final Pose2d RED_AMP_FEED = new Pose2d(13.50,7.55, new Rotation2d(0));
         public static final double BLUE_AUTO_PENALTY_LINE = 8.6; // X distance from origin to center of the robot almost fully crossing the midline
         public static final double RED_AUTO_PENALTY_LINE = 7.9; // X distance from origin to center of the robot almost fully crossing the midline
 

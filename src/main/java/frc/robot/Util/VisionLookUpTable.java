@@ -15,51 +15,57 @@ public class VisionLookUpTable {
     public static VisionLookUpTable getInstance() {
         return instance;
     }
+
     public VisionLookUpTable() {
         shooterConfig = new ShooterConfig();
-        shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(19, 70, 40, 2)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(23.25, 70, 40, 2.5)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(27.33, 70, 40, 3));
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(30.44, 70, 40, 3.5));
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(32.60, 70,40, 4)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(33.80, 75, 40, 4.5)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(34.04, 75, 40, 5)); //Maybe was good in match
-        /* if (DriverStation.getAlliance().isPresent()) {
-            if (DriverStation.getAlliance().get() == Alliance.Red) {
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(19, 70, 40, 2)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(23.25, 70, 40, 2.5)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(27.33, 70, 40, 3));
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(30.44, 70, 40, 3.5));
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(32.60, 70,40, 4)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(33.80, 75, 40, 4.5)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(34.04, 75, 40, 5)); //Maybe was good in match
-                
-            } else {
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(19, 70, 40, 2)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(22, 70, 40, 2.5)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(27, 70, 40, 3));
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(29, 70, 40, 3.5));
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(30.8, 70,40, 4)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(32.35, 75, 40, 4.5)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(33.8, 75, 40, 5)); //Maybe was good in match
-
-            }
-
-        } else {
-                System.out.println("ALLIANCE NOT PRESENT, FALLING BACK TO BLUE PRESETS");
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(19, 70, 40, 2)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(22, 70, 40, 2.5)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(27, 70, 40, 3));
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(29, 70, 40, 3.5));
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(30.8, 70,40, 4)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(32.35, 75, 40, 4.5)); 
-                shooterConfig.getShooterConfigs().add(new ShooterPreset(33.8, 75, 40, 5)); //Maybe was good in match
-
-        } */
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5));
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(19, 70, 40, 2));
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(23.25, 70, 40, 2.5));
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(27.33, 70, 40, 3));
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(30.44, 70, 40, 3.5));
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(32.60, 70, 40, 4));
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(33.80, 75, 40, 4.5));
+        shooterConfig.getShooterConfigs().add(new ShooterPreset(34.04, 75, 40, 5)); // Maybe was good in match
+        /*
+         * if (DriverStation.getAlliance().isPresent()) {
+         * if (DriverStation.getAlliance().get() == Alliance.Red) {
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(19, 70, 40, 2));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(23.25, 70, 40, 2.5));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(27.33, 70, 40, 3));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(30.44, 70, 40, 3.5));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(32.60, 70,40, 4));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(33.80, 75, 40, 4.5));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(34.04, 75, 40, 5));
+         * //Maybe was good in match
+         * 
+         * } else {
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(19, 70, 40, 2));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(22, 70, 40, 2.5));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(27, 70, 40, 3));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(29, 70, 40, 3.5));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(30.8, 70,40, 4));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(32.35, 75, 40, 4.5));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(33.8, 75, 40, 5));
+         * //Maybe was good in match
+         * 
+         * }
+         * 
+         * } else {
+         * System.out.println("ALLIANCE NOT PRESENT, FALLING BACK TO BLUE PRESETS");
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(19, 70, 40, 2));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(22, 70, 40, 2.5));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(27, 70, 40, 3));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(29, 70, 40, 3.5));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(30.8, 70,40, 4));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(32.35, 75, 40, 4.5));
+         * shooterConfig.getShooterConfigs().add(new ShooterPreset(33.8, 75, 40, 5));
+         * //Maybe was good in match
+         * 
+         * }
+         */
         
         
         //shooterConfig.getShooterConfigs().add(new ShooterPreset(36, 75, 50, 5.5)); 
