@@ -191,6 +191,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("LookAndShoot",
                 new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false));
         NamedCommands.registerCommand("OverrideToNote", new overrideAngleToNote(m_drivetrain, m_limelightVision));
+        NamedCommands.registerCommand("SubwooferShoot",
+                new prepareShooterOnly(40.0, 35.0, m_shooterSubsystem).andThen(m_stageSubsystem.feedWithBeam()));
     }
 
     /**
