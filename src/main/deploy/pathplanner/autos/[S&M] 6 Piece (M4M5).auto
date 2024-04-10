@@ -159,7 +159,7 @@
         {
           "type": "named",
           "data": {
-            "name": "MoveAndShoot"
+            "name": "LookAndShoot"
           }
         },
         {

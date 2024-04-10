@@ -86,13 +86,14 @@ public class smartShoot extends Command {
         m_setpoints = RobotConstants.LOOKUP;
         shotTimer = new Timer();
 
-        addRequirements(m_arm, m_stage, m_shooter);
+        addRequirements(m_arm, m_shooter);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
         System.out.println("SCHEDULED");
+        m_arm.enable();
 
         m_isFinished = false;
         timerIsRunning = false;
@@ -119,7 +120,7 @@ public class smartShoot extends Command {
         if (timerIsRunning) {
             System.out.println(shotTimer.get());
             if (shotTimer.hasElapsed(timeToBeReady.get() / 2)) {
-                if (!m_shooter.isShooterAtSpeed() || !m_arm.isArmJointAtSetpoint() || m_drivetrain.isRotatingFast()
+                if (!m_shooter.isShooterAtSpeed() || !m_arm.isArmJointAtSetpoint() || m_drivetrain.isRotatingFast() || !m_drivetrain.isAtFutureAngle()
                         || (!m_isShootOnTheMove && m_drivetrain.isMoving())) {
                     System.out.println("WONT BE READY, RESTARTING SHOT");
                     shotTimer.stop();
@@ -134,6 +135,9 @@ public class smartShoot extends Command {
                     if (!m_arm.isArmJointAtSetpoint()) {
                         System.out.println("Arm is not at setpoint");
                     }
+                    if (!m_drivetrain.isAtFutureAngle()) {
+                        System.out.println("Drivetrain is not at angle");
+                    }
                     if (!m_isShootOnTheMove && m_drivetrain.isMoving()) {
                         System.out.println("Drivetrain is moving during static shot");
                     }
@@ -145,15 +149,13 @@ public class smartShoot extends Command {
                 m_stage.feedNote2ShooterCommand().schedule();
                 SmartDashboard.putNumber("Angle error at t=0",
                         currentAngleToSpeaker.minus(m_drivetrain.getState().Pose.getRotation()).getDegrees());
-                SmartDashboard.putNumber("Angle error at t=0",
-                        currentAngleToSpeaker.minus(m_drivetrain.getState().Pose.getRotation()).getDegrees());
             }
 
             if (shotTimer.hasElapsed(timeToBeReady.get())) {
                 System.out.println("Shot should be complete now");
-
                 m_isFinished = true;
             }
+
 
         } else {
             if (m_isShootOnTheMove && correctedDistance <= Constants.RobotConstants.robotMaxDynamicShotDist) {

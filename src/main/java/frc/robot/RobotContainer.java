@@ -187,9 +187,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("GetThatNote",
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
         NamedCommands.registerCommand("MoveAndShoot",
-                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, true).repeatedly().until(()-> !m_stageSubsystem.isNoteInStage()));
+                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, true));
         NamedCommands.registerCommand("LookAndShoot",
-                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false).repeatedly().until(()-> !m_stageSubsystem.isNoteInStage()));
+                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false));
         NamedCommands.registerCommand("OverrideToNote", new overrideAngleToNote(m_drivetrain, m_limelightVision));
     }
 
@@ -330,8 +330,14 @@ public class RobotContainer {
 
         // Stationary look and shoot with shoot when ready
          m_driverCtrl.rightStick()
-                .whileTrue(new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false)
-                        .andThen(m_armSubsystem.prepareForIntakeCommand())); 
+                .whileTrue(Commands.parallel(
+                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false)
+                        .andThen(m_armSubsystem.prepareForIntakeCommand()),
+                m_drivetrain.applyRequest(
+                        () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * .25 * invertForAlliance())
+                                .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * .25 * invertForAlliance())
+                                .withTargetDirection(m_drivetrain.getVelocityOffset())
+                                .withDeadband(Constants.maxSpeed * 0.1))));
         m_driverCtrl.rightStick().onFalse(m_shooterSubsystem.stopShooterCommand());
 
         // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X')
@@ -473,5 +479,9 @@ public class RobotContainer {
     public void stopShooterAuto(){
         m_shooterSubsystem.stopShooter();
 
+    }
+
+    public void resetPathPlannerOverrides(){
+        m_drivetrain.setOverrideAngle(null);
     }
 }
