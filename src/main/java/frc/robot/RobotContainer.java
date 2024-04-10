@@ -191,9 +191,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("LookAndShoot",
                 new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false));
         NamedCommands.registerCommand("OverrideToNote", new overrideAngleToNote(m_drivetrain, m_limelightVision));
-        NamedCommands.registerCommand("SubwooferShoot",
-                new prepareShooterOnly(40.0, 35.0, m_shooterSubsystem).andThen(m_stageSubsystem.feedWithBeam()));
-    }
+        /* NamedCommands.registerCommand("SubThatShot",
+                new subThatShot(m_shooterSubsystem).andThen(m_stageSubsystem.feedWithBeam())); */
+    } 
 
     /**
      * Disables all ProfiledPIDSubsystem and PIDSubsystem instances. This should be
@@ -370,7 +370,8 @@ public class RobotContainer {
                         .andThen(m_armSubsystem.prepareForIntakeCommand()));
 
         //m_driverCtrl.back().whileTrue(new calibrateLookupTable(m_drivetrain, m_armSubsystem, m_shooterSubsystem));
-        m_driverCtrl.back().whileTrue(new driveToTrap(m_drivetrain, m_shooterSubsystem));
+        //m_driverCtrl.back().whileTrue(new driveToTrap(m_drivetrain, m_shooterSubsystem));
+        m_driverCtrl.back().onTrue(new subThatShot(m_shooterSubsystem, m_stageSubsystem));
 
         m_driverCtrl.start().whileTrue(
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note)

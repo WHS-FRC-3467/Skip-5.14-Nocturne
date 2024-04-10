@@ -7,36 +7,37 @@ package frc.robot.Commands;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
+import frc.robot.Subsystems.Stage.StageSubsystem;
 //import frc.robot.Subsystems.Stage.StageSubsystem;
 import frc.robot.Util.Setpoints;
 //import frc.robot.Util.Setpoints.GameState;
 
-public class prepareShooterOnly extends Command{
+public class subThatShot extends Command{
 
     Setpoints m_setpoints;
-    //StageSubsystem m_stageSubsystem;
+    StageSubsystem m_stageSubsystem;
     ShooterSubsystem m_shooterSubsystem;
     BooleanSupplier m_haveNote;
     boolean m_runShooter;
-    boolean m_isDone;
+    boolean m_isDone = false;
 
     /** Constructor - Creates a new prepareShooterOnly. */
-    public prepareShooterOnly(double leftShootSpeed, double rightShootSpeed, ShooterSubsystem shootSub) {
-
+    public subThatShot(ShooterSubsystem shootSub, StageSubsystem stageSub) {
+        m_setpoints = Constants.RobotConstants.SUBWOOFER;
         m_shooterSubsystem = shootSub;
-        m_setpoints.shooterLeft = leftShootSpeed;
-        m_setpoints.shooterRight = rightShootSpeed;
-
+        m_stageSubsystem = stageSub;
         addRequirements(shootSub);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        m_isDone = false;
 
         // If Shooter setpoints are zero, don't bother to check if it is up to speed
-        m_runShooter = (m_setpoints.shooterLeft != 0.0 || m_setpoints.shooterRight != 0.0);
+       
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -50,6 +51,8 @@ public class prepareShooterOnly extends Command{
 
         // End command if shooter wheels are at speed
         if (m_shooterSubsystem.areWheelsAtSpeed()) {
+            m_stageSubsystem.feedWithBeam().schedule();
+            System.out.println("SUB SHOT READY");
             m_isDone = true;
         }
     }

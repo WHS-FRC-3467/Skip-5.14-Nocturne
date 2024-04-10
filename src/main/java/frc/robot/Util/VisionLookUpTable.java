@@ -25,6 +25,7 @@ public class VisionLookUpTable {
                 shooterConfig.getShooterConfigs().add(new ShooterPreset(32.60, 70,40, 4)); 
                 shooterConfig.getShooterConfigs().add(new ShooterPreset(33.80, 75, 40, 4.5)); 
                 shooterConfig.getShooterConfigs().add(new ShooterPreset(34.04, 75, 40, 5)); //Maybe was good in match
+                
         /* if (DriverStation.getAlliance().isPresent()) {
             if (DriverStation.getAlliance().get() == Alliance.Red) {
                 shooterConfig.getShooterConfigs().add(new ShooterPreset(10, 70, 40, 1.5)); 
