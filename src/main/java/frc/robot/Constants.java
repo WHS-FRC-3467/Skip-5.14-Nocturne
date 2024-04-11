@@ -215,7 +215,7 @@ public final class Constants {
             public static final String kCameraName = "top_right";
             public static final Transform3d kRobotToCam = new Transform3d(
                     new Translation3d(.159, -.213,.53),
-                    new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(0)));
+                    new Rotation3d(0, Units.degreesToRadians(-40), Units.degreesToRadians(0)));
         }
        
 

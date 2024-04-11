@@ -439,8 +439,14 @@ public class RobotContainer {
                 .onTrue(new prepareToShoot(RobotConstants.SUBWOOFER, () -> m_stageSubsystem.isNoteInStage(),
                         m_armSubsystem, m_shooterSubsystem));
 
-        m_operatorCtrl.start().onTrue(new prepareToShoot(RobotConstants.FEED, () -> m_stageSubsystem.isNoteInStage(),
-                m_armSubsystem, m_shooterSubsystem));
+        m_operatorCtrl.start().whileTrue(Commands.parallel(
+                new prepareToShoot(RobotConstants.FEED, () -> m_stageSubsystem.isNoteInStage(),
+                        m_armSubsystem, m_shooterSubsystem),
+                m_drivetrain.applyRequest(
+                        () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * .75 * invertForAlliance())
+                                .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * .75 * invertForAlliance())
+                                .withTargetDirection(m_fieldCentricAiming.getAngleToFeed(m_drivetrain.getState().Pose.getTranslation()))
+                                .withDeadband(Constants.maxSpeed * 0.1))));
 
         //m_operatorCtrl.back().onTrue(Commands.parallel(m_shooterSubsystem.runShooterCommand(25, 25), m_trapSubsystem.startBlowerCommand()));
         m_operatorCtrl.back().onTrue(Commands.parallel(m_trapSubsystem.startBlowerCommand(),new prepareToShoot(RobotConstants.TRAP, () -> m_stageSubsystem.isNoteInStage(),
@@ -494,5 +500,5 @@ public class RobotContainer {
 
     public void resetPathPlannerOverrides(){
         m_drivetrain.setOverrideAngle(null);
-    }
+     }
 }
