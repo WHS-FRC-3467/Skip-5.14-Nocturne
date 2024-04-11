@@ -50,7 +50,7 @@ public class subThatShot extends Command{
         m_shooterSubsystem.runShooter();
 
         // End command if shooter wheels are at speed
-        if (m_shooterSubsystem.areWheelsAtSpeed()) {
+        if (m_shooterSubsystem.areAtMinSpeed()) {
             m_stageSubsystem.feedWithBeam().schedule();
             System.out.println("SUB SHOT READY");
             m_isDone = true;

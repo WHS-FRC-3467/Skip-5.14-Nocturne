@@ -251,6 +251,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
     }
 
+    public boolean areAtMinSpeed() {
+        double leftErr = Math.abs(20 - getShooterVelocity(kShooterSide.kLEFT));
+        double rightErr = Math.abs(20 - getShooterVelocity(kShooterSide.kRIGHT));
+        return (leftErr + rightErr / 2.0) < ShooterConstants.kShooterTolerance;
+
+    }
+
     /**
      * Quicker method for outside callers (i.e. LEDSubsystem)
      * @return true if the error of the shooter is within the tolerance

@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.188996640101542,
+        "y": 3.1223392361314644
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.305938184525941,
+        "y": 3.718741112695901
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.020899364773203,
+        "y": 4.092954054853979
+      },
+      "prevControl": {
+        "x": 4.675609603929873,
+        "y": 3.966963583205746
+      },
+      "nextControl": {
+        "x": 5.96031600132526,
+        "y": 4.435731508851791
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.439971575099845,
+        "y": 4.092954054853979
+      },
+      "prevControl": {
+        "x": 5.984691747407913,
+        "y": 4.242332835387091
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "Source Side Auto",
+  "previewStartingState": {
+    "rotation": 151.0990859279985,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

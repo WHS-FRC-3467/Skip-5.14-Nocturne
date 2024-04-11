@@ -1,11 +1,7 @@
 package frc.robot.Util;
 
-import java.sql.Driver;
 import java.util.Collections;
 import java.util.List;
-
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class VisionLookUpTable {
     ShooterConfig shooterConfig;

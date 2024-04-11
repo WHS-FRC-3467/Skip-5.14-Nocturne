@@ -20,8 +20,8 @@
         "y": 3.039887100861882
       },
       "prevControl": {
-        "x": 2.578540300874614,
-        "y": 1.3091522433807707
+        "x": 3.6715900290846095,
+        "y": 2.186242419099711
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,26 +29,20 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
-  "eventMarkers": [
+  "constraintZones": [
     {
-      "name": "Speed Up Shooter",
-      "waypointRelativePos": 0.15,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "SpeedUpShooter"
-              }
-            }
-          ]
-        }
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.2,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
       }
     }
   ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 6.0,
     "maxAcceleration": 6.0,

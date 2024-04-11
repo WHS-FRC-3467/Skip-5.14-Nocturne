@@ -25,7 +25,6 @@ import frc.robot.Util.Setpoints;
 import frc.robot.Util.ShooterPreset;
 import frc.robot.Util.TunableNumber;
 import frc.robot.Util.VisionLookUpTable;
-import frc.robot.Util.Setpoints.GameState;
 
 public class smartShoot extends Command {
 
@@ -181,7 +180,9 @@ public class smartShoot extends Command {
                 System.out.println("STARTING READYUP TIMER FOR DYNAMIC SHOT ");
                 shotTimer.start();
                 timerIsRunning = true;
-            } 
+            } else {
+                System.out.println("NOT CLOSE ENOUGH");
+            }
             lockedRotation = correctedRotation;
             lockedDistance = correctedDistance;
         }
@@ -206,6 +207,8 @@ public class smartShoot extends Command {
             m_shooter.stopShooter();
         }
         m_stage.stopStage();
+        m_drivetrain.setOverrideAngle(null);
+        System.out.println("STOPPING SMART SHOT");
     }
 
     // Returns true when the command should end.

@@ -187,12 +187,20 @@ public class RobotContainer {
         NamedCommands.registerCommand("GetThatNote",
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
         NamedCommands.registerCommand("MoveAndShoot",
-                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, true, 0));
+                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, true, 0)
+                );
         NamedCommands.registerCommand("LookAndShoot",
-                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false, 0));
+                Commands.deadline(
+                new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false, 0)
+                        ,
+                m_drivetrain.applyRequest(
+                        () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * .25 * invertForAlliance())
+                                .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * .25 * invertForAlliance())
+                                .withTargetDirection(m_drivetrain.getVelocityOffset())
+                                .withDeadband(Constants.maxSpeed * 0.1))));
         NamedCommands.registerCommand("OverrideToNote", new overrideAngleToNote(m_drivetrain, m_limelightVision));
-        /* NamedCommands.registerCommand("SubThatShot",
-                new subThatShot(m_shooterSubsystem).andThen(m_stageSubsystem.feedWithBeam())); */
+        NamedCommands.registerCommand("SubThatShot",
+                new subThatShot(m_shooterSubsystem, m_stageSubsystem));
     } 
 
     /**

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6976021055260757,
-        "y": 4.306585660896072
+        "x": 3.9377803061932433,
+        "y": 2.3055690950449605
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6982266724596813,
-        "y": 1.88514148066546
+        "x": 4.506876760701358,
+        "y": 2.1587054938815764
       },
       "isLocked": false,
-      "linkedName": "SubSource"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.568607273966684,
-        "y": 0.877061583182996
+        "x": 5.443132218117932,
+        "y": 1.6905777651732885
       },
       "prevControl": {
-        "x": 4.007152030923771,
-        "y": 0.7952181797910198
+        "x": 4.4793398354832235,
+        "y": 2.1587054938815764
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "M5 (SSA)"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -38,14 +38,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 2.0,
-    "rotation": 175.4301160036781,
-    "rotateFast": true
+    "velocity": 0,
+    "rotation": 180.0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Side Auto",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 120.17352002964432,
+    "rotation": -178.72696997994322,
     "velocity": 0
   },
   "useDefaultConstraints": true
