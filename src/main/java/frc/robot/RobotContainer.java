@@ -378,8 +378,8 @@ public class RobotContainer {
                         .andThen(m_armSubsystem.prepareForIntakeCommand()));
 
         //m_driverCtrl.back().whileTrue(new calibrateLookupTable(m_drivetrain, m_armSubsystem, m_shooterSubsystem));
-        //m_driverCtrl.back().whileTrue(new driveToTrap(m_drivetrain, m_shooterSubsystem));
-        m_driverCtrl.back().onTrue(new subThatShot(m_shooterSubsystem, m_stageSubsystem));
+        m_driverCtrl.back().whileTrue(new driveToTrap(m_drivetrain, m_shooterSubsystem));
+        //m_driverCtrl.back().onTrue(new subThatShot(m_shooterSubsystem, m_stageSubsystem));
 
         m_driverCtrl.start().whileTrue(
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note)

@@ -31,7 +31,7 @@ public class driveToTrap extends Command {
     Rotation2d currentAngle;
     Setpoints currentSetpoint;
 
-    TunableNumber trap_dist = new TunableNumber("Trap Dist", .6);
+    TunableNumber trap_dist = new TunableNumber("Trap Dist", .775);
     Pose2d trap_target = new Pose2d();
     Pose3d trap_location;
     
