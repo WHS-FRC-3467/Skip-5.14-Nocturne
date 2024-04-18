@@ -34,7 +34,7 @@ public final class Constants {
         public static final boolean kIsDriveTuningMode = false;
         public static final boolean kIsArmTuningMode = true;
         public static final boolean kIsIntakeTuningMode = false;
-        public static final boolean kIsStageTuningMode = false;
+        public static final boolean kIsStageTuningMode = true;
         public static final boolean kIsShooterTuningMode = true;
         public static final boolean kIsAutoAimTuningMode = true;
         public static final boolean kIsTrapTuningMode = false;
@@ -59,7 +59,7 @@ public final class Constants {
         public static final double robotMaxFeedShotDist = 15;
 
         public static final double kTimeToShoot = .15; //Time it takes before note leave the shooter
-        public static final double kTimeToReady = .5;
+        public static final double kTimeToReady = .5;   // Past number was 0.5
     }
     
     public static final class CanConstants {
@@ -126,7 +126,7 @@ public final class Constants {
 
     public static final class StageConstants {
 
-        public static final double kIntakeSpeed = 0.6;
+        public static final double kIntakeSpeed = 0.8;
         public static final double kFeedToShooterSpeed = 1.0;
         public static final double kFeedToAmpSpeed = 0.7;
         public static final double kFeedToTrapSpeed = 0.5;

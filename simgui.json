@@ -73,7 +73,10 @@
       "/SmartDashboard/Static Turning PID": "PIDController",
       "/SmartDashboard/Stop Shooter": "Command",
       "/SmartDashboard/Update Shooter Gains": "Command",
-      "/SmartDashboard/VisionSystemSim-main/Sim Field": "Field2d"
+      "/SmartDashboard/VisionSystemSim-main/Sim Field": "Field2d",
+      "/SmartDashboard/driveToPose xController": "ProfiledPIDController",
+      "/SmartDashboard/driveToPose yController": "ProfiledPIDController",
+      "/SmartDashboard/driveToPoseHead": "PIDController"
     },
     "windows": {
       "/Pose": {

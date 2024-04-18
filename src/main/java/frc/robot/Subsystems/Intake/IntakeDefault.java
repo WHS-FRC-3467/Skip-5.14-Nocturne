@@ -45,6 +45,9 @@ public class IntakeDefault extends Command {
         m_intake.runIntake(-speed);
  //       m_stage.runStage(-speed * StageConstants.kIntakeSpeed);
 
+    } else if (m_stage.isStageRunning()) { //TODO: Take out if doesn't work
+        m_intake.runIntake(.5);
+
     } else {
         m_intake.stopIntake();
   //      m_stage.stopStage();
@@ -52,6 +55,7 @@ public class IntakeDefault extends Command {
     }
 
   }
+
 
   // Called once the command ends or is interrupted.
   @Override

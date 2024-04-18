@@ -132,7 +132,7 @@ public class smartShoot extends Command {
         correctedRotation = futureAngleToTarget;
 
         if (timerIsRunning) {
-            System.out.println(shotTimer.get());
+            //System.out.println(shotTimer.get());
             if (shotTimer.hasElapsed(timeToBeReady.get() / 2)) {
                 if (!m_shooter.isShooterAtSpeed() || !m_arm.isArmJointAtSetpoint() || m_drivetrain.isRotatingFast()
                         || !m_drivetrain.isAtFutureAngle()
@@ -169,10 +169,8 @@ public class smartShoot extends Command {
 
             if (shotTimer.hasElapsed(timeToBeReady.get())) {
                 System.out.println("Shot should be complete now");
-
-            }
-            if (!m_stage.isNoteInStage()) {
                 m_isFinished = true;
+
             }
 
         } else {

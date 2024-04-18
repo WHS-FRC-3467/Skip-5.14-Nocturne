@@ -70,7 +70,7 @@
         {
           "type": "named",
           "data": {
-            "name": "MoveAndShoot"
+            "name": "LookAndShoot"
           }
         },
         {
@@ -94,7 +94,7 @@
         {
           "type": "named",
           "data": {
-            "name": "MoveAndShoot"
+            "name": "LookAndShoot"
           }
         },
         {

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CanConstants;
@@ -74,6 +75,7 @@ public class StageSubsystem extends SubsystemBase {
 
         if (RobotConstants.kIsStageTuningMode) {
             SmartDashboard.putNumber("Stage Current Draw", m_stageMotor.getSupplyCurrent());
+            SmartDashboard.putBoolean("Is Stage Running", isStageRunning());
         }
     }
 
@@ -89,16 +91,19 @@ public class StageSubsystem extends SubsystemBase {
     public void runStage(double speed) {
         m_stageMotor.set(ControlMode.PercentOutput, speed);
         m_stageRunning = true;
+        System.out.println("Running Stage");
     }
 
     public void runStage() {
         m_stageMotor.set(ControlMode.PercentOutput, StageConstants.kIntakeSpeed);
         m_stageRunning = true;
+        
     }
 
     public void stopStage() {
         m_stageMotor.set(ControlMode.PercentOutput, 0.0);
         m_stageRunning = false;
+        System.out.println("Stopping Stage");
     }
 
     // Do not use if the shooter's target velocity is zero.
@@ -149,6 +154,14 @@ public class StageSubsystem extends SubsystemBase {
         return new RunCommand(() -> this.ejectFront(.8), this)
                 .until(() -> isNoteInStage()) // run until there is NOT a Note in the Stage
                 .andThen(() -> this.stopStage());
+    }
+
+    public Command ejectFrontCommand() {
+        return new InstantCommand(() -> this.ejectFront(.8),this);
+    }
+
+    public Command stopStageCommand() {
+        return new InstantCommand(() -> this.stopStage(),this);
     }
 
 }
