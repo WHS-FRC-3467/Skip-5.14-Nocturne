@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7336934388833163,
-      "y": 4.387391197585246
+      "x": 0.7067810805987872,
+      "y": 4.315764635968784
     },
     "rotation": 118.73979529168795
   },
@@ -101,6 +101,12 @@
           "type": "named",
           "data": {
             "name": "StopShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NL to M5 (SSA)"
           }
         }
       ]

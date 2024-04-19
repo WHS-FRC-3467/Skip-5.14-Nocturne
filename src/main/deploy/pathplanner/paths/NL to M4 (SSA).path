@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.2126845393291923,
-        "y": 3.1691158539012236
+        "x": 3.4639590646750533,
+        "y": 2.9001503017247976
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7445135467407455,
-        "y": 1.0296915599380592
+        "x": 5.428577011000176,
+        "y": 1.450075150862553
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SSA Podium Score"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 1.8359822474630711
       },
       "prevControl": {
-        "x": 7.379926845793359,
-        "y": 0.34386708260642895
+        "x": 6.36410936639537,
+        "y": 0.9355323553951949
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": -142.0012675574954,
+    "rotation": -126.86989764584403,
     "rotateFast": true
   },
   "reversed": false,

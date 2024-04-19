@@ -2,57 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7336934388833163,
-      "y": 4.387391197585246
+      "x": 0.7526759559623448,
+      "y": 6.729835080091914
     },
-    "rotation": 118.73979529168795
+    "rotation": -119.47588900324575
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.4
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNote"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SW(Amp Side) to M5 (SSA)"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntake"
-                }
-              }
-            ]
+            "pathName": "Poop [ASR]PSW-M5"
           }
         },
         {
@@ -64,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M5 to NL (SSA)"
+            "pathName": "[ASR]M5-WL"
           }
         },
         {
@@ -76,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NL to M4 (SSA)"
+            "pathName": "[ASR]WL-M4"
           }
         },
         {
@@ -88,7 +50,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M4 to NL (SSA)"
+            "pathName": "[ASR]M4-WL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LookAndShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[ASR]WL-M3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GetThatNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[ASR]M3-WL"
           }
         },
         {
@@ -102,16 +88,10 @@
           "data": {
             "name": "StopShooter"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "NL to M4 (SSA)"
-          }
         }
       ]
     }
   },
-  "folder": "Stable",
+  "folder": "Development",
   "choreoAuto": false
 }

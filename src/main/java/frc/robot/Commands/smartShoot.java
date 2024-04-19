@@ -4,6 +4,7 @@
 
 package frc.robot.Commands;
 
+import java.sql.Driver;
 import java.util.function.BooleanSupplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -97,7 +98,12 @@ public class smartShoot extends Command {
             if (isShootOnTheMove) {
                 maxShotDist = Constants.RobotConstants.robotMaxDynamicShotDist;
             } else {
-                maxShotDist = Constants.RobotConstants.robotMaxStaticShotDist;
+                if (DriverStation.isAutonomousEnabled()) {
+                    maxShotDist = Constants.RobotConstants.robotMaxStaticShotDist * 2; // Allow for futher shots during auto just to clear the note
+                } else {
+                    maxShotDist = Constants.RobotConstants.robotMaxStaticShotDist;
+                }
+                
             }
         }
 

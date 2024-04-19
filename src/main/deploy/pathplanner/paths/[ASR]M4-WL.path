@@ -8,29 +8,47 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.086168756133296,
-        "y": 6.472823778055991
+        "x": 6.972205397402246,
+        "y": 6.805997885500045
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.27740238388357,
-        "y": 6.179096575729224
+        "x": 4.142220022331783,
+        "y": 6.116042773396089
       },
       "prevControl": {
-        "x": 5.461490168263355,
-        "y": 6.463644802983281
+        "x": 5.326307806711568,
+        "y": 6.400591000650146
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ASR Mid Chain Score"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.5,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SpeedUpShooter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 6.0,
     "maxAcceleration": 6.0,

@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7392210795817603,
-        "y": 4.3385312981452175
+        "x": 0.7251390307442104,
+        "y": 4.343301561186919
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4054882924580663,
-        "y": 2.198501035178709
+        "x": 3.391406243620517,
+        "y": 2.20327129822041
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SW Source"
     },
     {
       "anchor": {

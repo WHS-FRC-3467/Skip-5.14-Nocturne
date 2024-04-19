@@ -8,29 +8,47 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.618549310350564,
-        "y": 7.142888958363933
+        "x": 7.299641721790566,
+        "y": 7.168516673215683
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.188996640101542,
-        "y": 6.256372626705367
+        "x": 4.142220022331783,
+        "y": 6.116042773396089
       },
       "prevControl": {
-        "x": 5.033462346791003,
-        "y": 6.4307731530868875
+        "x": 5.007587451072339,
+        "y": 6.373314171129768
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ASR Mid Chain Score"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.55,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SpeedUpShooter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 6.0,
     "maxAcceleration": 6.0,
@@ -39,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -169.64833051290796,
+    "rotation": -168.7585212323735,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "Amp Side",
   "previewStartingState": {
-    "rotation": 178.9949139947457,
+    "rotation": -165.80316403180902,
     "velocity": 0
   },
   "useDefaultConstraints": true

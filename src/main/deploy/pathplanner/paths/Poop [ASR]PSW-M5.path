@@ -20,12 +20,12 @@
         "y": 7.785417213453739
       },
       "prevControl": {
-        "x": 1.606320637724516,
-        "y": 7.739522338090181
+        "x": 1.605560835878457,
+        "y": 7.800801494223607
       },
       "nextControl": {
-        "x": 4.048140016467153,
-        "y": 7.830635001476101
+        "x": 3.570621303284782,
+        "y": 7.776238238381027
       },
       "isLocked": false,
       "linkedName": null
@@ -48,7 +48,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "Note Override",
       "waypointRelativePos": 1.7,
       "command": {
         "type": "parallel",
@@ -61,6 +61,33 @@
               }
             }
           ]
+        }
+      }
+    },
+    {
+      "name": "Start Passthrough",
+      "waypointRelativePos": 0.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "RushPass"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot Feed Shot",
+      "waypointRelativePos": 1.55,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
         }
       }
     }

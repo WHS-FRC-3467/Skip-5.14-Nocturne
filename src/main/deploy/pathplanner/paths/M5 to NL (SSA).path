@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.568607273966684,
-        "y": 0.877061583182996
+        "x": 7.381500802887644,
+        "y": 1.4032985330927936
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.961778353316612,
-        "y": 1.023925184346381
+        "x": 4.820480979993299,
+        "y": 0.9004498920678762
       },
       "isLocked": false,
-      "linkedName": "M5 (SSA)"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.4966812197775345,
-        "y": 3.039887100861882
+        "x": 3.4639590646750533,
+        "y": 2.9001503017247976
       },
       "prevControl": {
-        "x": 2.578540300874614,
-        "y": 1.3091522433807707
+        "x": 4.294244030083502,
+        "y": 1.5553225408445124
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ShootM5 (SSA)"
+      "linkedName": "SSA Podium Score"
     }
   ],
   "rotationTargets": [],
@@ -63,7 +63,7 @@
   "reversed": false,
   "folder": "Source Side Auto",
   "previewStartingState": {
-    "rotation": 177.33699923393272,
+    "rotation": -178.7546357332317,
     "velocity": 0
   },
   "useDefaultConstraints": true

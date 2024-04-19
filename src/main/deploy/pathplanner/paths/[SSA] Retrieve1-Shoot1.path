@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.652723796014667,
-        "y": 2.718622973312168
+        "x": 3.1667464000854753,
+        "y": 2.3239270451903833
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5150391699229573,
-        "y": 3.177571726952555
+        "x": 3.4639590646750533,
+        "y": 2.9001503017247976
       },
       "prevControl": {
-        "x": 2.6986186713782248,
-        "y": 2.709443998239457
+        "x": 3.276894100958014,
+        "y": 2.470790646353767
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SSA Podium Score"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 140.90614111408132,
+    "rotation": 138.54101609638522,
     "rotateFast": false
   },
   "reversed": false,

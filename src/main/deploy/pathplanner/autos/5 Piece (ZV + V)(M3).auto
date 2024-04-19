@@ -24,7 +24,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.4
+                  "waitTime": 0.5
                 }
               }
             ]
@@ -59,7 +59,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.6
+                        "waitTime": 0.2
                       }
                     }
                   ]
@@ -103,7 +103,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.6
+                        "waitTime": 0.4
                       }
                     }
                   ]
@@ -147,76 +147,25 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.4
+                        "waitTime": 0.2
                       }
                     }
                   ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LookAndShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "[6N] R1 to M1"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntake"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "[ZV]SW to M1"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
+            "pathName": "[ZV]R1 to SW"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "[6N] M1 to WL"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "MoveAndShoot"
-                }
-              }
-            ]
+            "name": "ShootNote"
           }
         },
         {
@@ -236,7 +185,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "[6N] WL to M2"
+                        "pathName": "[5P]PSW-M3"
                       }
                     },
                     {
@@ -252,22 +201,15 @@
           }
         },
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "[6N] M2 to WL"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "MoveAndShoot"
-                }
-              }
-            ]
+            "pathName": "[5P]M3-WL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LookAndShoot"
           }
         },
         {
@@ -275,10 +217,16 @@
           "data": {
             "name": "StopShooter"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[ASR]WL-M4"
+          }
         }
       ]
     }
   },
-  "folder": "Alpha",
+  "folder": "Stable",
   "choreoAuto": false
 }

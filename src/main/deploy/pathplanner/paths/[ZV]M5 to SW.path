@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 0.8561626240061597,
-        "y": 4.198201444835939
+        "x": 0.7251390307442104,
+        "y": 4.343301561186919
       },
       "prevControl": {
-        "x": 1.9671072960379532,
-        "y": 3.227586626113424
+        "x": 1.8360837027760044,
+        "y": 3.3726867424644036
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SW Source"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 122.38067770656923,
+    "rotation": 120.61860540890939,
     "rotateFast": true
   },
   "reversed": false,
