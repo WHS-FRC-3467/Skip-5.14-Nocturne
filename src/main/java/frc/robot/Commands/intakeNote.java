@@ -30,13 +30,13 @@ public class intakeNote extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        System.out.println("intakeNote Starting");
         m_isDone = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        System.out.println("intakeNote Running");
         // Run the Stage until a Note is inside
         if (!m_stageSubsystem.isNoteInStage()) {
             m_stageSubsystem.runStage();

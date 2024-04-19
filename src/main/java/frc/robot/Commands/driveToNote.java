@@ -48,6 +48,7 @@ public class driveToNote extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        System.out.println("Starting driveToNote");
         if (Constants.RobotConstants.kIsAutoAimTuningMode) {
             SmartDashboard.putData("Note Detect PID",omegaController);
         }
@@ -58,9 +59,7 @@ public class driveToNote extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        System.out.println("AUTO NOTE RUNNING");
         tx = LimelightHelpers.getTX(kCameraName);
-
         omegaSpeed = omegaController.calculate(tx);
         if (omegaController.atGoal()) {
             omegaSpeed = 0;

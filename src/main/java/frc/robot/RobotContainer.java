@@ -46,7 +46,6 @@ import frc.robot.Vision.PhotonVision;
 import frc.robot.generated.TunerConstants;
 
 public class RobotContainer {
-
     /*
      * Shuffleboard Chooser widgets
      */
@@ -200,7 +199,7 @@ public class RobotContainer {
                 new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, true, 0).andThen(
                     m_armSubsystem.prepareForIntakeCommand())
                 );
-        NamedCommands.registerCommand("LookAndShoot",
+        NamedCommands.registerCommand("LookAndShoot", //TODO: Add timeout that just fires after 1.5/2 seconds
                 Commands.deadline(
                 new smartShoot(m_drivetrain, m_stageSubsystem, m_armSubsystem, m_shooterSubsystem, false, 0),
                 m_drivetrain.applyRequest(
