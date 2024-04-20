@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -77,7 +78,7 @@ public class ShooterSubsystem extends SubsystemBase {
     double m_idleSpeed = ShooterConstants.kShooterIdleSpeed;
 
     public ShooterSubsystem() {
-        //SmartDashboard.putData("POWER", new PowerDistribution());
+        SmartDashboard.putData("POWER", new PowerDistribution());
 
         /* Configure the motors */
         var leadConfiguration = new TalonFXConfiguration();

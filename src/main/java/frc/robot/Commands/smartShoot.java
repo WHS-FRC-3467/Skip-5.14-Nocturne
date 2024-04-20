@@ -117,6 +117,7 @@ public class smartShoot extends Command {
         m_arm.enable();
         m_isFinished = false;
         timerIsRunning = false;
+        m_stage.checkBeam();
     }
 
     // Called every time the scheduler runs while the command is scheduled.

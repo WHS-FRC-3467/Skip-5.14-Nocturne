@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.80825808932417,
-        "y": 7.427437185617991
+        "x": 1.8357950145423048,
+        "y": 7.436616160690702
       },
       "isLocked": false,
       "linkedName": null
@@ -20,28 +20,28 @@
         "y": 7.785417213453739
       },
       "prevControl": {
-        "x": 2.138701191941785,
-        "y": 7.748701313162894
+        "x": 2.3589965936868613,
+        "y": 7.776238238381027
       },
       "nextControl": {
-        "x": 3.56966363753986,
-        "y": 7.8240151260891055
+        "x": 3.5705429130288207,
+        "y": 7.799537206060681
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.223853382223969,
-        "y": 7.409079235472567
+        "x": 5.828649171171818,
+        "y": 7.4457951357634125
       },
       "prevControl": {
-        "x": 6.223853382223969,
-        "y": 7.409079235472567
+        "x": 4.828649171171818,
+        "y": 7.4457951357634125
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "AmpSideSkipWL"
     }
   ],
   "rotationTargets": [],
@@ -106,7 +106,7 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 2.0,
+    "velocity": 5.0,
     "rotation": -179.45958470625976,
     "rotateFast": true
   },

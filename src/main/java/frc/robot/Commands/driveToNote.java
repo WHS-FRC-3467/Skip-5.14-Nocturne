@@ -53,7 +53,20 @@ public class driveToNote extends Command {
             SmartDashboard.putData("Note Detect PID",omegaController);
         }
         omegaController.reset(tx);
-        m_isFinished = false;
+        if (m_limelight.hasTarget()) {
+            m_isFinished = false;
+
+        } else {
+            if (DriverStation.isAutonomous()) {
+                m_isFinished = true;
+
+            } else {
+                m_isFinished = false;
+            }
+            
+            
+        }
+        
     }
 
     // Called every time the scheduler runs while the command is scheduled.

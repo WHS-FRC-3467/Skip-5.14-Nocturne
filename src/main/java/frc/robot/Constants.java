@@ -42,8 +42,8 @@ public final class Constants {
         // Shooter and Arm Setpoints
         public static final Setpoints STOWED =    new Setpoints(0.0, 0.2, 0.0, 0.0, GameState.STOWED);
         public static final Setpoints INTAKE =    new Setpoints(1.0, 2.0, 0.0, 0.0, GameState.INTAKE);
-        public static final Setpoints SUBWOOFER = new Setpoints(1.0, 1.0, 40.0,35.0,  GameState.SUBWOOFER);
-        public static final Setpoints AMP =       new Setpoints(95.0, 0.4, 40.0,40.0,  GameState.AMP);
+        public static final Setpoints SUBWOOFER = new Setpoints(1.0, 1.0, 30.0,25.0,  GameState.SUBWOOFER);
+        public static final Setpoints AMP =       new Setpoints(93.0, 0.4, 40.0,40.0,  GameState.AMP);
         public static final Setpoints PODIUM =    new Setpoints(23.0, 0.4, 50.0,50.0,  GameState.PODIUM);
         public static final Setpoints WING =      new Setpoints(30.0, 0.4, 70.0,60.0,  GameState.WING);
         public static final Setpoints PREPCLIMB = new Setpoints(0.0, 0.4, 0.0,0.0,  GameState.PREPCLIMB);
@@ -126,7 +126,7 @@ public final class Constants {
 
     public static final class StageConstants {
 
-        public static final double kIntakeSpeed = 0.8;
+        public static final double kIntakeSpeed = 0.6;
         public static final double kFeedToShooterSpeed = 1.0;
         public static final double kFeedToAmpSpeed = 0.7;
         public static final double kFeedToTrapSpeed = 0.5;
@@ -138,7 +138,7 @@ public final class Constants {
 
     public static final class IntakeConstants {
 
-        public static final double kIntakeSpeed = 0.5;
+        public static final double kIntakeSpeed = 0.7;
         public static final double kEjectSpeed = -0.3;
     }
 
@@ -248,10 +248,10 @@ public final class Constants {
     public static class FieldConstants {
         public static final Pose2d BLUE_SPEAKER = new Pose2d(Units.inchesToMeters(-1.5+12), Units.inchesToMeters(218.42), new Rotation2d(0));
         public static final Pose2d RED_SPEAKER = new Pose2d(Units.inchesToMeters(652.73-12), Units.inchesToMeters(218.42), new Rotation2d(Math.PI));
-        public static final Pose2d BLUE_AMP_FEED = new Pose2d(2.75,7.55, new Rotation2d(0));
-        public static final Pose2d RED_AMP_FEED = new Pose2d(13.50,7.55, new Rotation2d(0));
-        public static final double BLUE_AUTO_PENALTY_LINE = 8.6; // X distance from origin to center of the robot almost fully crossing the midline
-        public static final double RED_AUTO_PENALTY_LINE = 7.9; // X distance from origin to center of the robot almost fully crossing the midline
+        public static final Pose2d BLUE_AMP_FEED = new Pose2d(1.25,6.62, new Rotation2d(0));
+        public static final Pose2d RED_AMP_FEED = new Pose2d(15.250,6.62, new Rotation2d(0));
+        public static final double BLUE_AUTO_PENALTY_LINE = 9; // X distance from origin to center of the robot almost fully crossing the midline
+        public static final double RED_AUTO_PENALTY_LINE = 7.4; // X distance from origin to center of the robot almost fully crossing the midline
 
     }
 

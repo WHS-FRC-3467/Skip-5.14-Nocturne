@@ -128,6 +128,14 @@ public class StageSubsystem extends SubsystemBase {
         return m_stageRunning;
     }
 
+    public void checkBeam() {
+        if(!isNoteInStage()) {
+            ejectFront(0.3);
+        } else {
+            stopStage();
+        }
+    }
+
     /*
      * Command Factories
      */
@@ -162,6 +170,13 @@ public class StageSubsystem extends SubsystemBase {
 
     public Command stopStageCommand() {
         return new InstantCommand(() -> this.stopStage(),this);
+    }
+
+    // Testing
+    public Command checkBeamCommand() {
+        return new RunCommand(() -> this.ejectFront(0.3), this)
+                .until(() -> isNoteInStage()) // run until there is NOT a Note in the Stage
+                .andThen(() -> this.stopStage());
     }
 
 }

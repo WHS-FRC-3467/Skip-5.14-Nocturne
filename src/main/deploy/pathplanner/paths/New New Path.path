@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9372720232676874,
-        "y": 1.8649782915548072
+        "x": 6.801620528879238,
+        "y": 0.7176064074658672
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1667464000854753,
-        "y": 2.3239270451903833
+        "x": 7.801620528879238,
+        "y": 0.7176064074658672
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.212641275449033,
-        "y": 2.9113814498439217
+        "x": 8.343688341096644,
+        "y": 0.7176064074658672
       },
       "prevControl": {
-        "x": 3.0255763117319936,
-        "y": 2.482021794472891
+        "x": 7.168779531789568,
+        "y": 0.7635012828340888
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SSA Podium Score"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 138.54101609638522,
+    "rotation": 176.67259575827347,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Far Side",
   "previewStartingState": {
-    "rotation": 131.7295120768164,
+    "rotation": 178.6881122172717,
     "velocity": 0
   },
   "useDefaultConstraints": true

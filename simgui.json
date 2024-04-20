@@ -51,6 +51,7 @@
       "/SmartDashboard/Auto Path": "Field2d",
       "/SmartDashboard/Auto Path Preview": "Field2d",
       "/SmartDashboard/Auto Turning PID": "PIDController",
+      "/SmartDashboard/Autonomous Turning PID": "PIDController",
       "/SmartDashboard/Cardinal Turning PID": "PIDController",
       "/SmartDashboard/Control Chooser": "String Chooser",
       "/SmartDashboard/Control Style Chooser": "String Chooser",

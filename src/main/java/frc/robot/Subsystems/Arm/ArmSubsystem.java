@@ -264,7 +264,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
      * 
      * @param setpoints - the desired position as a Setpoints object
      */
-    public void updateArmSetpoint(Setpoints setpoints) {
+    public boolean updateArmSetpoint(Setpoints setpoints) {
 
         // Convert degrees to radians and set the profile goal
         m_armSetpoint = setpoints.arm;
@@ -278,6 +278,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
         // Display requested Arm State to dashboard
         Setpoints.displayArmState(m_armState);
+        return isArmJointAtSetpoint();
     }
 
     /**

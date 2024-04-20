@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 1.3768462609067285,
-      "y": 1.6355039147370192
+      "y": 7.271394609381894
     },
-    "rotation": 180.0
+    "rotation": -178.8542371618249
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[SSA] Rush-M5"
+            "pathName": "Poop [ASR]PSW-M5 (ZV)"
           }
         },
         {
@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "New New Path"
+                        "pathName": "[ASR]ReachMid"
                       }
                     },
                     {
@@ -52,32 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[SSA] M5-M4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "[SSA] M4-WL"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
-                }
-              }
-            ]
+            "pathName": "[ASR]M5-WL"
           }
         },
         {
@@ -89,7 +64,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[SSA] WL-Retrieve1"
+            "pathName": "[ASR]WL-M4"
           }
         },
         {
@@ -101,7 +76,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[SSA] Retrieve1-Shoot1"
+            "pathName": "[ASR]M4-WL"
           }
         },
         {
@@ -113,7 +88,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[SSA] Shoot1-Retrieve2"
+            "pathName": "[ASR]WL-M3"
           }
         },
         {
@@ -125,13 +100,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[SSA] Retrieve2-Shoot2"
+            "pathName": "[ASR]M3-WL"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "LookAndShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
           }
         }
       ]
