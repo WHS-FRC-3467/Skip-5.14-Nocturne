@@ -2,6 +2,8 @@ package frc.robot.Subsystems.Stage;
 
 import java.util.function.BooleanSupplier;
 
+//import frc.ThriftyController;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
@@ -25,6 +27,7 @@ public class StageSubsystem extends SubsystemBase {
 
     // Initialize devices
     TalonSRX m_stageMotor = new WPI_TalonSRX(CanConstants.ID_StageMotor);
+    //ThriftyController thrifty_nova = new ThriftyController(CanConstants.ID_StageMotor);
     DigitalInput m_stageBeamBreak = new DigitalInput(DIOConstants.kStageBeamBreak);
     boolean m_noteInStage = false;
     BooleanSupplier m_noteInStageSupplier;
@@ -37,14 +40,14 @@ public class StageSubsystem extends SubsystemBase {
         m_stageMotor.configFactoryDefault();
 
         // Invert motor?
+        //thrifty_nova.setInverted(true);
         m_stageMotor.setInverted(true);
 
         // Set motor to Brake
+        //thrifty_nova.setBrakeMode(true);
         m_stageMotor.setNeutralMode(NeutralMode.Brake);
 
         // Config current limit
-        // m_stageMotor.configSupplyCurrentLimit(new
-        // SupplyCurrentLimitConfiguration(true, 15, 20, 0.10));
 
         /* Config the peak and nominal outputs */
         m_stageMotor.configNominalOutputForward(0.0, 30);
@@ -89,18 +92,21 @@ public class StageSubsystem extends SubsystemBase {
      * @param speed speed to set Stage motor at
      */
     public void runStage(double speed) {
+        //thrifty_nova.setPercentOutput(speed);
         m_stageMotor.set(ControlMode.PercentOutput, speed);
         m_stageRunning = true;
         System.out.println("Running Stage");
     }
 
     public void runStage() {
+        //thrifty_nova.setPercentOutput(StageConstants.kIntakeSpeed);
         m_stageMotor.set(ControlMode.PercentOutput, StageConstants.kIntakeSpeed);
         m_stageRunning = true;
         
     }
 
     public void stopStage() {
+        //thrifty_nova.setPercentOutput(0.0);
         m_stageMotor.set(ControlMode.PercentOutput, 0.0);
         m_stageRunning = false;
         System.out.println("Stopping Stage");
