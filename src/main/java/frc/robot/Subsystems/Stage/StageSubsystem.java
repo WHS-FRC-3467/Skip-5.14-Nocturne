@@ -27,7 +27,7 @@ import frc.robot.Util.ThriftyNova;
 public class StageSubsystem extends SubsystemBase {
 
     // Initialize devices
-    //TalonSRX m_stageMotor = new WPI_TalonSRX(CanConstants.ID_StageMotor);
+    // TalonSRX m_stageMotor = new WPI_TalonSRX(CanConstants.ID_StageMotor);
     ThriftyNova thrifty_nova = new ThriftyNova(CanConstants.ID_StageMotor);
     DigitalInput m_stageBeamBreak = new DigitalInput(DIOConstants.kStageBeamBreak);
     boolean m_noteInStage = false;
@@ -38,34 +38,34 @@ public class StageSubsystem extends SubsystemBase {
     public StageSubsystem() {
 
         // Set motor to factory defaults
-        //m_stageMotor.configFactoryDefault();
+        // m_stageMotor.configFactoryDefault();
 
         // Invert motor?
         thrifty_nova.setInverted(false);
-        //m_stageMotor.setInverted(true);
+        // m_stageMotor.setInverted(true);
 
         // Set motor to Brake
         thrifty_nova.setBrakeMode(true);
-        //m_stageMotor.setNeutralMode(NeutralMode.Brake);
+        // m_stageMotor.setNeutralMode(NeutralMode.Brake);
 
         // Config current limit
 
         /* Config the peak and nominal outputs */
-        //m_stageMotor.configNominalOutputForward(0.0, 30);
-        //m_stageMotor.configNominalOutputReverse(0.0, 30);
-        //m_stageMotor.configPeakOutputForward(1.0, 30);
-        //m_stageMotor.configPeakOutputReverse(1.0, 30);
+        // m_stageMotor.configNominalOutputForward(0.0, 30);
+        // m_stageMotor.configNominalOutputReverse(0.0, 30);
+        // m_stageMotor.configPeakOutputForward(1.0, 30);
+        // m_stageMotor.configPeakOutputReverse(1.0, 30);
 
         // slows unneeded CAN status fames
-        //m_stageMotor.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 255);
-        //m_stageMotor.setStatusFramePeriod(StatusFrame.Status_10_Targets, 255);
-        //m_stageMotor.setStatusFramePeriod(StatusFrame.Status_9_MotProfBuffer, 255);
+        // m_stageMotor.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 255);
+        // m_stageMotor.setStatusFramePeriod(StatusFrame.Status_10_Targets, 255);
+        // m_stageMotor.setStatusFramePeriod(StatusFrame.Status_9_MotProfBuffer, 255);
 
     }
 
     public void simulationInit() {
         /* If running in Simulation, setup simulated Falcons */
-        //PhysicsSim.getInstance().addTalonSRX(m_stageMotor, 1.0, 89975.0);
+        // PhysicsSim.getInstance().addTalonSRX(m_stageMotor, 1.0, 89975.0);
     }
 
     @Override
@@ -78,7 +78,8 @@ public class StageSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Note In Stage?", m_noteInStage);
 
         if (RobotConstants.kIsStageTuningMode) {
-            //SmartDashboard.putNumber("Stage Current Draw", m_stageMotor.getSupplyCurrent());
+            // SmartDashboard.putNumber("Stage Current Draw",
+            // m_stageMotor.getSupplyCurrent());
             SmartDashboard.putBoolean("Is Stage Running", isStageRunning());
         }
     }
@@ -94,21 +95,21 @@ public class StageSubsystem extends SubsystemBase {
      */
     public void runStage(double speed) {
         thrifty_nova.setPercentOutput(speed);
-        //m_stageMotor.set(ControlMode.PercentOutput, speed);
+        // m_stageMotor.set(ControlMode.PercentOutput, speed);
         m_stageRunning = true;
         System.out.println("Running Stage");
     }
 
     public void runStage() {
         thrifty_nova.setPercentOutput(StageConstants.kIntakeSpeed);
-        //m_stageMotor.set(ControlMode.PercentOutput, StageConstants.kIntakeSpeed);
+        // m_stageMotor.set(ControlMode.PercentOutput, StageConstants.kIntakeSpeed);
         m_stageRunning = true;
-        
+
     }
 
     public void stopStage() {
         thrifty_nova.setPercentOutput(0.0);
-        //m_stageMotor.set(ControlMode.PercentOutput, 0.0);
+        // m_stageMotor.set(ControlMode.PercentOutput, 0.0);
         m_stageRunning = false;
         System.out.println("Stopping Stage");
     }
@@ -136,7 +137,7 @@ public class StageSubsystem extends SubsystemBase {
     }
 
     public void checkBeam() {
-        if(!isNoteInStage()) {
+        if (!isNoteInStage()) {
             ejectFront(0.3);
         } else {
             stopStage();
@@ -149,7 +150,7 @@ public class StageSubsystem extends SubsystemBase {
 
     // Pass the Note to the Shooter
     public ConditionalCommand feedNote2ShooterCommand() {
-        return new ConditionalCommand(feedWithBeam(),feedWithTimeout(),() -> m_noteInStage); 
+        return new ConditionalCommand(feedWithBeam(), feedWithTimeout(), () -> m_noteInStage);
     }
 
     public Command feedWithTimeout() {
@@ -172,11 +173,11 @@ public class StageSubsystem extends SubsystemBase {
     }
 
     public Command ejectFrontCommand() {
-        return new InstantCommand(() -> this.ejectFront(.8),this);
+        return new InstantCommand(() -> this.ejectFront(.8), this);
     }
 
     public Command stopStageCommand() {
-        return new InstantCommand(() -> this.stopStage(),this);
+        return new InstantCommand(() -> this.stopStage(), this);
     }
 
     // Testing

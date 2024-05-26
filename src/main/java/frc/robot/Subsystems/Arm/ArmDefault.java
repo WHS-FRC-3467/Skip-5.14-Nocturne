@@ -4,9 +4,6 @@
 
 package frc.robot.Subsystems.Arm;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 
 /*
@@ -18,32 +15,21 @@ public class ArmDefault extends Command {
 
     /** Creates a new ArmDefault. */
     ArmSubsystem m_arm;
-    BooleanSupplier m_joyMode;
-    DoubleSupplier m_valueSrc;
 
-    public ArmDefault(ArmSubsystem arm, BooleanSupplier joyMode, DoubleSupplier valueSrc) {
+    public ArmDefault(ArmSubsystem arm) {
         m_arm = arm;
-        m_valueSrc = valueSrc;
-        m_joyMode = joyMode;
-        addRequirements(m_arm);
+
     }
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
 
-        // If Operator is holding a particular button, then disable PID and go to Manual control mode
-        if (m_joyMode.getAsBoolean()) {
-            if (m_arm.isEnabled()) m_arm.disable();
-            m_arm.setArmVoltage(12.0 * m_valueSrc.getAsDouble() * 0.3);
-        // Else, switch to Profiled PID control
-        } else {
-            if (!m_arm.isEnabled()) m_arm.enable();
-        }
     }
 
     // Called once the command ends or is interrupted.
