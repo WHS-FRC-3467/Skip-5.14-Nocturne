@@ -5,6 +5,7 @@
 package frc.robot.Util;
 
 /**
+ * This comment is copied from main
  * A Class to hold setpoints for both the Shooter and the Arm, since they work
  * in tandem.
  * 

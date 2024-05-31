@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.wpilibj2.command.Commands.*;
 
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.Constants.OperatorConstants;
 //import frc.robot.Commands.Autos;
 //import frc.robot.Commands.ExampleCommand;
@@ -16,6 +18,8 @@ import frc.robot.Subsystems.Stage.StageSubsystem;
 import frc.robot.Subsystems.LED.LEDSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Util.CommandXboxPS5Controller;
+import frc.robot.Vision.Limelight;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -33,9 +37,12 @@ public class RobotContainer {
     private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
     private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
     private final StageSubsystem m_StageSubsystem = new StageSubsystem();
+    private final Limelight m_LimeLight = new Limelight();
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController m_driverController = new CommandXboxController(
-            OperatorConstants.kDriverControllerPort);
+    CommandXboxPS5Controller m_driverController = new CommandXboxPS5Controller(0); // assuming 1 is assignment in DS
+    CommandXboxPS5Controller m_operatorController = new CommandXboxPS5Controller(1);
+    GenericHID m_driveRmbl = m_driverController.getHID();
+    GenericHID m_operatorRmbl = m_operatorController.getHID();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -69,7 +76,9 @@ public class RobotContainer {
         // Schedule `exampleMethodCommand` when the Xbox controller's B button is
         // pressed,
         // cancelling on release.
-        m_driverController.b().whileTrue(m_IntakeSubsystem.intakeFwdCommand(0.7));
+        m_driverController.leftBumper().whileTrue(m_IntakeSubsystem.intakeFwdCommand(0.7));
+        m_driverController.rightBumper().whileTrue(m_IntakeSubsystem.intakeRevCommand());
+        // Once the button is lifted, the intake should go back to its default command
     }
 
     /**

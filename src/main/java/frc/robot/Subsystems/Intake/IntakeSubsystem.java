@@ -11,8 +11,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DigitalInput;
-
+//import edu.wpi.first.wpilibj.DigitalInput;
+import frc.robot.Constants;
 import frc.robot.Constants.CanConstants;
 import frc.robot.Constants.DIOConstants;
 
@@ -21,7 +21,8 @@ public class IntakeSubsystem extends SubsystemBase {
     // Initalize Motors and Beam Break
     TalonFX m_intakeLead = new TalonFX(CanConstants.k_INTAKE_LEFT_CAN_ID);
     TalonFX m_intakeFollow = new TalonFX(CanConstants.k_INTAKE_RIGHT_CAN_ID);
-    DigitalInput m_intakeBeam = new DigitalInput(DIOConstants.k_INTAKE_BEAM_BREAK);
+
+    // m_intakeLead.setNeutralMode(1);
 
     /** Creates a new IntakeSubsystem. */
     public IntakeSubsystem() {
@@ -44,22 +45,30 @@ public class IntakeSubsystem extends SubsystemBase {
      *
      * @return value of some boolean subsystem state, such as a digital sensor.
      */
-    public boolean isIntakeAtSpeed() {
-        // Query some boolean state, such as a digital sensor.
+    public boolean isIntakeAtSpeed(double targetSpeed, double tolerance) {
+        // Intake is at Speed if it is within the allowed tolerance, returns false if
+        // not
+        if ((m_intakeLead.get() < targetSpeed + tolerance) && (m_intakeLead.get() > targetSpeed - tolerance)) {
+            return true;
+        }
         return false;
     }
 
     public void intakeForward(double speed) {
         // Actually tell motors to run at the speed
         if (speed >= 0.1) {
-            speed += 1;
+            m_intakeLead.set(speed);
         }
     }
 
     public void intakeReverse(double speed) {
-        if (speed >= 0.1) {
-            speed -= 1;
+        if (speed <= -0.1) {
+            m_intakeLead.set(speed);
         }
+    }
+
+    public void stopIntake() {
+        m_intakeLead.set(0.0);
     }
 
     /**
@@ -78,7 +87,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command intakeRevCommand() {
         // Inline construction of command goes here.
         // Subsystem::RunOnce implicitly requires `this` subsystem.
-        return runOnce(() -> intakeReverse(1));
+        return runOnce(() -> intakeReverse(Constants.IntakeConstants.k_INTAKE_REV_SPEED));
 
+    }
+
+    public Command stopIntakeCommand() {
+        return runOnce(() -> stopIntake());
     }
 }

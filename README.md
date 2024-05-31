@@ -1,14 +1,34 @@
 
 # 3467 Nocturne Code
 
-- This is now the active competition code, 
+- This branch is not official competition code, only offseason coding practice for new programmers.
 - This code base was started with Jason Daming's improved version of the CTRE Swerve Example (see notes below).
 - Added basic Subsystems: Drive, Arm, Shooter, Intake and Stage.
 - Cleaned up and reorganized RobotContainer.jave to make it clearer for new programmers.
 - Shooter subsystem features TunableNumber constants for tuning Velocity PID via the Shuffleboard.
 - Arm, Shooter and Intake use Falcons and therefore the Phoenix 6 library. Intake and Stage use Talon SRX, and therefore the Phoenix 5 library.
 - This code uses the CTRE Swerve Generator built into Tuner X. After generating a project using the Generator, copy the newly-generated TunerConstants.java into this code.
+- Development, Testing, and Stable will be used to determine the progress for subsystems/commands/features
 
+# Development
+- Intake Subsystem
+- Driver Controls
+- Arm Subsystem
+- intakeNote command
+
+# Testing
+- Intake Default Command
+# Stable
+- Features that work, but may be put back in development again if it needs updating
+
+# To be Started
+
+- Stage Subsystem
+- Shooter Subsystem
+- Limelight + Note Following
+- Drivetrain
+- Photonvision and April Tag Location
+- Look and Shoot
 
 # CTRE Swerve Example
 

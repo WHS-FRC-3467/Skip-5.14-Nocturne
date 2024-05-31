@@ -4,6 +4,7 @@
 
 package frc.robot.Subsystems.Intake;
 
+import frc.robot.Subsystems.Intake.IntakeSubsystem;
 // figure out how to use java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,9 +13,13 @@ import frc.robot.Subsystems.Stage.StageSubsystem;
 
 public class IntakeDefault extends Command {
 
-    /** Creates a new IntakeDefault. */
-    public IntakeDefault() {
+    private final IntakeSubsystem m_intakeSub;
 
+    /** Creates a new IntakeDefault. */
+    public IntakeDefault(IntakeSubsystem intakeSubsystem) {
+
+        m_intakeSub = intakeSubsystem;
+        addRequirements(m_intakeSub);
     }
 
     // Called when the command is initially scheduled.
@@ -25,7 +30,7 @@ public class IntakeDefault extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-
+        m_intakeSub.stopIntake();
     }
 
     // Called once the command ends or is interrupted.
