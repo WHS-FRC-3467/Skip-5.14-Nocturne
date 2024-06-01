@@ -6,7 +6,8 @@
 - Added basic Subsystems: Drive, Arm, Shooter, Intake and Stage.
 - Cleaned up and reorganized RobotContainer.jave to make it clearer for new programmers.
 - Shooter subsystem features TunableNumber constants for tuning Velocity PID via the Shuffleboard.
-- Arm, Shooter and Intake use Falcons and therefore the Phoenix 6 library. Intake and Stage use Talon SRX, and therefore the Phoenix 5 library.
+- Arm, Shooter and Intake use Falcons and therefore the Phoenix 6 library. Intake and uses Talon SRX, and therefore the Phoenix 5 library.
+- Stage no longer uses Talon SRX, it is testing Thrify Nova.
 - This code uses the CTRE Swerve Generator built into Tuner X. After generating a project using the Generator, copy the newly-generated TunerConstants.java into this code.
 - Development, Testing, and Stable will be used to determine the progress for subsystems/commands/features
 
@@ -16,8 +17,10 @@
 - Arm Subsystem
 - intakeNote command
 
-# Testing
+# Testing/Ready For Testing
 - Intake Default Command
+- Drivetrain (once driver controls are ready)
+
 # Stable
 - Features that work, but may be put back in development again if it needs updating
 
@@ -26,7 +29,7 @@
 - Stage Subsystem
 - Shooter Subsystem
 - Limelight + Note Following
-- Drivetrain
+- Trap Subsystem
 - Photonvision and April Tag Location
 - Look and Shoot
 

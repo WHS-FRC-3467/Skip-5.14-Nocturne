@@ -35,6 +35,10 @@ public final class Constants {
 
     }
 
+    public static class RobotConstants {
+        public static final boolean kIsTuningMode = true;
+    }
+
     public static class IntakeConstants {
         public static final double k_INTAKE_REV_SPEED = -0.8;
     }
