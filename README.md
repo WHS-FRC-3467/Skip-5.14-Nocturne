@@ -16,6 +16,7 @@
 - Driver Controls
 - Arm Subsystem
 - intakeNote command
+- Shooter Subsystem
 
 # Testing/Ready For Testing
 - Intake Default Command
@@ -27,7 +28,7 @@
 # To be Started
 
 - Stage Subsystem
-- Shooter Subsystem
+- Setpoints enumeration
 - Limelight + Note Following
 - Trap Subsystem
 - Photonvision and April Tag Location

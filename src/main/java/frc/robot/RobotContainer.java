@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.wpilibj2.command.Commands.*;
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
+
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.Constants.OperatorConstants;
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Util.CommandXboxPS5Controller;
 import frc.robot.Vision.Limelight;
+import frc.robot.generated.TunerConstants;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -33,13 +36,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private final CommandSwerveDrivetrain m_CommandSwerveDrivetrain = new CommandSwerveDrivetrain();
+    private final CommandSwerveDrivetrain m_Drivetrain = TunerConstants.DriveTrain;
     private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
     private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
     private final StageSubsystem m_StageSubsystem = new StageSubsystem();
     private final Limelight m_LimeLight = new Limelight();
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    CommandXboxPS5Controller m_driverController = new CommandXboxPS5Controller(0); // assuming 1 is assignment in DS
+    CommandXboxPS5Controller m_driverController = new CommandXboxPS5Controller(0);
     CommandXboxPS5Controller m_operatorController = new CommandXboxPS5Controller(1);
     GenericHID m_driveRmbl = m_driverController.getHID();
     GenericHID m_operatorRmbl = m_operatorController.getHID();

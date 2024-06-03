@@ -45,30 +45,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        m_robotContainer.disablePIDSubsystems();
-        SmartDashboard.putData("Auto Path Preview", m_autoTraj);
+
     }
 
     @Override
     public void disabledPeriodic() {
-        // Get currently selected command
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-        // Check if is the same as the last one
-        if (m_autonomousCommand != m_lastAutonomousCommand && m_autonomousCommand != null) {
-            // Check if its contained in the list of our autos
-            if (AutoBuilder.getAllAutoNames().contains(m_autonomousCommand.getName())) {
-                // Clear the current path
-                m_pathsToShow.clear();
-                // Grabs all paths from the auto
-                for (PathPlannerPath path : PathPlannerAuto.getPathGroupFromAutoFile(m_autonomousCommand.getName())) {
-                    // Adds all poses to master list
-                    m_pathsToShow.addAll(path.getPathPoses());
-                }
-                // Displays all poses on Field2d widget
-                m_autoTraj.getObject("traj").setPoses(m_pathsToShow);
-            }
-        }
-        m_lastAutonomousCommand = m_autonomousCommand;
+
     }
 
     @Override
@@ -77,12 +59,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        m_robotContainer.resetPathPlannerOverrides();
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.schedule();
-        }
     }
 
     @Override

@@ -26,7 +26,7 @@ public final class Constants {
     public static class CanConstants {
         public static final int k_INTAKE_LEFT_CAN_ID = 15;
         public static final int k_INTAKE_RIGHT_CAN_ID = 16;
-
+        public static final int k_STAGE_CAN_ID = 17;
     }
 
     public static class DIOConstants {
@@ -44,10 +44,18 @@ public final class Constants {
     }
 
     public static class ShooterConstants {
+        // This enum is used to keep track of what the shooter is and should be doing.
+        // Example: ShooterState currentShooterState = ShooterState.SPOOLING;
+        public enum ShooterState {
+            STOP,
+            SPOOLING,
+            REVVING,
+            READY
+        }
 
     }
 
-    public static class ClimberConstants {
+    public static class StageConstants {
 
     }
 
@@ -66,6 +74,19 @@ public final class Constants {
         public static final double kMaxAccelerationRadPerSecSquared = 200;
 
         public static final double k_ARM_ENCODER_OFFSET_RADIANS = 0;
+
+        public enum ArmState {
+            STOWED,
+            SUBWOOFER,
+            PODIUM,
+            WING,
+            AMP,
+            CLIMB,
+            HARMONY,
+            AIMING,
+            MOVING,
+            FEED
+        }
 
     }
 }

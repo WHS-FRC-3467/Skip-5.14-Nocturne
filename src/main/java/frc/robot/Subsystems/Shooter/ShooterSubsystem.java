@@ -18,11 +18,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CanConstants;
 //import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.ShooterConstants.ShooterState;
 import frc.robot.Util.Setpoints;
 import frc.robot.Util.TunableNumber;
 import frc.robot.sim.PhysicsSim;
 
 public class ShooterSubsystem extends SubsystemBase {
+
+    // Initialize devices
+    TalonFX m_shooterLeft = new TalonFX(18);
+    TalonFX m_shooterRight = new TalonFX(19);
+
+    // Declare ShooterState Variables - keep track of what the shooter is doing
+    ShooterState m_ShooterState = ShooterState.STOP;
+    ShooterState m_GoalState = ShooterState.STOP;
 
     public ShooterSubsystem() {
 

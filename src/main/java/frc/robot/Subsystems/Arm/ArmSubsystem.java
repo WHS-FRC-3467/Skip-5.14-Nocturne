@@ -4,8 +4,11 @@
 
 package frc.robot.Subsystems.Arm;
 
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -17,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.CanConstants;
 import frc.robot.Constants.DIOConstants;
+import frc.robot.Constants.ArmConstants.ArmState;
 
 /* 
  * ArmSubsystem - Subsystem to control all Arm motion using a Trapezoidal Profiled PID controller
@@ -29,11 +33,15 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
     TalonFX m_armLead = new TalonFX(CanConstants.k_INTAKE_LEFT_CAN_ID);
     TalonFX m_armFollow = new TalonFX(CanConstants.k_INTAKE_RIGHT_CAN_ID);
-    private DutyCycleEncoder m_encoder = new DutyCycleEncoder(DIOConstants.k_ARM_ENCODER_ID);
+    CANcoder m_armEncoder  = new CANcoder(DIOConstants.k_ARM_ENCODER_ID);
 
     private final ArmFeedforward m_feedforward = new ArmFeedforward(
             ArmConstants.kSVolts, ArmConstants.kGVolts,
             ArmConstants.kVVoltSecondPerRad, ArmConstants.kAVoltSecondSquaredPerRad);
+
+    // Keep track of what the Arm is doing
+    ArmState m_ArmState = ArmState.STOWED;
+    ArmState m_FutureArm = ArmState.STOWED;
 
     /*
      * Constructor
@@ -52,8 +60,17 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         // Start arm at rest in neutral position
         setGoal(ArmConstants.k_ARM_ENCODER_OFFSET_RADIANS);
 
-        TalonFXConfiguration m_armConfig = new TalonFXConfiguration();
+        // https://v6.docs.ctr-electronics.com/en/latest/docs/hardware-reference/talonfx/improving-performance-with-current-limits.html
+        var talonFXConfigurator = m_armLead.getConfigurator();
+        var limitConfigs = new CurrentLimitsConfigs();
 
+        // enable stator current limit
+        limitConfigs.StatorCurrentLimit = 120;
+        limitConfigs.StatorCurrentLimitEnable = true;
+
+        talonFXConfigurator.apply(limitConfigs);
+
+        // Check this out: https://v6.docs.ctr-electronics.com/en/latest/docs/api-reference/api-usage/configuration.html
         /*
          * config.supplyCurrLimit.enable = true;
          * config.supplyCurrLimit.triggerThresholdCurrent = 40; // the peak supply
@@ -79,22 +96,24 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
          * Apply the configurations to the motors, and set one to follow the other in
          * the same direction
          */
-        // m_armLeader.getConfigurator().apply(leadConfiguration);
-        // m_armFollower.getConfigurator().apply(followerConfiguration);
-        // m_armFollower.setControl(new Follower(m_armLeader.getDeviceID(), true));
+        //m_armLead.getConfigurator().apply(talonFXConfigurator);
+        //m_armFollow.getConfigurator().apply(talonFXConfigurator);
+        m_armFollow.setControl(new Follower(m_armLead.getDeviceID(), true));
 
     }
 
     @Override
     public void periodic() {
 
+        // Put the measurement of the arm and state of the arm on shuffleboard
     }
 
     @Override
     protected void useOutput(double output, State setpoint) {
 
+        double correctedPosition = setpoint.position - ArmConstants.k_ARM_ENCODER_OFFSET_RADIANS;
         // Calculate the feedforward from the sepoint
-        double feedforward = m_feedforward.calculate(setpoint.position, setpoint.velocity);
+        double feedforward = m_feedforward.calculate(correctedPosition, setpoint.velocity);
         // Add the feedforward to the PID output to get the motor output
         m_armLead.setVoltage(output + feedforward);
 
@@ -102,8 +121,8 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
     @Override
     protected double getMeasurement() {
-
-        return m_encoder.getDistance() + ArmConstants.k_ARM_ENCODER_OFFSET_RADIANS;
+        //getAbsolutePosition returns in rotations, not radians, hence the x2pi
+        return (m_armEncoder.getAbsolutePosition().getValueAsDouble()*2*Math.PI) - ArmConstants.k_ARM_ENCODER_OFFSET_RADIANS;
 
     }
 
