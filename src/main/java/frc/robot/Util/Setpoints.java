@@ -29,50 +29,11 @@ public class Setpoints {
     }
 
     public enum GameState {
-        STOWED, INTAKE, SUBWOOFER, AMP, PODIUM, WING, PREPCLIMB, CLIMB, TRAP, LOOKUP, FEED, HARMONY
+        STOWED, INTAKE, SUBWOOFER, AMP, CLIMB, HARMONY, AIM, FEED, CUSTOM
     }
 
     // Display the commanded Arm state on the dashboard
     public static void displayArmState(GameState state) {
-
-        switch (state) {
-            case STOWED:
-                SmartDashboard.putString("Arm State", "STOWED");
-                break;
-            case INTAKE:
-                SmartDashboard.putString("Arm State", "INTAKE");
-                break;
-            case SUBWOOFER:
-                SmartDashboard.putString("Arm State", "SUBWOOFER");
-                break;
-            case AMP:
-                SmartDashboard.putString("Arm State", "AMP");
-                break;
-            case PODIUM:
-                SmartDashboard.putString("Arm State", "PODIUM");
-                break;
-            case WING:
-                SmartDashboard.putString("Arm State", "WING");
-                break;
-            case PREPCLIMB:
-                SmartDashboard.putString("Arm State", "PREPCLIMB");
-                break;
-            case CLIMB:
-                SmartDashboard.putString("Arm State", "CLIMB");
-                break;
-            case TRAP:
-                SmartDashboard.putString("Arm State", "TRAP");
-                break;
-            case LOOKUP:
-                SmartDashboard.putString("Arm State", "LOOKUP");
-                break;
-            case FEED:
-                SmartDashboard.putString("Arm State", "FEED");
-                break;
-            default:
-                SmartDashboard.putString("Arm State", "OTHER");
-        }
+        SmartDashboard.putString("Arm State", state.toString());
     }
-
-
 }

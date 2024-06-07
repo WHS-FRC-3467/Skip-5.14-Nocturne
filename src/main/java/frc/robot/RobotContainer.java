@@ -101,7 +101,6 @@ public class RobotContainer {
     IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
     StageSubsystem m_stageSubsystem = new StageSubsystem();
     ArmSubsystem m_armSubsystem = new ArmSubsystem();
-    TrapSubsystem m_trapSubsystem = new TrapSubsystem(m_drivetrain);
     PhotonVision m_photonVision = new PhotonVision(m_drivetrain,0);
     PhotonVision m_photonVision2 = new PhotonVision(m_drivetrain,1);
     Limelight m_limelightVision = new Limelight(m_drivetrain);

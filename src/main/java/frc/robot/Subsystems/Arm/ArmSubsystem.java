@@ -15,6 +15,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
@@ -43,7 +45,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
     private static TunableNumber tuneArmSetpoint = new TunableNumber("Tunable Arm Setpoint", 0.0);
     
-
+    Debouncer atSetpointDebouncer = new Debouncer(.1,DebounceType.kBoth);
     /* Creates a new ArmSubsystem */
     private TalonFX m_armLeader = new TalonFX(CanConstants.ID_ArmLeader);
     private TalonFX m_armFollower = new TalonFX(CanConstants.ID_ArmFollower);
@@ -84,11 +86,8 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     }
     private armAction m_armAction = armAction.kSTOWED;
 
-    TunableNumber tempDegree = new TunableNumber("Set Arm To Degrees", 0.0);
-    
     private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
 
-    private int scansAtPos = 0;
     private boolean armSteadyAtSetpoint = false;
 
     /*
@@ -112,19 +111,16 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         m_encoder.setDutyCycleRange(ArmConstants.kDuty_Cycle_Min, ArmConstants.kDuty_Cycle_Max);
 
         // Config Motors
-        var leadConfiguration = new TalonFXConfiguration();
-        var followerConfiguration = new TalonFXConfiguration();
-        
+        var armMotorConfiguration = new TalonFXConfiguration();
+
         // Set the output mode to brake
-        leadConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        followerConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        armMotorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         // Set the motor's Neutral Deadband
-        leadConfiguration.MotorOutput.DutyCycleNeutralDeadband = ArmConstants.kNeutral_Deadband;
-        followerConfiguration.MotorOutput.DutyCycleNeutralDeadband = ArmConstants.kNeutral_Deadband;
+        armMotorConfiguration.MotorOutput.DutyCycleNeutralDeadband = ArmConstants.kNeutral_Deadband;
 
         /* Set the turning direction */
-        leadConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        armMotorConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         /* Current Limiting for the arm */
         m_currentLimits.SupplyCurrentLimit = 30; // Limit to 30 amps
@@ -134,22 +130,15 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
         m_currentLimits.StatorCurrentLimit = 60; // Limit stator to 60 amps
         m_currentLimits.StatorCurrentLimitEnable = true; // And enable it
-        leadConfiguration.CurrentLimits = m_currentLimits;
-        followerConfiguration.CurrentLimits = m_currentLimits;
+        armMotorConfiguration.CurrentLimits = m_currentLimits;
 
         /*
          * Apply the configurations to the motors, and set one to follow the other in
          * the same direction
          */
-        m_armLeader.getConfigurator().apply(leadConfiguration);
-        m_armFollower.getConfigurator().apply(followerConfiguration);
+        m_armLeader.getConfigurator().apply(armMotorConfiguration);
+        m_armFollower.getConfigurator().apply(armMotorConfiguration);
         m_armFollower.setControl(new Follower(m_armLeader.getDeviceID(), true));
-
-        // optimize StatusSignal rates for the Talons
-        //m_armLeader.getSupplyVoltage().setUpdateFrequency(4);
-        //m_armLeader.optimizeBusUtilization();
-        //m_armFollower.getSupplyVoltage().setUpdateFrequency(4);
-        //m_armFollower.optimizeBusUtilization();
 
 
         // Put controls for the PID controller on the dashboard
@@ -191,16 +180,10 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         } else if (atSetpoint) {
             m_armAction = armAction.kONPOINT;            
         }
-
+        
+        // Checks if at setpoint for more then debounce time
         if (atSetpoint) {
-            if (scansAtPos < 6) {
-                scansAtPos += 1;
-            } else {
-                armSteadyAtSetpoint = true;
-            }
-        } else {
-            scansAtPos = 0;
-            armSteadyAtSetpoint = false;
+            armSteadyAtSetpoint = atSetpointDebouncer.calculate(atSetpoint);
         }
         // Display useful info on the SmartDashboard
         if (Constants.RobotConstants.kIsTuningMode) {

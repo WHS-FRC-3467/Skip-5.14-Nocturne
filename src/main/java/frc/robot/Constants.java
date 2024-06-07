@@ -44,12 +44,8 @@ public final class Constants {
         public static final Setpoints INTAKE =    new Setpoints(1.0, 2.0, 0.0, 0.0, GameState.INTAKE);
         public static final Setpoints SUBWOOFER = new Setpoints(1.0, 1.0, 30.0,25.0,  GameState.SUBWOOFER);
         public static final Setpoints AMP =       new Setpoints(93.0, 0.4, 40.0,40.0,  GameState.AMP);
-        public static final Setpoints PODIUM =    new Setpoints(23.0, 0.4, 50.0,50.0,  GameState.PODIUM);
-        public static final Setpoints WING =      new Setpoints(30.0, 0.4, 70.0,60.0,  GameState.WING);
-        public static final Setpoints PREPCLIMB = new Setpoints(0.0, 0.4, 0.0,0.0,  GameState.PREPCLIMB);
         public static final Setpoints CLIMB =     new Setpoints(88.0, 0.4, 0.0,0.0,  GameState.CLIMB); //88
-        public static final Setpoints TRAP =      new Setpoints(-3.0, 0.4, 18.8,18.8,  GameState.TRAP);
-        public static final Setpoints LOOKUP =    new Setpoints(0.0, 0.5, 20.0,25.0,  GameState.LOOKUP);
+        public static final Setpoints LOOKUP =    new Setpoints(0.0, 0.5, 20.0,25.0,  GameState.AIM);
         public static final Setpoints FEED =      new Setpoints(10.0, 2, 28,28.0,  GameState.FEED);
         public static final Setpoints HARMONY =   new Setpoints(122.0, 2, 0,0,  GameState.HARMONY);
 

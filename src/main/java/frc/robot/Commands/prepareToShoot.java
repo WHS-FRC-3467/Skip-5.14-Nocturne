@@ -48,12 +48,8 @@ public class prepareToShoot extends Command {
         m_shooterSubsystem.setShooterSetpoints(m_setpoints);
         // ... then run the Shooter
         m_shooterSubsystem.runShooter();
+        m_armSubsystem.updateArmSetpoint(m_setpoints);
 
-        // After we have a Note in the Stage, bring Arm to requested position
-        // Don't require a Note if we are trying to STOW the arm or CLIMB
-        if (m_haveNote.getAsBoolean() || m_setpoints.state == GameState.STOWED || m_setpoints.state == GameState.CLIMB || m_setpoints.state == GameState.TRAP) {
-            m_armSubsystem.updateArmSetpoint(m_setpoints);
-        }
 
     }
 

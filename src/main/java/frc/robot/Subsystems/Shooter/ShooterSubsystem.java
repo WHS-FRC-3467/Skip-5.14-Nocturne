@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -246,16 +247,8 @@ public class ShooterSubsystem extends SubsystemBase {
      * @return true if the error of the shooter is within the tolerance
      */
     public boolean areWheelsAtSpeed() {
-        double leftErr = Math.abs(m_ShooterSetpointL.get() - getShooterVelocity(kShooterSide.kLEFT));
-        double rightErr = Math.abs(m_ShooterSetpointR.get() - getShooterVelocity(kShooterSide.kRIGHT));
-        return (leftErr + rightErr / 2.0) < ShooterConstants.kShooterTolerance;
-
-    }
-
-    public boolean areAtMinSpeed() {
-        double leftErr = Math.abs(20 - getShooterVelocity(kShooterSide.kLEFT));
-        double rightErr = Math.abs(20 - getShooterVelocity(kShooterSide.kRIGHT));
-        return (leftErr + rightErr / 2.0) < ShooterConstants.kShooterTolerance;
+        return MathUtil.isNear(m_ShooterSetpointL.get(), getShooterVelocity(kShooterSide.kLEFT), ShooterConstants.kShooterTolerance) 
+            && MathUtil.isNear(m_ShooterSetpointR.get(), getShooterVelocity(kShooterSide.kRIGHT), ShooterConstants.kShooterTolerance);
 
     }
 
@@ -273,11 +266,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public Command runShooterCommand(double velocityL, double velocityR) {
         return new RunCommand(()->this.runShooter(velocityL, velocityR), this);
     }
-
-    public Command runTrapShooterCommand() {
-        return new RunCommand(()->this.runTrap(), this);
-    }
-
+    
     public Command runShooterCommand() {
         return new RunCommand(()->this.runShooter(), this);
     }
