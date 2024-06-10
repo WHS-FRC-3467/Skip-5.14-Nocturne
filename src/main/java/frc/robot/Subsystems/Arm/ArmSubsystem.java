@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /* 
  * ArmSubsystem - Subsystem to control all Arm motion using a Trapezoidal Profiled PID controller
@@ -41,7 +42,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
  * https://docs.wpilib.org/en/stable/docs/software/commandbased/profilepid-subsystems-commands.html
  *
  */
-public class ArmSubsystem extends ProfiledPIDSubsystem {
+public class ArmSubsystem extends SubsystemBase {
 
     private static TunableNumber tuneArmSetpoint = new TunableNumber("Tunable Arm Setpoint", 0.0);
     
@@ -90,19 +91,17 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
     private boolean armSteadyAtSetpoint = false;
 
+    ProfiledPIDController pidController = new ProfiledPIDController(
+                        ArmConstants.kP,
+                        ArmConstants.kI,
+                        ArmConstants.kD,
+                        new TrapezoidProfile.Constraints(ArmConstants.kArm_MaxVelocity, ArmConstants.kArm_MaxAcceleration));
+
     /*
      * Constructor
      */
     public ArmSubsystem() {
         
-
-        /* Create the Trapezoidal motion profile controller */
-        super(
-                new ProfiledPIDController(
-                        ArmConstants.kP,
-                        ArmConstants.kI,
-                        ArmConstants.kD,
-                        new TrapezoidProfile.Constraints(ArmConstants.kArm_Cruise, ArmConstants.kArm_Acceleration)));
 
         // Start arm at rest in STOWED position
         updateArmSetpoint(RobotConstants.STOWED);
@@ -143,9 +142,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
         // Put controls for the PID controller on the dashboard
         if (RobotConstants.kIsArmTuningMode) {
-        SmartDashboard.putData(this.m_controller);    
-        SmartDashboard.putData("Arm Coast Command", armCoastCommand());    
-        SmartDashboard.putData("Arm Brake Command", armBrakeCommand()); 
+        SmartDashboard.putData(pidController);    
         }   
     }
 

@@ -186,8 +186,8 @@ public final class Constants {
 
 
         // Profiled PID Constants
-        public static final double kArm_Cruise = 4.0;           // Radians per second
-        public static final double kArm_Acceleration = 10.0;   // Radians per second^2
+        public static final double kArm_MaxVelocity = 4.0;           // Radians per second
+        public static final double kArm_MaxAcceleration = 10.0;   // Radians per second^2
 
         public static final double kDuty_Cycle_Min = 1.0/1025.0;
         public static final double kDuty_Cycle_Max = 1024.0/1025.0;
