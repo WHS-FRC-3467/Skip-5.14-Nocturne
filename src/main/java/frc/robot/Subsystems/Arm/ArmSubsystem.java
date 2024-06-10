@@ -5,9 +5,11 @@
 package frc.robot.Subsystems.Arm;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -47,13 +49,13 @@ public class ArmSubsystem extends SubsystemBase {
 
     private static TunableNumber tuneArmSetpoint = new TunableNumber("Tunable Arm Setpoint", 0.0);
     
-    Debouncer atSetpointDebouncer = new Debouncer(.1,DebounceType.kBoth);
+    Debouncer atSetpointDebouncer = new Debouncer(.1,DebounceType.kRising);
     /* Creates a new ArmSubsystem */
     private TalonFX m_armLeader = new TalonFX(CanConstants.ID_ArmLeader);
     private TalonFX m_armFollower = new TalonFX(CanConstants.ID_ArmFollower);
 
     /* Set up to control the motors by Voltage */
-    private VoltageOut m_VoltageOutput = new VoltageOut(0.0);
+    private final PositionVoltage m_positionVoltage = new PositionVoltage(0);
 
     /* Neutral output control for disabling the Arm */
     private final NeutralOut m_neutral = new NeutralOut();
@@ -92,6 +94,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     private boolean armSteadyAtSetpoint = false;
 
+    
+
     ProfiledPIDController pidController = new ProfiledPIDController(
                         ArmConstants.kP,
                         ArmConstants.kI,
@@ -102,6 +106,10 @@ public class ArmSubsystem extends SubsystemBase {
      * Constructor
      */
     public ArmSubsystem() {
+        var slot0Configs = new Slot0Configs();
+        slot0Configs.kP = ArmConstants.kP; // An error of 1 rotation results in 2.4 V output
+        slot0Configs.kI = 0; // no output for integrated error
+        slot0Configs.kD = 0.1; // A velocity of 1 rps results in 0.1 V output
         
 
         // Start arm at rest in STOWED position
@@ -166,7 +174,7 @@ public class ArmSubsystem extends SubsystemBase {
                 System.out.println(armPos);
                 // Stop the arm and disable the PID
                 neutralOutput();
-                this.disable();
+                pidController.();
             }
 
         }
