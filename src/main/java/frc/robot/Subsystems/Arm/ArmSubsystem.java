@@ -18,6 +18,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -187,7 +188,6 @@ public class ArmSubsystem extends SubsystemBase {
             SmartDashboard.putBoolean("Arm Joint at Setpoint?", atSetpoint);
             SmartDashboard.putBoolean("Arm at Setpoint?", isArmAtSetpoint());
             SmartDashboard.putBoolean("Arm Steady?", armSteadyAtSetpoint);
-            SmartDashboard.putNumber("Count", scansAtPos);
             SmartDashboard.putNumber("Arm Joint Setpoint", m_armSetpoint);
             SmartDashboard.putNumber("Raw Arm Encoder ", getJointPosAbsolute());
             SmartDashboard.putNumber("Arm Angle Uncorrected", dutyCycleToDegrees(getJointPosAbsolute()));
@@ -295,12 +295,6 @@ public class ArmSubsystem extends SubsystemBase {
         setGoal(m_tpState);
     }
 
-    public double getDegrees() {
-        // Get the smart dashboard
-        return tempDegree.get();
-
-    }
-
     /** Override the enable() method so we can set the goal to the current position
      * 
      *  The super method resets the controller and sets its current setpoint to the 
@@ -383,24 +377,6 @@ public class ArmSubsystem extends SubsystemBase {
         return armSteadyAtSetpoint;
     }
 
-    public void armCoastMode() {
-        m_armLeader.setNeutralMode(NeutralModeValue.Coast);
-        m_armFollower.setNeutralMode(NeutralModeValue.Coast);
-        disable();
-        m_armLeader.disable();
-
-        //m_armFollower.disable();
-        //m_armFollower.setControl(new Follower(m_armLeader.getDeviceID(), true));
-    } 
-
-    public void armBrakeMode() {
-        m_armLeader.setNeutralMode(NeutralModeValue.Brake);
-        m_armFollower.setNeutralMode(NeutralModeValue.Brake);
-        setGoal(getArmJointRadians());
-        enable();
-        //m_armFollower.setControl(new Follower(m_armLeader.getDeviceID(), true));
-    }
-
 
 
     /*
@@ -418,15 +394,6 @@ public class ArmSubsystem extends SubsystemBase {
             .until(()->this.isArmJointAtSetpoint());
     }
 
-    public Command moveToDegreeCommand() {
-        return new RunCommand(() -> this.updateArmInDegrees(this.getDegrees()));
-    }
 
-    public Command armCoastCommand() {
-        return new InstantCommand(() -> armCoastMode());
-    }
 
-    public Command armBrakeCommand() {
-        return new InstantCommand(() -> armBrakeMode());
-    }
 }
