@@ -173,11 +173,14 @@ public final class Constants {
         // Measured when the Arm is exactly horizontal
         public static final double kARM_HORIZONTAL_OFFSET = 181.6;
 
+        public static final double kMIN_ARM_ANGLE = -1;
+        public static final double kMAX_ARM_ANGLE = 130;
+
         // Feedforward Gains
         public static final double kS = .5;  // The Static Gain, in volts
-        public static final double kG = .4;  // The Gravity Gain, in volts //.25
-        public static final double kV = 2.5;  // The Velocity Gain, in volt seconds per radian
-        public static final double kA = .01;  // The acceleration gain, in volt seconds^2 per radian
+        public static final double kG = .4;  // The Gravity Gain, in volts 
+        public static final double kV = .04;  // The Velocity Gain, in volt seconds per radian
+        public static final double kA = .0001;  // The acceleration gain, in volt seconds^2 per radian
 
         // PID Control Gains
         public static final double kP = 18.0; // P Gain - Volts
@@ -186,8 +189,8 @@ public final class Constants {
 
 
         // Profiled PID Constants
-        public static final double kArm_MaxVelocity = 4.0;           // Radians per second
-        public static final double kArm_MaxAcceleration = 10.0;   // Radians per second^2
+        public static final double kArm_MaxVelocity = 180;           // degree per second
+        public static final double kArm_MaxAcceleration = 90;   // degree per second^2
 
         public static final double kDuty_Cycle_Min = 1.0/1025.0;
         public static final double kDuty_Cycle_Max = 1024.0/1025.0;
