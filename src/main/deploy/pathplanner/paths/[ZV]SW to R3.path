@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3952042110521514,
-        "y": 5.527389345566705
+        "x": 1.4869939617792667,
+        "y": 5.545747295712128
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7577229987678091,
-        "y": 4.966069932333802
+        "x": 1.8495127494949244,
+        "y": 4.984427882479225
       },
       "isLocked": false,
       "linkedName": "SW Mid"
     },
     {
       "anchor": {
-        "x": 2.61028579037215,
-        "y": 4.291754680375458
+        "x": 2.726155596595323,
+        "y": 4.214795910168958
       },
       "prevControl": {
-        "x": 1.9554131415955138,
-        "y": 4.934933174709655
+        "x": 1.3584883107613055,
+        "y": 4.425912336841322
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,14 +32,14 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 600.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 151.78264414527075,
+    "rotation": 168.69006752597986,
     "rotateFast": true
   },
   "reversed": false,

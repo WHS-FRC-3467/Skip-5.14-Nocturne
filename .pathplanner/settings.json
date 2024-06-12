@@ -14,9 +14,9 @@
     "Alpha",
     "Stable"
   ],
-  "defaultMaxVel": 6.0,
-  "defaultMaxAccel": 6.0,
-  "defaultMaxAngVel": 540.0,
-  "defaultMaxAngAccel": 720.0,
+  "defaultMaxVel": 4.5,
+  "defaultMaxAccel": 4.0,
+  "defaultMaxAngVel": 360.0,
+  "defaultMaxAngAccel": 600.0,
   "maxModuleSpeed": 4.5
 }

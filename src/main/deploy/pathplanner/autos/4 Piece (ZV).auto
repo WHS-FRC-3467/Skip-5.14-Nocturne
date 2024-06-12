@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4525645005705765,
-      "y": 5.543029205712317
+      "x": 1.4,
+      "y": 5.545747295712128
     },
     "rotation": 180.0
   },
@@ -59,7 +59,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.2
+                        "waitTime": 0.4
                       }
                     }
                   ]
@@ -103,7 +103,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.4
+                        "waitTime": 1.0
                       }
                     }
                   ]
@@ -147,7 +147,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.2
+                        "waitTime": 0.4
                       }
                     }
                   ]
@@ -169,59 +169,9 @@
           }
         },
         {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntake"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "[5P]PSW-M3"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.4
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[5P]M3-WL"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LookAndShoot"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "StopShooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[ASR]WL-M4"
           }
         }
       ]

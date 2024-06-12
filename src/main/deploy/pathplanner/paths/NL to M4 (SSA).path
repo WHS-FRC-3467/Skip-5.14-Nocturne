@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.212641275449033,
-        "y": 2.9113814498439217
+        "x": 2.388096855965791,
+        "y": 3.1691158539012236
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.177259221774156,
-        "y": 1.461306298981677
+        "x": 4.2240791034288625,
+        "y": 0.5496252587946778
       },
       "isLocked": false,
       "linkedName": "SSA Podium Score"
     },
     {
       "anchor": {
-        "x": 7.533524810639364,
-        "y": 1.8359822474630711
+        "x": 7.517580584550737,
+        "y": 1.8557993164820963
       },
       "prevControl": {
-        "x": 6.36410936639537,
-        "y": 0.9355323553951949
+        "x": 6.262474723646055,
+        "y": 1.2698040307021603
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,20 +50,20 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 600.0
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": -126.86989764584403,
+    "rotation": -137.48955292199906,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "Source Side Auto",
   "previewStartingState": {
-    "rotation": 134.2212703684774,
+    "rotation": 136.78991060824598,
     "velocity": 0
   },
   "useDefaultConstraints": true

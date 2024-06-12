@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.653740361864743,
-        "y": 6.2617073513836266
+        "x": 4.708814212301011,
+        "y": 6.445286852837857
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.486524828942605,
-        "y": 6.903036583297586
+        "x": 5.541598679378874,
+        "y": 7.0866160847518165
       },
       "isLocked": false,
       "linkedName": "ASR Mid Chain Score"
@@ -50,10 +50,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 600.0
   },
   "goalEndState": {
     "velocity": 2.0,

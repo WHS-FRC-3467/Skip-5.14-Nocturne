@@ -103,7 +103,7 @@ public class RobotContainer {
     ArmSubsystem m_armSubsystem = new ArmSubsystem();
     TrapSubsystem m_trapSubsystem = new TrapSubsystem(m_drivetrain);
     PhotonVision m_photonVision = new PhotonVision(m_drivetrain,0);
-    PhotonVision m_photonVision2 = new PhotonVision(m_drivetrain,1);
+    //PhotonVision m_photonVision2 = new PhotonVision(m_drivetrain,1);
     Limelight m_limelightVision = new Limelight(m_drivetrain);
     LEDSubsystem m_ledSubsystem = new LEDSubsystem(m_stageSubsystem, m_intakeSubsystem, m_armSubsystem,
             m_shooterSubsystem, m_drivetrain, m_photonVision);
@@ -137,7 +137,7 @@ public class RobotContainer {
 
         m_auto.ForwardReference = ForwardReference.RedAlliance;
         m_auto.HeadingController.setP(26);  //28
-        m_auto.HeadingController.setI(4); //0
+        m_auto.HeadingController.setI(15); //0
         m_auto.HeadingController.setD(6); 
         m_auto.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         m_auto.HeadingController.setTolerance(Units.degreesToRadians(0.5));
@@ -186,13 +186,13 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("RunIntake",Commands.deadline(new intakeNote(m_intakeSubsystem, m_stageSubsystem),
         m_armSubsystem.prepareForIntakeCommand()));
-        NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(40, 30));
+        NamedCommands.registerCommand("RunShooter", m_shooterSubsystem.runShooterCommand(23, 23));
         NamedCommands.registerCommand("SpeedUpShooter", m_shooterSubsystem.runShooterCommand(70, 50));
         NamedCommands.registerCommand("Passthrough", m_shooterSubsystem.runShooterCommand(8, 8));
         NamedCommands.registerCommand("RushPass", m_shooterSubsystem.runShooterCommand(11, 11));
         NamedCommands.registerCommand("StopShooter", m_shooterSubsystem.stopShooterCommand());
         NamedCommands.registerCommand("ShootNote",
-                m_stageSubsystem.feedWithBeam());
+                m_stageSubsystem.feedNote2ShooterCommand());
         NamedCommands.registerCommand("GetThatNote",
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
         NamedCommands.registerCommand("MoveAndShoot",

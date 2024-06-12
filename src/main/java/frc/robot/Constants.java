@@ -42,7 +42,7 @@ public final class Constants {
         // Shooter and Arm Setpoints
         public static final Setpoints STOWED =    new Setpoints(0.0, 0.2, 0.0, 0.0, GameState.STOWED);
         public static final Setpoints INTAKE =    new Setpoints(1.0, 2.0, 0.0, 0.0, GameState.INTAKE);
-        public static final Setpoints SUBWOOFER = new Setpoints(1.0, 1.0, 30.0,25.0,  GameState.SUBWOOFER);
+        public static final Setpoints SUBWOOFER = new Setpoints(1.0, 1.0, 27.0,27.0,  GameState.SUBWOOFER);
         public static final Setpoints AMP =       new Setpoints(93.0, 0.4, 40.0,40.0,  GameState.AMP);
         public static final Setpoints PODIUM =    new Setpoints(23.0, 0.4, 50.0,50.0,  GameState.PODIUM);
         public static final Setpoints WING =      new Setpoints(30.0, 0.4, 70.0,60.0,  GameState.WING);
@@ -126,7 +126,7 @@ public final class Constants {
 
     public static final class StageConstants {
 
-        public static final double kIntakeSpeed = 0.6;
+        public static final double kIntakeSpeed = 0.45;
         public static final double kFeedToShooterSpeed = 1.0;
         public static final double kFeedToAmpSpeed = 0.7;
         public static final double kFeedToTrapSpeed = 0.5;
@@ -138,7 +138,7 @@ public final class Constants {
 
     public static final class IntakeConstants {
 
-        public static final double kIntakeSpeed = 0.7;
+        public static final double kIntakeSpeed = 0.5;
         public static final double kEjectSpeed = -0.3;
     }
 

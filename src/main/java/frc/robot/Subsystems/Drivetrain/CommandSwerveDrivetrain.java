@@ -140,6 +140,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             customCurrentLimitConfigs.SupplyCurrentLimitEnable = SwerveConstants.kSwerveDriveSupplyCurrentLimitEnable;
             customCurrentLimitConfigs.SupplyCurrentThreshold = SwerveConstants.kSwerveDriveSupplyCurrentThreshold;
             customCurrentLimitConfigs.SupplyTimeThreshold = SwerveConstants.kSwerveDriveSupplyTimeThreshold;
+            customCurrentLimitConfigs.StatorCurrentLimit = 80;
+            customCurrentLimitConfigs.StatorCurrentLimitEnable = true;
 
             //Apply the new current limit configuration.
             currentConfigurator.apply(customCurrentLimitConfigs);
@@ -168,6 +170,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             SmartDashboard.putNumber("vel Offset drivertrain", getVelocityOffset().getDegrees());
             SmartDashboard.putBoolean("IsRotatingFast", isRotatingFast());
             SmartDashboard.putNumber("Rot Speed", getCurrentRobotChassisSpeeds().omegaRadiansPerSecond);
+            SmartDashboard.putNumber("Vel", getCurrentRobotChassisSpeeds().vxMetersPerSecond);
         }
 
         atAngle = (Math.abs(m_FieldCentricAiming.getAngleToSpeaker(getState().Pose.getTranslation())

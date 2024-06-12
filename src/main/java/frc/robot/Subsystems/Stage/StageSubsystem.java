@@ -153,7 +153,7 @@ public class StageSubsystem extends SubsystemBase {
     }
 
     public Command feedWithTimeout() {
-        return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
+        return new RunCommand(() -> this.ejectFront(0.8), this)
                 .withTimeout(0.5) // run for time
                 .andThen(() -> this.stopStage());
 

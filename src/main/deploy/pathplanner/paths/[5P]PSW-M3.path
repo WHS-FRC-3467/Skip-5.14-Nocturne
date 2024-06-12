@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3952042110521514,
-        "y": 5.527389345566705
+        "x": 1.4869939617792667,
+        "y": 5.545747295712128
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6073372035756286,
-        "y": 5.775221672529917
+        "x": 3.699126954302744,
+        "y": 5.79357962267534
       },
       "isLocked": false,
       "linkedName": "SW Mid"
@@ -66,10 +66,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 600.0
   },
   "goalEndState": {
     "velocity": 0,

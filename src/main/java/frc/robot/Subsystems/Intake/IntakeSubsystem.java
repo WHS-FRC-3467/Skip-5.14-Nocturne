@@ -126,6 +126,7 @@ public class IntakeSubsystem extends SubsystemBase {
      * @param speed speed to set intake motor at (-1,1)
      */
     public void runIntake(double speed) {
+        System.out.println("Starting stage");
         m_intakeMotor.setControl(m_speed.withOutput(speed));
         m_intakeRunning = true;
     }

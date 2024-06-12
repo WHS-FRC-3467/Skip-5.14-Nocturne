@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.212641275449033,
-        "y": 2.9113814498439217
+        "x": 2.388096855965791,
+        "y": 3.1691158539012236
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.653232078939186,
-        "y": 2.4616116712810565
+        "x": 2.828687659455944,
+        "y": 2.7193460753383585
       },
       "isLocked": false,
       "linkedName": "SSA Podium Score"
     },
     {
       "anchor": {
-        "x": 4.084643907356628,
-        "y": 2.0026629176454804
+        "x": 4.53982127337474,
+        "y": 1.8593705563479515
       },
       "prevControl": {
-        "x": 3.717484904448167,
-        "y": 2.388179870699364
+        "x": 4.172662270466279,
+        "y": 2.2448875094018357
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,10 +32,10 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 600.0
   },
   "goalEndState": {
     "velocity": 0,
