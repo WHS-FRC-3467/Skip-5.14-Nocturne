@@ -38,9 +38,9 @@ import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.LED.LEDSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Stage.StageSubsystem;
-import frc.robot.Subsystems.Trap.TrapSubsystem;
 import frc.robot.Util.CommandXboxPS5Controller;
 import frc.robot.Util.FieldCentricAiming;
+import frc.robot.Util.TunableNumber;
 import frc.robot.Vision.Limelight;
 import frc.robot.Vision.PhotonVision;
 import frc.robot.generated.TunerConstants;
@@ -209,17 +209,13 @@ public class RobotContainer {
                                 .withRotationalDeadband(0))
                 ).andThen(m_armSubsystem.prepareForIntakeCommand()));
         NamedCommands.registerCommand("OverrideToNote", new overrideAngleToNote(m_drivetrain, m_limelightVision));
-        NamedCommands.registerCommand("SubThatShot",
-                new subThatShot(m_shooterSubsystem, m_stageSubsystem));
+
     } 
 
     /**
      * Disables all ProfiledPIDSubsystem and PIDSubsystem instances. This should be
      * called on robot disable to prevent any integral windup.
      */
-    public void disablePIDSubsystems() {
-        m_armSubsystem.disable();
-    }
 
     public void stopShooter() {
         m_shooterSubsystem.stopShooter();
@@ -260,14 +256,10 @@ public class RobotContainer {
         if (RobotConstants.kIsShooterTuningMode) {
             SmartDashboard.putData("Update Shooter Gains", m_shooterSubsystem.updateShooterGainsCommand());
             SmartDashboard.putData("Run Shooter", m_shooterSubsystem.runShooterCommand());
-            SmartDashboard.putData("Stop Shooter", m_shooterSubsystem.stopShooterCommand());
-            SmartDashboard.putData("Arm to Angle", m_armSubsystem.moveToDegreeCommand());
+            SmartDashboard.putData("Stop Shooter", m_shooterSubsystem.stopShooterCommand());   
         }
         if (RobotConstants.kIsArmTuningMode) {
-            SmartDashboard.putData("Move Arm To Setpoint", m_armSubsystem.tuneArmSetPointCommand());
-        }
-        if (RobotConstants.kIsTuningMode){
-            //SmartDashboard.putNumber("Trap Speed", 22);
+            SmartDashboard.putData("Arm to Angle", m_armSubsystem.setArmAngleCommand(m_armSubsystem.tuneArmSetpoint.get()));
         }
     }
 
@@ -368,7 +360,7 @@ public class RobotContainer {
         // Driver: DPad Up: Reset the field-centric heading (when pressed)
         //m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
         
-        // Driver: While Left Bumper is held, reduce speed by 50%
+        // Driver: While Left Bumper is held, reduce speed by 25%
          m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = Constants.maxSpeed * .25)
                 .andThen(() -> m_AngularRate = Constants.maxAngularRate * .25));
         m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = Constants.maxSpeed)
@@ -385,7 +377,6 @@ public class RobotContainer {
         // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
         m_driverCtrl.rightTrigger(Constants.ControllerConstants.triggerThreashold)
                 .onTrue(m_stageSubsystem.feedNote2ShooterCommand()
-                        .withTimeout(1)
                         .andThen(m_armSubsystem.prepareForIntakeCommand()));
 
         m_driverCtrl.rightTrigger(Constants.ControllerConstants.triggerThreashold)
@@ -441,10 +432,6 @@ public class RobotContainer {
         m_armSubsystem.setDefaultCommand(
                 new ArmDefault(m_armSubsystem, m_operatorCtrl.leftBumper(), () -> (-1.0) * m_operatorCtrl.getLeftY()));
 
-        // Operator: DPad Left: Arm to Podium position (when pressed)
-        m_operatorCtrl.povLeft()
-                .onTrue(new prepareToShoot(RobotConstants.PODIUM, () -> m_stageSubsystem.isNoteInStage(),
-                        m_armSubsystem, m_shooterSubsystem));
 
         // Operator: DPad Up: Shooter/Arm to AMP Position & Speed (when pressed)
         m_operatorCtrl.povUp().onTrue(new prepareToShoot(RobotConstants.AMP, () -> true,
@@ -468,10 +455,8 @@ public class RobotContainer {
                                 .withTargetDirection(m_fieldCentricAiming.getAngleToFeed(m_drivetrain.getState().Pose.getTranslation()))
                                 .withDeadband(Constants.maxSpeed * 0.1))));
 
-        //m_operatorCtrl.back().onTrue(Commands.parallel(m_shooterSubsystem.runShooterCommand(25, 25), m_trapSubsystem.startBlowerCommand()));
-         m_operatorCtrl.back().onTrue(Commands.parallel(m_trapSubsystem.startBlowerCommand(),new prepareToShoot(RobotConstants.TRAP, () -> m_stageSubsystem.isNoteInStage(),
-                m_armSubsystem, m_shooterSubsystem)));
-        m_operatorCtrl.back().onFalse(Commands.parallel(m_shooterSubsystem.stopShooterCommand(), m_trapSubsystem.stopBlowerCommand())); 
+
+        //TODO: Make brownout driving actually work
         /* m_operatorCtrl.back().whileTrue(m_drivetrain.applyRequest( //Brownout compensation drive request
                         () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed * .75 * invertForAlliance()) //m_head is now m_auto
                                 .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed * .75 * invertForAlliance())

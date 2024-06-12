@@ -5,22 +5,20 @@
 package frc.robot.Subsystems.Arm;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -33,10 +31,10 @@ import frc.robot.Util.TunableNumber;
 import frc.robot.Util.Setpoints.GameState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /* 
  * ArmSubsystem - Subsystem to control all Arm motion using a Trapezoidal Profiled PID controller
@@ -47,7 +45,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class ArmSubsystem extends ProfiledPIDSubsystem {
 
-    private static TunableNumber tuneArmSetpoint = new TunableNumber("Tunable Arm Setpoint", 0.0);
+    public TunableNumber tuneArmSetpoint = new TunableNumber("Tunable Arm Angle", 0.0);
     
     Debouncer atSetpointDebouncer = new Debouncer(.1,DebounceType.kRising);
     /* Creates a new ArmSubsystem */
@@ -65,24 +63,17 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
     /* Feed Forward object to assist Profile Controller */
     private ArmFeedforward m_feedforward = new ArmFeedforward(
-            Constants.ArmConstants.kS,
-            Constants.ArmConstants.kG,
-            Constants.ArmConstants.kV,
-            Constants.ArmConstants.kA);
+            ArmConstants.kS,
+            ArmConstants.kG,
+            ArmConstants.kV,
+            ArmConstants.kA);
 
-    /* Create our own TP State object so a new one is not created on every setGoal() call  */
-    private TrapezoidProfile.State m_tpState = new TrapezoidProfile.State(0.0, 0.0);
-
-    /* Working (current) setpoint */
+    /* Working (current) setpoint, tolerance, and state */
     private double m_armSetpoint;
-
-    /* Working (current) tolerance */
     private double m_tolerance;
-
-    /* Working (currently requested) arm game state */
     private GameState m_armState;
 
-    private final CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
+    
 
     private boolean armSteadyAtSetpoint = false;
 
@@ -99,10 +90,12 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
         
         // Start arm at rest in STOWED position
-        updateArmSetpoint(RobotConstants.STOWED);
+        setArmSetpoint(RobotConstants.STOWED);
 
         // Config Duty Cycle Range for the encoders
         m_encoder.setDutyCycleRange(ArmConstants.kDuty_Cycle_Min, ArmConstants.kDuty_Cycle_Max);
+        m_encoder.setDistancePerRotation(360);
+        m_encoder.setPositionOffset(ArmConstants.kARM_STARTING_OFFSET/360);
 
         // Config Motors 
         var armMotorConfiguration = new TalonFXConfiguration();
@@ -117,14 +110,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         armMotorConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         /* Current Limiting for the arm */
-        m_currentLimits.SupplyCurrentLimit = 30; // Limit to 30 amps
-        m_currentLimits.SupplyCurrentThreshold = 50; // If we exceed 50 amps
-        m_currentLimits.SupplyTimeThreshold = 0.1; // For at least 0.1 second
-        m_currentLimits.SupplyCurrentLimitEnable = true; // And enable it
-
-        m_currentLimits.StatorCurrentLimit = 60; // Limit stator to 60 amps
-        m_currentLimits.StatorCurrentLimitEnable = true; // And enable it
-        armMotorConfiguration.CurrentLimits = m_currentLimits;
+        armMotorConfiguration.CurrentLimits = Constants.MotorCurrentConfigs.kArmCurrentConfig;
 
         /*
          * Apply the configurations to the motors, and set one to follow the other in
@@ -143,21 +129,17 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
     @Override
     public void periodic() {
+        
 
         // This method will be called once per scheduler run
 
         // Make sure the parent controller gets to do its own updates
         super.periodic();
-
-        boolean atSetpoint = isArmJointAtSetpoint();
         
-        // Validate current encoder reading; stop motors if out of range
-        double armPos = getAbsoluteAngle();
         //TODO: Test if encoder disconnect code works
         if (Robot.isReal()) {
-            if (!m_encoder.isConnected() || (armPos < 0.1 || armPos >= 1.0)) {
+            if (!m_encoder.isConnected()) {
                 System.out.println("Arm Encoder error reported in periodic().");
-                System.out.println(armPos);
                 // Stop the arm and disable the PID
                 m_armLeader.setControl(m_neutral);
                 this.disable();
@@ -165,19 +147,17 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
         }
         
-        
         // Checks if at setpoint for more then debounce time
-        if (atSetpoint) {
-            armSteadyAtSetpoint = atSetpointDebouncer.calculate(atSetpoint);
+        if (getController().atGoal()) {
+            armSteadyAtSetpoint = atSetpointDebouncer.calculate(getController().atGoal());
         }
         // Display useful info on the SmartDashboard
         if (Constants.RobotConstants.kIsTuningMode) {
-            SmartDashboard.putBoolean("Arm Joint at Setpoint?", atSetpoint);
+            SmartDashboard.putBoolean("Arm Joint at Setpoint?", getController().atGoal());
             SmartDashboard.putBoolean("Arm Steady?", armSteadyAtSetpoint);
-            SmartDashboard.putNumber("Arm Joint Setpoint", m_armSetpoint);
-            SmartDashboard.putNumber("Raw Arm Encoder ", getAbsoluteAngle());
-            SmartDashboard.putNumber("Arm Current Angle", getArmAngle());
-            SmartDashboard.putNumber("Arm Joint Error", getArmJointError());
+            SmartDashboard.putNumber("Arm Joint Setpoint", getController().getGoal().position);
+            SmartDashboard.putNumber("Arm Current Angle", m_encoder.getDistance());
+            SmartDashboard.putNumber("Arm Joint Error", getController().getPositionError());
         }
     }
 
@@ -211,11 +191,11 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
      * block, and pass the returned value to the control loop.
      * 
      * @return the measurement of the process variable, in this case, the Arm angle,
-     *         in radians corrected to 0.0 at the STOWED position
+     *         in degrees corrected to 0.0 at the STOWED position
      */
     @Override
     public double getMeasurement() {
-        return getArmAngle();
+        return m_encoder.getDistance();
     }
 
     /**
@@ -223,33 +203,18 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
      * 
      * @param setpoints - the desired position as a Setpoints object
      */
-    public boolean updateArmSetpoint(Setpoints setpoints) {
+    public void setArmSetpoint(Setpoints setpoints) {
 
         // Convert degrees to radians and set the profile goal
-        m_armSetpoint = setpoints.arm;
+        m_armSetpoint = MathUtil.clamp(setpoints.arm, ArmConstants.kMIN_ARM_ANGLE, ArmConstants.kMAX_ARM_ANGLE) ;
         m_tolerance = setpoints.tolerance;
         m_armState = setpoints.state;
 
-        // Arm setpoint must be passed  in radians
-        m_tpState.position = setpoints.arm;
-        setGoal(m_tpState);
+        getController().setTolerance(m_tolerance);
+        setGoal(m_armSetpoint);
 
         // Display requested Arm State to dashboard
         Setpoints.displayArmState(m_armState);
-        return isArmJointAtSetpoint();
-    }
-    
-    /**
-     * Update the PID controller's current Arm setpoint in degrees
-     * 
-     * @param degrees - the desired Arm position in degrees
-     */
-    public void updateArmInDegrees(double degrees) {
-
-        // Convert degrees to radians and set the profile goal
-        m_armSetpoint = degrees;
-        m_tpState.position = degrees;
-        setGoal(m_tpState);
     }
 
     /** Override the enable() method so we can set the goal to the current position
@@ -261,40 +226,20 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     @Override
     public void enable() {
         super.enable();
-        m_armSetpoint = getArmAngle(); 
-        setGoal(getArmAngle());
-    }
-
-    // Get the current Arm Joint position error (in degrees)
-    public double getArmJointError() {
-        return Math.abs(m_armSetpoint - getArmAngle());
-    }
-
-    // Check if Arm is at the setpoint (or within tolerance) - private method
-    public boolean isArmJointAtSetpoint() {
-        return getArmJointError() < m_tolerance;
+        setGoal(m_encoder.getDistance());
     }
 
     // Drive the Arm directly by providing a supply voltage value
     public void setArmVoltage(double voltage) {
+        super.disable();
         m_armLeader.setControl(m_VoltageOutput.withOutput(voltage));
-    }
-
-    // Returns the current encoder absolute value in degrees
-    public double getAbsoluteAngle() {
-        return m_encoder.getAbsolutePosition() * 360;
-    }
-    
-    // Corrects relative to a STOWED position of zero, in degrees
-    public double getArmAngle() {
-        return getAbsoluteAngle() - ArmConstants.kARM_STARTING_OFFSET;
     }
 
     // Takes a position in degrees relative to STOWED, and corrects it to be
     // relative to a HORIZONTAL position of zero.
     // This is used for Feedforward only, where we account for gravity using a
     // cosine function
-    public double correctArmJointForFeedFwd(double position) {
+    private double correctArmJointForFeedFwd(double position) {
         return position - (ArmConstants.kARM_HORIZONTAL_OFFSET - ArmConstants.kARM_STARTING_OFFSET);
     }
 
@@ -302,22 +247,39 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         return armSteadyAtSetpoint;
     }
 
-
-
     /*
      * Command Factories
      */
 
     // To position for Intake, move Arm to INTAKE position
     public Command prepareForIntakeCommand() {
-        return new RunCommand(()-> this.updateArmSetpoint(RobotConstants.INTAKE), this)
-            .until(()->this.isArmJointAtSetpoint());
-    }   
-    // To tune the lookup table using SmartDashboard
-    public Command tuneArmSetPointCommand() {
-        return new RunCommand(()-> this.updateArmInDegrees(tuneArmSetpoint.get()), this)
-            .until(()->this.isArmJointAtSetpoint());
+        return new RunCommand(()-> this.setArmSetpoint(RobotConstants.INTAKE), this)
+            .until(()-> getController().atGoal());
     }
+
+    public Command setArmSetpointCommand(Setpoints setpoint) {
+        return Commands.runOnce(() -> {
+            super.enable();
+            setArmSetpoint(setpoint);
+        }, this);
+    }
+
+    public Command setArmAngleCommand(double angle) {
+        return Commands.runOnce(() -> {
+            super.enable();
+            setGoal(angle);
+        }, this);
+    }
+
+    public Command disableArmCommand() {
+        return Commands.runOnce(() -> {
+            this.disable();
+            m_armLeader.setControl(m_neutral);
+        }, this);
+    }
+
+    Trigger encoderDisconnect = new Trigger(()-> !m_encoder.isConnected() && Robot.isReal()).onTrue(disableArmCommand());
+
 
 
 

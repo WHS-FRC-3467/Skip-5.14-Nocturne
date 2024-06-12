@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
@@ -252,6 +254,48 @@ public final class Constants {
         public static final double BLUE_AUTO_PENALTY_LINE = 9; // X distance from origin to center of the robot almost fully crossing the midline
         public static final double RED_AUTO_PENALTY_LINE = 7.4; // X distance from origin to center of the robot almost fully crossing the midline
 
+    }
+
+    public static class MotorCurrentConfigs {
+        public static final CurrentLimitsConfigs kDriveCurrentConfig = new CurrentLimitsConfigs()
+                .withSupplyCurrentLimit(30)
+                .withSupplyCurrentThreshold(90)
+                .withSupplyTimeThreshold(.1)
+                .withSupplyCurrentLimitEnable(true)
+                .withStatorCurrentLimit(80)
+                .withStatorCurrentLimitEnable(true);
+
+        public static final CurrentLimitsConfigs kSteerCurrentConfig = new CurrentLimitsConfigs()
+                .withSupplyCurrentLimit(30)
+                .withSupplyCurrentThreshold(90)
+                .withSupplyTimeThreshold(.1)
+                .withSupplyCurrentLimitEnable(true)
+                .withStatorCurrentLimit(60)
+                .withStatorCurrentLimitEnable(true);
+        
+        public static final CurrentLimitsConfigs kArmCurrentConfig = new CurrentLimitsConfigs()
+                .withSupplyCurrentLimit(30)
+                .withSupplyCurrentThreshold(50)
+                .withSupplyTimeThreshold(.1)
+                .withSupplyCurrentLimitEnable(true)
+                .withStatorCurrentLimit(60)
+                .withStatorCurrentLimitEnable(true);
+
+        public static final CurrentLimitsConfigs kIntakeCurrentConfig = new CurrentLimitsConfigs()
+                .withSupplyCurrentLimit(20)
+                .withSupplyCurrentThreshold(40)
+                .withSupplyTimeThreshold(.1)
+                .withSupplyCurrentLimitEnable(true)
+                .withStatorCurrentLimit(70)
+                .withStatorCurrentLimitEnable(true);
+
+        public static final CurrentLimitsConfigs kShooterCurrentConfig = new CurrentLimitsConfigs()
+                .withSupplyCurrentLimit(60)
+                .withSupplyCurrentThreshold(80)
+                .withSupplyTimeThreshold(.1)
+                .withSupplyCurrentLimitEnable(true)
+                .withStatorCurrentLimit(70)
+                .withStatorCurrentLimitEnable(true);
     }
 
     // Initial max is true top speed

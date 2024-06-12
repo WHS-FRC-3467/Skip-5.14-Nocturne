@@ -196,7 +196,7 @@ public class smartShoot extends Command {
         m_setpoints.arm = m_shotInfo.getArmAngle();
         m_setpoints.shooterLeft = m_shotInfo.getLeftShooter();
         m_setpoints.shooterRight = m_shotInfo.getRightShooter();
-        m_arm.updateArmSetpoint(m_setpoints);
+        m_arm.setArmTarget(m_setpoints);
         m_shooter.runShooter(m_setpoints.shooterLeft, m_setpoints.shooterRight);
 
         m_drivetrain.setVelocityOffset(lockedRotation, lockedDistance); // Pass the offsets to the drivetrain

@@ -48,7 +48,7 @@ public class prepareToShoot extends Command {
         m_shooterSubsystem.setShooterSetpoints(m_setpoints);
         // ... then run the Shooter
         m_shooterSubsystem.runShooter();
-        m_armSubsystem.updateArmSetpoint(m_setpoints);
+        m_armSubsystem.setArmTarget(m_setpoints);
 
 
     }

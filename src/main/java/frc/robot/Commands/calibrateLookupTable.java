@@ -49,7 +49,7 @@ public class calibrateLookupTable extends Command {
         m_arm = arm;
         m_shooter = shooter;
         m_fieldCentricAiming = new FieldCentricAiming();
-        currentSetpoint = new Setpoints(0, 0.4, 0, 0, GameState.LOOKUP);
+        currentSetpoint = new Setpoints(0, 0.4, 0, 0, GameState.AIM);
        
         if (Constants.RobotConstants.kIsAutoAimTuningMode) {
             SmartDashboard.putData("Lookup Table: Next Index", new InstantCommand(() -> incIndex()));
@@ -85,7 +85,7 @@ public class calibrateLookupTable extends Command {
         currentSetpoint.shooterLeft = leftSpeedTuner.get();
         currentSetpoint.shooterRight = rightSpeedTuner.get();
 
-        m_arm.updateArmSetpoint(currentSetpoint);
+        m_arm.setArmTarget(currentSetpoint);
         if (currentSetpoint.shooterLeft > 0) {
             m_shooter.runShooter(currentSetpoint.shooterLeft, currentSetpoint.shooterRight);
         } else {
