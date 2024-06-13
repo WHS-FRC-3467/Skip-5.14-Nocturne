@@ -4,7 +4,6 @@
 
 package frc.robot.Subsystems.Arm;
 
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
@@ -144,6 +143,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
                 m_armLeader.setControl(m_neutral);
                 this.disable();
             }
+            
 
         }
         
@@ -278,7 +278,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         }, this);
     }
 
-    Trigger encoderDisconnect = new Trigger(()-> !m_encoder.isConnected() && Robot.isReal()).onTrue(disableArmCommand());
+    Trigger encoderDisconnect = new Trigger(()-> !m_encoder.isConnected() && Robot.isReal()).debounce(.1).onTrue(disableArmCommand());
 
 
 

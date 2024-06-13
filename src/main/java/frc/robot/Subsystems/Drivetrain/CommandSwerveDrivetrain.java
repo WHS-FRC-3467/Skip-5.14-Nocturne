@@ -48,14 +48,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     
     
 
-    public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
-            SwerveModuleConstants... modules) {
-        super(driveTrainConstants, OdometryUpdateFrequency, modules);
-        configNeutralMode(NeutralModeValue.Brake);
-        setSwerveDriveCustomCurrentLimits(); // Setup the current Limits
-        configurePathPlanner();
-    }
-
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         configNeutralMode(NeutralModeValue.Brake);
