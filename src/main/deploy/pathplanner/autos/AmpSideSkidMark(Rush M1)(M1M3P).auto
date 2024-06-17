@@ -64,30 +64,6 @@
         {
           "type": "path",
           "data": {
-            "pathName": "[ASR]WL-M4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GetThatNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "[ASR]M4-WL"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LookAndShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "[ASR]WL-M3"
           }
         },
@@ -114,10 +90,28 @@
           "data": {
             "name": "StopShooter"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "[ASR]Fetch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GetThatNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LookAndShoot"
+          }
         }
       ]
     }
   },
-  "folder": "Development",
+  "folder": "Stable",
   "choreoAuto": false
 }
