@@ -144,9 +144,9 @@ public class RobotContainer {
 
         /* Static turning PID */
         m_cardinal.ForwardReference = ForwardReference.RedAlliance;
-        m_cardinal.HeadingController.setP(22);
+        m_cardinal.HeadingController.setP(15);
         m_cardinal.HeadingController.setI(10); //0
-        m_cardinal.HeadingController.setD(1.5);
+        m_cardinal.HeadingController.setD(4);
         m_cardinal.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         m_cardinal.HeadingController.setTolerance(Units.degreesToRadians(0.01));
 
