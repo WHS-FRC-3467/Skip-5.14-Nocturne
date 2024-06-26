@@ -122,7 +122,7 @@ public class RobotContainer {
 
         /* Dynamic turning PID */
         m_head.ForwardReference = ForwardReference.RedAlliance;
-        m_head.HeadingController.setP(25);
+        m_head.HeadingController.setP(20); //25
         m_head.HeadingController.setI(10); // 0
         m_head.HeadingController.setD(2);
         m_head.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -188,8 +188,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("Passthrough", m_shooterSubsystem.runShooterCommand(8, 8));
         NamedCommands.registerCommand("RushPass", m_shooterSubsystem.runShooterCommand(11, 11));
         NamedCommands.registerCommand("StopShooter", m_shooterSubsystem.stopShooterCommand());
-        NamedCommands.registerCommand("ShootNote",
-                m_stageSubsystem.feedNote2ShooterCommand());
+         NamedCommands.registerCommand("ShootNote",
+                m_stageSubsystem.feedNote2ShooterCommand()); 
+/*           NamedCommands.registerCommand("ShootNote",
+                m_stageSubsystem.ejectFrontCommand().withTimeout(.3).andThen(m_stageSubsystem.stopStageCommand())); */
         NamedCommands.registerCommand("GetThatNote",
                 new autoCollectNote(m_drivetrain, m_intakeSubsystem, m_stageSubsystem, m_limelightVision, m_note));
         NamedCommands.registerCommand("MoveAndShoot",

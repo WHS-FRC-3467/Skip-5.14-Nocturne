@@ -4,7 +4,6 @@
 
 package frc.robot.Commands;
 
-import java.sql.Driver;
 import java.util.function.BooleanSupplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -117,7 +116,7 @@ public class smartShoot extends Command {
         m_arm.enable();
         m_isFinished = false;
         timerIsRunning = false;
-        m_stage.checkBeam();
+        //m_stage.checkBeam();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -129,8 +128,8 @@ public class smartShoot extends Command {
         speeds = m_drivetrain.getFieldRelativeChassisSpeeds();
 
         // Calculate change in x/y distance due to time and velocity
-        moveDelta = new Translation2d(timeToBeReady.get() * (speeds.vxMetersPerSecond),
-                timeToBeReady.get() * (speeds.vyMetersPerSecond));
+        moveDelta = new Translation2d((timeToBeReady.get()-shotTimer.get()) * (speeds.vxMetersPerSecond),
+                (timeToBeReady.get()-shotTimer.get()) * (speeds.vyMetersPerSecond));
 
         futureRobotTranslation = currentRobotTranslation.plus(moveDelta);
         futureAngleToTarget = m_FieldCentricAiming.getTargetAngle(futureRobotTranslation,m_target);
@@ -188,9 +187,10 @@ public class smartShoot extends Command {
             } else {
                 System.out.println("NOT CLOSE ENOUGH");
             }
-            lockedRotation = correctedRotation;
-            lockedDistance = correctedDistance;
+            
         }
+        lockedRotation = correctedRotation;
+        lockedDistance = correctedDistance;
 
         m_shotInfo = m_VisionLookUpTable.getShooterPreset(lockedDistance);
         m_setpoints.arm = m_shotInfo.getArmAngle();

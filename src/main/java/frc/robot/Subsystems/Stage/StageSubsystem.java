@@ -1,15 +1,6 @@
 package frc.robot.Subsystems.Stage;
 
 import java.util.function.BooleanSupplier;
-
-//import frc.ThriftyController;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrame;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -119,8 +110,7 @@ public class StageSubsystem extends SubsystemBase {
     }
 
     public void ejectFront() {
-        double speed = StageConstants.kFeedToShooterSpeed;
-        this.runStage(speed);
+        this.runStage(StageConstants.kFeedToShooterSpeed);
     }
 
     public void ejectBack(double speed) {
@@ -137,7 +127,7 @@ public class StageSubsystem extends SubsystemBase {
 
     public void checkBeam() {
         if(!isNoteInStage()) {
-            ejectFront(0.3);
+            ejectFront(0.1);
         } else {
             stopStage();
         }
@@ -153,14 +143,14 @@ public class StageSubsystem extends SubsystemBase {
     }
 
     public Command feedWithTimeout() {
-        return new RunCommand(() -> this.ejectFront(0.8), this)
+        return new RunCommand(() -> this.ejectFront(1.0), this)
                 .withTimeout(0.5) // run for time
                 .andThen(() -> this.stopStage());
 
     }
 
     public Command feedWithBeam() {
-        return new RunCommand(() -> this.ejectFront(StageConstants.kFeedToShooterSpeed), this)
+        return new RunCommand(() -> this.ejectFront(1.0), this)
                 .until(() -> !isNoteInStage()) // run until there is NOT a Note in the Stage
                 .andThen(() -> this.stopStage());
     }

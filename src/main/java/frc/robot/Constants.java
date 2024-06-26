@@ -126,7 +126,7 @@ public final class Constants {
 
     public static final class StageConstants {
 
-        public static final double kIntakeSpeed = 0.45;
+        public static final double kIntakeSpeed = 0.3;
         public static final double kFeedToShooterSpeed = 1.0;
         public static final double kFeedToAmpSpeed = 0.7;
         public static final double kFeedToTrapSpeed = 0.5;
