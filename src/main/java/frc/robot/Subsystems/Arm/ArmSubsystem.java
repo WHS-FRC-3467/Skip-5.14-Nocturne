@@ -72,8 +72,6 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     private double m_tolerance;
     private GameState m_armState;
 
-    
-
     private boolean armSteadyAtSetpoint = false;
 
     /*
