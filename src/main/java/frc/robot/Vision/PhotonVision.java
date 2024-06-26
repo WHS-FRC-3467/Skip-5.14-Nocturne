@@ -30,6 +30,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import frc.robot.Constants.PhotonVisionConstants.front_left_cam;
@@ -55,9 +56,9 @@ public class PhotonVision extends SubsystemBase {
     PhotonCamera camera;
     Boolean hasTargets;
     String cam_name;
-
+    CommandSwerveDrivetrain m_drivetrain;
     public PhotonVision(CommandSwerveDrivetrain drivetrain, int cam_num) {
-
+        m_drivetrain = drivetrain;
         if (cam_num == 1) {
             cam_name = "front_left_cam";
         } else if (cam_num == 0) {
@@ -97,6 +98,11 @@ public class PhotonVision extends SubsystemBase {
             //List<TargetCorner> corners = target.getCorners();
 
         }
+
     }
 
+    public PhotonPipelineResult getLastResult(){
+            // Query the latest result from PhotonVision
+        return camera.getLatestResult();
+    }
 }
