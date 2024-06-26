@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
 
+import java.util.List;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -47,17 +48,56 @@ import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
+import org.photonvision.targeting.TargetCorner;
 
 public class PhotonVision extends SubsystemBase {
 
+    PhotonCamera camera;
+    Boolean hasTargets;
+    String cam_name;
     CommandSwerveDrivetrain m_drivetrain;
-    // Declare camera variable
-            // Change this to match the name of your camera
-    PhotonCamera camera = new PhotonCamera("photonvision");
-
     public PhotonVision(CommandSwerveDrivetrain drivetrain, int cam_num) {
-
         m_drivetrain = drivetrain;
+        if (cam_num == 1) {
+            cam_name = "front_left_cam";
+        } else if (cam_num == 0) {
+            cam_name = "top_right_cam";
+        }
+
+        camera = new PhotonCamera(cam_name);
+
+    }
+
+    @Override
+    public void periodic() {
+
+        /* Get the latest pipeline result.
+        it returns a container with all information about currently detected targets from a PhotonCamera
+        and is guaranteed to be from the same timestamp.
+        */
+        var result = camera.getLatestResult();
+        // MUST ALWAYS check if the result has a target before getting targets or else you may get a null pointer exception.
+        // ALso must use the same result in every subsequent call in that loop
+        hasTargets = result.hasTargets();
+        // If camera has target, then get a list of tracked targets from a pipeline result.
+        // Contains info such as yaw, pitch, area, and robot relative pose
+        if (hasTargets) {
+            // Get a list of currently tracked targets.
+            List<PhotonTrackedTarget> targets = result.getTargets();
+            
+            // Get the current best target.
+            PhotonTrackedTarget target = result.getBestTarget();
+
+            // Get information from target.
+            double yaw = target.getYaw();
+            double pitch = target.getPitch();
+            double area = target.getArea();
+            double skew = target.getSkew();
+            //Transform2d pose = target.getCameraToTarget();
+            //List<TargetCorner> corners = target.getCorners();
+
+        }
 
     }
 

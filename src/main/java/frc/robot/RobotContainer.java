@@ -40,8 +40,8 @@ public class RobotContainer {
     private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
     private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
     private final StageSubsystem m_StageSubsystem = new StageSubsystem();
-    private final Limelight m_LimeLight = new Limelight();
-    // Replace with CommandPS4Controller or CommandJoystick if needed
+    private final Limelight m_LimeLight = new Limelight("ll");
+    // Instantiate driver and operator controllers
     CommandXboxPS5Controller m_driverController = new CommandXboxPS5Controller(0);
     CommandXboxPS5Controller m_operatorController = new CommandXboxPS5Controller(1);
     GenericHID m_driveRmbl = m_driverController.getHID();
