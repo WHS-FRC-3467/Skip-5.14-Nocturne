@@ -37,6 +37,7 @@ public final class Constants {
 
     public static class RobotConstants {
         public static final boolean kIsTuningMode = true;
+        public static final boolean k_shouldUseLimelight = true;
     }
 
     public static class IntakeConstants {
