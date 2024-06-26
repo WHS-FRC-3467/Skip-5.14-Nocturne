@@ -30,6 +30,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import frc.robot.Constants.PhotonVisionConstants.front_left_cam;
@@ -49,7 +50,19 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 public class PhotonVision extends SubsystemBase {
 
+    CommandSwerveDrivetrain m_drivetrain;
+    // Declare camera variable
+            // Change this to match the name of your camera
+    PhotonCamera camera = new PhotonCamera("photonvision");
+
     public PhotonVision(CommandSwerveDrivetrain drivetrain, int cam_num) {
+
+        m_drivetrain = drivetrain;
+
     }
 
+    public PhotonPipelineResult getLastResult(){
+            // Query the latest result from PhotonVision
+        return camera.getLatestResult();
+    }
 }
