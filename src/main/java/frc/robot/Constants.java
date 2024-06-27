@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import frc.robot.generated.TunerConstants;
 
 /**
@@ -89,5 +90,17 @@ public final class Constants {
             FEED
         }
 
+    }
+
+    public static class PhotonVisionConstants {
+
+        // Constants such as camera and target height stored. Change per robot and goal!
+        public final static double LEFT_CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+        public final static double RIGHT_CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+        public final static double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
+
+        // Angle between horizontal and the camera.
+        public final static double LEFT_CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+        public final static double RIGHT_CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
     }
 }

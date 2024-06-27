@@ -30,10 +30,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//import frc.robot.Constants.PhotonVisionConstants.front_left_cam;
+import frc.robot.Constants.PhotonVisionConstants;
 //import frc.robot.Constants.PhotonVisionConstants.top_right_cam;
 import frc.robot.Robot;
 import frc.robot.Subsystems.Drivetrain.CommandSwerveDrivetrain;
@@ -44,6 +45,7 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.PhotonUtils;
 import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
@@ -104,5 +106,37 @@ public class PhotonVision extends SubsystemBase {
     public PhotonPipelineResult getLastResult(){
             // Query the latest result from PhotonVision
         return camera.getLatestResult();
+    }
+
+    public double getDistanceToTarget(){
+        double range = 0.0;
+        /* Get the latest pipeline result.
+        it returns a container with all information about currently detected targets from a PhotonCamera
+        and is guaranteed to be from the same timestamp.
+        */
+        var result = camera.getLatestResult();
+        // MUST ALWAYS check if the result has a target before getting targets or else you may get a null pointer exception.
+        // ALso must use the same result in every subsequent call in that loop
+        hasTargets = result.hasTargets();
+        // If camera has target, then get a list of tracked targets from a pipeline result.
+        // Contains info such as yaw, pitch, area, and robot relative pose
+        if (hasTargets) {
+            // First calculate range
+            if (cam_name == "front_left_cam"){
+            range =
+                PhotonUtils.calculateDistanceToTargetMeters(
+                    PhotonVisionConstants.LEFT_CAMERA_HEIGHT_METERS,
+                    PhotonVisionConstants.TARGET_HEIGHT_METERS,
+                    PhotonVisionConstants.LEFT_CAMERA_PITCH_RADIANS,
+                    Units.degreesToRadians(result.getBestTarget().getPitch()));
+            } else {
+                PhotonUtils.calculateDistanceToTargetMeters(
+                    PhotonVisionConstants.RIGHT_CAMERA_HEIGHT_METERS,
+                    PhotonVisionConstants.TARGET_HEIGHT_METERS,
+                    PhotonVisionConstants.RIGHT_CAMERA_PITCH_RADIANS,
+                    Units.degreesToRadians(result.getBestTarget().getPitch()));
+            }
+        }
+        return range;
     }
 }
