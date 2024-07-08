@@ -51,6 +51,9 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        
+        // Set Default Commands
+        m_IntakeSubsystem.setDefaultCommand(m_IntakeSubsystem.stopIntakeCommand());
         // Configure the trigger bindings
         configureBindings();
     }

@@ -12,14 +12,17 @@
 - Development, Testing, and Stable will be used to determine the progress for subsystems/commands/features
 
 # Development
-- Intake Subsystem
+- Intaking note Command Files
 - Driver Controls
 - Arm Subsystem
 - intakeNote command
 - Shooter Subsystem
+- Limelight
+- Photonvision and April Tag Location
+- Stage Subsystem
 
 # Testing/Ready For Testing
-- Intake Default Command
+- Intake Default Command + Subsystem
 - Drivetrain (once driver controls are ready)
 
 # Stable
@@ -27,12 +30,11 @@
 
 # To be Started
 
-- Stage Subsystem
 - Setpoints enumeration
-- Limelight + Note Following
+- Note Following
 - Trap Subsystem
-- Photonvision and April Tag Location
 - Look and Shoot
+- Shoot & Move
 
 # CTRE Swerve Example
 

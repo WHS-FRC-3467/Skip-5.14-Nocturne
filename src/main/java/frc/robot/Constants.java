@@ -55,10 +55,14 @@ public final class Constants {
             READY
         }
 
+        public static final double k_SHOOTER_REV_VELOCITY = -0.8;
+        public static final double k_SHOOTER_VELOCITY_TOLERANCE = 50;
     }
 
     public static class StageConstants {
-
+        public static final double k_STAGE_VELOCITY = 0.8;
+        public static final double k_STAGE_REV_VELOCITY = -0.8;        
+        public static final int k_STAGE_VELOCITY_TOLERANCE = 10;
     }
 
     public static class ArmConstants {
