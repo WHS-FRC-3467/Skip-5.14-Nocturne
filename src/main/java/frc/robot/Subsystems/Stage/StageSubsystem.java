@@ -172,7 +172,7 @@ public class StageSubsystem extends SubsystemBase {
     // Testing
     public Command checkBeamCommand() {
         return new RunCommand(() -> this.ejectFront(0.3), this)
-                .until(() -> isNoteInStage()) // run until there is NOT a Note in the Stage
+                .until(() -> isNoteInStage()) // run until there is a Note in the Stage
                 .andThen(() -> this.stopStage());
     }
 

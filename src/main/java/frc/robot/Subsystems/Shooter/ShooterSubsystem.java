@@ -248,14 +248,14 @@ public class ShooterSubsystem extends SubsystemBase {
     public boolean areWheelsAtSpeed() {
         double leftErr = Math.abs(m_ShooterSetpointL.get() - getShooterVelocity(kShooterSide.kLEFT));
         double rightErr = Math.abs(m_ShooterSetpointR.get() - getShooterVelocity(kShooterSide.kRIGHT));
-        return (leftErr + rightErr / 2.0) < ShooterConstants.kShooterTolerance;
+        return ((leftErr + rightErr) / 2.0) < ShooterConstants.kShooterTolerance;
 
     }
 
     public boolean areAtMinSpeed() {
         double leftErr = Math.abs(20 - getShooterVelocity(kShooterSide.kLEFT));
         double rightErr = Math.abs(20 - getShooterVelocity(kShooterSide.kRIGHT));
-        return (leftErr + rightErr / 2.0) < ShooterConstants.kShooterTolerance;
+        return ((leftErr + rightErr) / 2.0) < ShooterConstants.kShooterTolerance;
 
     }
 
